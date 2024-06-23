@@ -19,7 +19,7 @@ export default function Login() {
 
             <main className="login">
                 <div className="login-container">
-                    <h2>Login</h2>
+                    <h2 className="login-header">Login</h2>
                     <hr />
                     
                     <h3 className="login-header">

@@ -19,10 +19,10 @@ export default function Signup() {
 
             <main className="signup">
                 <div className="signup-container">
-                    <h2>Sign up</h2>
+                    <h2 className="signup-header">Sign up</h2>
                     <hr />
                     
-                    <h3 className="signup-header">
+                    <h3 className="signup-header3">
                         Welcome!
                     </h3>
                     <div className="input-container">
