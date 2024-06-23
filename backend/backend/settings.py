@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'users',
     'rest_framework',
     'rest_framework.authtoken',
+    'product',
+    'order',
     'django.contrib.admin',
     'dj_rest_auth',
     'django.contrib.sites',
