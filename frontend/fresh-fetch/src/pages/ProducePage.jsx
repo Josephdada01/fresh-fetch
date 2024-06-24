@@ -66,11 +66,6 @@ export default function ProducePage() {
         }
     ]);
 
-    // if(modal) {
-    //     document.body.classList.add('active-modal')
-    // } else {
-    //     document.body.calssList.remove('active-modal');
-    // }
 
     const navigate = useNavigate();
 
@@ -94,6 +89,10 @@ export default function ProducePage() {
                 produce,
             ]
         }))
+    }
+
+    function handleLogout() {
+        setUser(null);
     }
 
     /* Depending on weather the user is logged in or not, this area will either
@@ -127,7 +126,7 @@ export default function ProducePage() {
                 <Profile profilePic={devUser.profilePic} />
                 <div className="user-info">
                     <h2 className="user-header">Welcome Benoni</h2>
-                    <Logout />
+                    <Logout handleLogout={handleLogout}/>
                 </div>
             </div>
             )}

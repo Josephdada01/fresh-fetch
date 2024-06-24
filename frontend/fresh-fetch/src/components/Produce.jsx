@@ -23,7 +23,7 @@ export default function Produce({ product, addToBasket }) {
         // product.quantity = Number(quantity);
         const price = pricePerPound * Number(quantity);
         console.log('PpP: ', pricePerPound, 'quanitity:', 'price:', price)
-        navigate('/summary', { state: { prices: [price] } });
+        navigate('/summary', { state: { orders: [product] } });
     }
 
     function handleChangeQuantity(e) {

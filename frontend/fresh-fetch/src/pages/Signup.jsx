@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { useLocation } from "react-router";
 
 import Header from "../components/Header";
 
@@ -6,6 +7,12 @@ import "../styles/Signup.css"
 
 export default function Signup() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const state = location.state;
+
+    function goHome () {
+        navigate('/produce');
+    };
 
     function goToLogin () {
         navigate('/login');
@@ -55,7 +62,8 @@ export default function Signup() {
                     </p>
 
                     <div className="signup-btn-container">
-                        <button className="continue">
+                        <button className="continue"
+                                onClick={goHome}>
                             Continue
                         </button>
                     </div>

@@ -83,7 +83,7 @@ export default function Basket() {
 
     useEffect(() => {
         setMadeOrders((pendingOrders));
-    }, []);
+    });
 
 
     function handleChangeQuantity(e, id) {
@@ -121,17 +121,13 @@ export default function Basket() {
 
     function confirmOrder(id) {
         const newMadeOrders = madeOrders.map((order => {
-            if (order.id == id) {
+            if (order.id === id) {
                 return {...order, status: "Completed"};
             } else {
                 return order;
             }
         }))
         setMadeOrders(newMadeOrders);
-
-        setTimeout(() => {
-            removeOrder(id);
-        }, 5000);
     };
 
     const navigate = useNavigate();
@@ -157,7 +153,6 @@ export default function Basket() {
         // setPrice returns the object that was ordered and
         // updates it's price attribute
         const order = updateOrder(id);
-        // const price = Number(order.pricePerPound) * Number(order.quantity);
 
         // Summary always recieves an array of prices
         removeOrder(id);

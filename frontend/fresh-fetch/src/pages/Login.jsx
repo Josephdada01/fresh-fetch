@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { useLocation } from "react-router";
 
 import Header from "../components/Header";
 
@@ -6,10 +7,17 @@ import "../styles/Login.css";
 
 export default function Login() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const state = location.state;
 
     function goToSignUp () {
         navigate('/signup');
     };
+
+    function goHome () {
+        navigate('/');
+    }
+
 
     return (
         <>
@@ -35,7 +43,8 @@ export default function Login() {
 
                     <p className="small">Don't have an account? <span className="green" onClick={goToSignUp}>Sign Up</span> instead.</p>
 
-                    <button className="continue">
+                    <button className="continue"
+                            onClick={goHome}>
                         Continue
                     </button>
                 </div>

@@ -1,7 +1,7 @@
 import "../styles/Logout.css";
 
-export default function Logout() {
+export default function Logout({ handleLogout }) {
     return (
-        <button className="logout">Logout</button>
+        <button className="logout" onClick={handleLogout}>Logout</button>
     )
 }
