@@ -9,6 +9,7 @@ from order.serializers import OrderSerializer
 class OrderList(generics.ListCreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    ordering = ['-order_date']  # Order by most recent orders
 
 class OrderDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()

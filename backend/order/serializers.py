@@ -1,14 +1,16 @@
 from rest_framework import serializers
 from order.models import Order, OrderItem
-from product.serializers import ProductSerializer
+from product.serializers import ProductSerializer, Product
 
 class OrderItemSerializer(serializers.ModelSerializer):
     """serializers for the orderItems class"""
-    product = ProductSerializer()
+    #product = ProductSerializer()
+    product_id = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all(), source='product.id')
    
     class Meta:
         model = OrderItem
-        fields = ['product', 'quantity', 'price' ]
+        fields = ['product_id', 'quantity', 'price']
+
 
 class OrderSerializer(serializers.ModelSerializer):
     """serializers for the order"""
@@ -16,7 +18,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = fields = ['user', 'order_id', 'items' 'price', 'order_date',
-                           'paid_status', 'order_status', 'address', 'city',
-                           'state', 'country', 'created_at', 'total']
+        fields = ['user', 'order_id', 'items', 'price', 'order_date',
+                  'paid_status', 'order_status', 'address', 'city',
+                  'state', 'country', 'total']
+
 
