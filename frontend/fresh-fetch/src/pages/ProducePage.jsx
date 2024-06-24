@@ -31,31 +31,46 @@ export default function ProducePage() {
         basket: [],
         profilePic: profilePic,
     };
-    const [ user, setUser ] = useState(null);
+    const [ user, setUser ] = useState(devUser);
 
     const [ products, setProducts ] = useState([
         {
             id: "1",
             name: "Heirloom Tomato",
-            pricePerPound: "$5.99 / lb",
+            pricePerPound: 5.99,
             vendor: "Wall-Mart",
+            quantity: 1,
+            price: 0,
+            status: null,
             pic: tomatoImg,
         },
         {
             id: "2",
             name: "Organic Ginger",
-            pricePerPound: "$12.99 / lb",
+            pricePerPound: 12.99,
             vendor: "Kmart",
+            quantity: 1,
+            price: 0,
+            status: null,
             pic: gingerImg,
         },
         {
             id: "3",
             name: "Sweet Onion",
-            pricePerPound: "$2.99 / lb",
+            pricePerPound: 2.99,
             vendor: "target",
+            quantity: 1,
+            price: 0,
+            status: null,
             pic: onionImg,
         }
-    ])
+    ]);
+
+    // if(modal) {
+    //     document.body.classList.add('active-modal')
+    // } else {
+    //     document.body.calssList.remove('active-modal');
+    // }
 
     const navigate = useNavigate();
 

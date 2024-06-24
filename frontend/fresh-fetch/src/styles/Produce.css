@@ -67,6 +67,36 @@
         font-size: 85%;
     }
 
+    .quantity-input-container {
+        /* display: flex;
+        flex-flow: column wrap; */
+        align-items: center;
+        width: 110px;
+        height: 45%;
+    }
+
+    .quantity-input-container label {
+
+        font-family: var(--font-family-base);
+        font-weight: var(--font-weight-bold);
+        font-size: var(--font-size-small);
+    }
+
+    .quantity-input-container input {
+        width: 35px;
+        margin-bottom: 15px;
+    }
+
+    .quantity-input-container .enter-quantity-btn {
+        background-color: var(--primary-green);
+        color: var(--primary-white);
+        width: 90%;
+        height: 30px;
+        font-size: 80%;
+        border: none;
+        border-radius: 5px;
+    }
+
     .produce .produce-btns {
         display: flex;
         flex-direction: column;

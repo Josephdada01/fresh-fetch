@@ -39,7 +39,7 @@ body {
     border-radius: 5px;
 }
 
-.signup-container .signup-header {
+.signup-container .signup-header, .signup-header3 {
     text-align: center;
     margin-top: 50px;
     font-family: var(--font-family-title);

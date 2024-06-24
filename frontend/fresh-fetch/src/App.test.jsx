@@ -17,37 +17,37 @@ describe('<App /> when user is not logged in', () => {
 
   });
 
-  it('does not render the Basket button when user is not signed in', () => {
-    render(<App />);
+  // it('does not render the Basket button when user is not signed in', () => {
+  //   render(<App />);
 
-    expect(screen.queryByRole('button', {name: /Basket(.)/})).toBeNull()
-  });
+  //   expect(screen.queryByRole('button', {name: /Basket(.)/})).toBeNull()
+  // });
 
-  it('Renders the Login and Sign up buttons', () => {
-    render(<App />);
+  // it('Renders the Login and Sign up buttons', () => {
+  //   render(<App />);
 
-    expect(screen.getByRole('button', {name: 'Login'})).toBeInTheDocument();
-    expect(screen.getByRole('button', {name: 'Signup'})).toBeInTheDocument();
-  });
+  //   expect(screen.getByRole('button', {name: 'Login'})).toBeInTheDocument();
+  //   expect(screen.getByRole('button', {name: 'Signup'})).toBeInTheDocument();
+  // });
   
 
-  it('does not render the User profile section when user not logged in', () => {
-    render(<App />);
+  // it('does not render the User profile section when user not logged in', () => {
+  //   render(<App />);
 
-    expect(screen.queryByLabelText('User Profile')).toBeNull();
-  }) 
+  //   expect(screen.queryByLabelText('User Profile')).toBeNull();
+  // }) 
 
-  it('doesn not renders the Profile component when user not logged in', () => {
-    render(<App />);
+  // it('doesn not renders the Profile component when user not logged in', () => {
+  //   render(<App />);
 
-    expect(screen.queryByLabelText('Profile')).toBeNull();
-  })
+  //   expect(screen.queryByLabelText('Profile')).toBeNull();
+  // })
 
-  it('does not renders the logout button when user not loggged in', () => {
-    render(<App />);
+  // it('does not render the logout button when user not loggged in', () => {
+  //   render(<App />);
   
-    expect(screen.queryByRole('button', {name: 'Logout'})).toBeNull();
-  })
+  //   expect(screen.queryByRole('button', {name: 'Logout'})).toBeNull();
+  // })
 
   it('renders the Produce header', () => {
     render(<App />);

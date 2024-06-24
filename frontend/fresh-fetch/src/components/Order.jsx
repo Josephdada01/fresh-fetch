@@ -1,7 +1,7 @@
 import "../styles/Order.css"
 import pencilImg from "../images/pencil.png";
 
-export default function Order({ order, removeOrder, handleChange }) {
+export default function Order({ order, removeOrder, handleChange, handleOrder }) {
     // This component is for the individual order items that will be displayed
     // in the basket. These orders haven't been made yet
     return (
@@ -15,11 +15,12 @@ export default function Order({ order, removeOrder, handleChange }) {
             
             <div className="order-details">
                 <h3 className="order-name">{order.name}</h3>
-                <p className="price-per-pound">{order.pricePerPound}</p>
+                <p className="price-per-pound">${order.pricePerPound} / lb</p>
                 <p className="vendor">Vendor: {order.vendor}</p>
 
                 <div className="order-btns">
-                    <button className="order-now-btn">Order now</button>
+                    <button className="order-now-btn"
+                            onClick={() => {handleOrder(order.id)}}>Order now</button>
                     <button className="remove-btn"
                             onClick={() => {removeOrder(order.id)}}>Remove</button>
                 </div>

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router";
 
 import Header from "../components/Header";
 import basketImg from "../images/basket.jpg";
@@ -17,11 +18,11 @@ import onionImg from "../images/onion.jpg";
 export default function Basket() {
     // This is a component that will display the basket page
 
-    const statuses = {
-        completed: "Completed",
-        pending: "Pending",
-        cancelled: "cancelled",
-    }
+    // const statuses = {
+    //     completed: "Completed",
+    //     pending: "Pending",
+    //     cancelled: "cancelled",
+    // }
 
     // User state is empty to represent users that are not logged in
     const [ user, setUser ] = useState({
@@ -33,10 +34,10 @@ export default function Basket() {
                 id: "1",
                 productId: "1",
                 name: "Heirloom tomato",
-                pricePerPound: "$5.99 / lb",
+                pricePerPound: 5.99,
                 vendor: "Wall-Mart",
                 quantity: 1,
-                price: "$5.99",
+                price: 0,
                 status: null,
                 pic: tomatoImg,
             },
@@ -44,10 +45,10 @@ export default function Basket() {
                 id: "2",
                 productId: "2",
                 name: "Organic ginger",
-                pricePerPound: "$12.99 / lb",
+                pricePerPound: 12.99,
                 vendor: "Wall-Mart",
                 quantity: 1,
-                price: "$6.50",
+                price: 0,
                 status: null,
                 pic: gingerImg,
             },
@@ -55,39 +56,35 @@ export default function Basket() {
                 id: "3",
                 productId: "3",
                 name: "Sweet onion",
-                pricePerPound: "$14.95 / lb",
+                pricePerPound: 14.95,
                 vendor: "Fresh Corner",
                 quantity: 1,
-                price: "$14.95",
-                status: statuses.pending,
+                price: 0,
+                status: null,
                 pic: onionImg,
             },
-
-            {
-                id: "4",
-                productId: "3",
-                name: "Sweet onion",
-                pricePerPound: "$14.95 / lb",
-                vendor: "Fresh Corner",
-                quantity: 1,
-                price: "$14.95",
-                status: statuses.pending,
-                pic: onionImg,
-            },
-            {
-                id: "5",
-                productId: "3",
-                name: "Sweet onion",
-                pricePerPound: "$14.95 / lb",
-                vendor: "Fresh Corner",
-                quantity: 1,
-                price: "$14.95",
-                status: statuses.completed,
-                pic: onionImg,
-            }
         ],
         profilePic: profilePic,
     });
+
+    const location = useLocation();
+    const allPending = [];
+    const pendingOrdersState = location.state;
+    let pendingOrders = pendingOrdersState ? pendingOrdersState.pendingOrders : [];
+
+    const [ madeOrders, setMadeOrders ] = useState([]);
+    const [ unmadeOrders, setUnmadeOrders ] = useState(user.basket);
+
+    useEffect(() => {
+        const unmade = user.basket;
+  
+        setUnmadeOrders(unmade);
+    }, [user.basket]);
+
+    useEffect(() => {
+        setMadeOrders((pendingOrders));
+    }, []);
+
 
     function handleChangeQuantity(e, id) {
         const value = e.target.value;
@@ -113,14 +110,65 @@ export default function Basket() {
         }));
     }
 
-    // console.log(user.basket);
+    function cancelOrder(id) {
+        const newBasket = madeOrders.filter(order => order.id !== id);
+        setMadeOrders(newBasket);
+    };
 
     function cancelAllPending() {
+        setMadeOrders([]);
+    }
+
+    function confirmOrder(id) {
+        const newMadeOrders = madeOrders.map((order => {
+            if (order.id == id) {
+                return {...order, status: "Completed"};
+            } else {
+                return order;
+            }
+        }))
+        setMadeOrders(newMadeOrders);
+
+        setTimeout(() => {
+            removeOrder(id);
+        }, 5000);
+    };
+
+    const navigate = useNavigate();
+
+    function updateOrder(id) {
         setUser((prevState) => ({
             ...prevState,
-            basket: user.basket.filter(order => order.status == null)
+            basket: prevState.basket.map((item) => {
+                if (item.id === String(id)) {
+                    const price = item.pricePerPound * item.quantity;
+                    return {...item, price: price};
+                } else {
+                    return item;
+                }
+            }),
         }));
+        const item = user.basket.filter(item => item.id === id);
+        // Returns the item instead of the filtered array
+        return item[0];
     }
+
+    function handleOrderNow(id) {
+        // setPrice returns the object that was ordered and
+        // updates it's price attribute
+        const order = updateOrder(id);
+        // const price = Number(order.pricePerPound) * Number(order.quantity);
+
+        // Summary always recieves an array of prices
+        removeOrder(id);
+        navigate('/summary', { state: { orders: Array.of(order)}});
+    }
+
+    function handleOrderAll(id) {
+
+        navigate('/summary', { state: { orders: user.basket } });
+    }
+
     return (
         <>
             <div className="header-container">
@@ -146,7 +194,8 @@ export default function Basket() {
                         </div>
                     </div>
 
-                    <button className="order-all-btn">Order all</button>
+                    <button className="order-all-btn"
+                            onClick={handleOrderAll}>Order all</button>
                 </div>
                 <hr />
 
@@ -155,12 +204,12 @@ export default function Basket() {
                     {user.basket.filter(order => !order.status).length === 0 ? (
                         <p className="basket-p">Looks like there is nothing in your basket.</p>
                     ) :
-                        user.basket.filter(order => !order.status)
-                            .map((order) => (
+                        unmadeOrders.map((order) => (
                                 <Order key={order.id}
                                     order={order} 
                                     removeOrder={removeOrder}
-                                    handleChange={handleChangeQuantity} />
+                                    handleChange={handleChangeQuantity}
+                                    handleOrder={handleOrderNow} />
                             ))
                         }
                     {/* {preOrders.map((order) => (
@@ -176,7 +225,7 @@ export default function Basket() {
                 <div className="pending-header">
                     <div className="pending-header-text">
                         <h2>Pending</h2>
-                        <small className="item-count">{user.basket.filter(order => order.status).length} item(s)</small>
+                        <small className="item-count">{madeOrders.length} item(s)</small>
                     </div>
                     <button className="cancel-all-btn"
                             onClick={cancelAllPending}>Cancel all</button>
@@ -187,14 +236,14 @@ export default function Basket() {
                     but still not delivered yet. */}
 
                 <div className="pending-orders">
-                    {user.basket.filter(order => order.status).length === 0 ? (
+                    {madeOrders.length === 0 ? (
                         <p className="basket-p">You have no pending orders</p>
-                    ) : 
-                        user.basket.filter(order => order.status)
-                            .map((order) => (
+                    ) :                     
+                        madeOrders.map((order) => (
                                 <PendingOrder key={order.id}
                                               order={order}
-                                              cancelOrder={removeOrder} />
+                                              cancelOrder={cancelOrder}
+                                              confirmOrder={confirmOrder} />
                             ))
                         }
                 </div>

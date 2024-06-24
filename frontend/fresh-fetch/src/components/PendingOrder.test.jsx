@@ -10,10 +10,10 @@ describe('<PendingOrder />', () => {
         id: "1",
         productId: "1",
         name: "Heirloom tomato",
-        pricePerPound: "$5.99 / lb",
+        pricePerPound: 5.99,
         vendor: "Wall-Mart",
         quantity: 1,
-        price: "$5.99",
+        price: 5.99,
         status: "Pending",
         pic: tomatoImg,
     };
@@ -21,7 +21,7 @@ describe('<PendingOrder />', () => {
     it('Contains an image with the write alt message', () => {
         render(<PendingOrder order={testOrder} />);
 
-        expect(screen.getByAltText('Image of the produce')).toBeInTheDocument();
+        expect(screen.getByAltText('produce')).toBeInTheDocument();
     });
 
     it('Contains the name of the produce', () => {

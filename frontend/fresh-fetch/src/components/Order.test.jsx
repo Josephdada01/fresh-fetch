@@ -10,10 +10,10 @@ describe('<Order />', () => {
         id: "1",
         productId: "1",
         name: "Heirloom tomato",
-        pricePerPound: "$5.99 / lb",
+        pricePerPound: 5.99,
         vendor: "Wall-Mart",
         quantity: 1,
-        price: "$5.99",
+        price: 5.99,
         status: null,
         pic: tomatoImg,
     };
@@ -30,7 +30,7 @@ describe('<Order />', () => {
         expect(screen.getByRole('heading', {name: 'Heirloom tomato'})).toBeInTheDocument();
     })
 
-    it('Contains the price per pund of the produce', () => {
+    it('Contains the price per pound of the produce', () => {
         render(<Order order={testOrder} />);
 
         expect(screen.getByText('$5.99 / lb')).toBeInTheDocument();

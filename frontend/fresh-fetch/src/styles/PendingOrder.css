@@ -22,7 +22,7 @@
     --font-family-base: 'Inter', Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
     --font-size-large: clamp(20px, 2vw + 1rem, 70px);
     --font-size-samll: clamp(12px, 2vw + .2rem, 22px);
-    --font-size-medium: clamp(14px, 2vw + .2rem, 17px);
+    --font-size-medium: clamp(13px, 2vw + .2rem, 17px);
     --font-size-extra-small: clamp(9px, 1vw + .5rem, 13px);
 }
 
@@ -50,7 +50,7 @@
 
     .pending-order h3 {
         font-family: var(--font-family-base);
-        font-size: var(--font-size-medium);
+        font-size: var(--font-size-small);
         margin-top: 5px;
     }
 

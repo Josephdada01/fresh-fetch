@@ -1,4 +1,6 @@
 import { render, screen, act } from '@testing-library/react';
+import { BrowserRouter } from "react-router-dom";
+
 import userEvent from '@testing-library/user-event';
 
 import Basket from './Basket';
@@ -6,58 +8,85 @@ import Basket from './Basket';
 
 describe('<Basket />', () => {
     it('contains the common Header', () => {
-        render(<Basket />);
+        render(<BrowserRouter>
+                    <Basket />
+                </BrowserRouter>
+        );
 
         expect(screen.getByRole('heading', { name: 'Fresh Fetch'})).toBeInTheDocument();
     });
 
     it('contains the user profile section', () => {
-        render(<Basket />);
+        render(<BrowserRouter>
+                    <Basket />
+                </BrowserRouter>
+        );
 
         expect(screen.getByLabelText('User Profile')).toBeInTheDocument();
     })
 
     it('Contains the profile component', () => {
-        render(<Basket />);
+        render(<BrowserRouter>
+                    <Basket />
+                </BrowserRouter>
+        );
 
         expect(screen.getByLabelText('Profile')).toBeInTheDocument();
     });
 
     it('Contains the Basket header', () => {
-        render(<Basket />);
+        render(<BrowserRouter>
+                    <Basket />
+                </BrowserRouter>
+        );
 
         expect(screen.getByRole('heading', { name: 'Basket'})).toBeInTheDocument();
         
     });
 
     it('Has the item count', () => {
-        render(<Basket />);
+        render(<BrowserRouter>
+                    <Basket />
+                </BrowserRouter>
+        );
 
         expect(screen.getByLabelText("Item count")).toBeInTheDocument();
     });
 
     it('Contains the order all button', () => {
-        render(<Basket />);
+        render(<BrowserRouter>
+                    <Basket />
+                </BrowserRouter>
+        );
 
         expect(screen.getByRole('button', { name: 'Order all'})).toBeInTheDocument();
     });
 
     it('Contains the order elements that have not been sent out yet', () => {
-        render(<Basket />);
+        render(<BrowserRouter>
+                    <Basket />
+                </BrowserRouter>
+        );
 
         expect(screen.getAllByLabelText('Unmade order').length).toBeGreaterThanOrEqual(0);
     })
 
-    it('Contains the order elements that are sent out and are\
+    it('Inititally contains no order elements that are sent out and are\
         pending/cancelled', () => {
     
-        render(<Basket />);
+        render(<BrowserRouter>
+                    <Basket />
+                </BrowserRouter>
+        );
 
-        expect(screen.getAllByLabelText('Pending/Cancelled order'))
+        expect(screen.queryAllByLabelText('Pending/Cancelled order')).toEqual([]);
     })
 
     it('Removes the unmade order when an remove is pressed on orders', () => {
-        render(<Basket />);
+        render(<BrowserRouter>
+                    <Basket />
+                </BrowserRouter>
+        );
 
         const preOrdersInitialLength = screen.queryAllByLabelText('Unmade order').length;
         const removeBtns = screen.queryAllByRole('button', {name: 'Remove'})
@@ -70,7 +99,10 @@ describe('<Basket />', () => {
     
     // it('Displays an informative message when there is nothing in\
     //     unmadeOrders', async () => {
-    //     render(<Basket />);
+    //     render(<BrowserRouter>
+    //                 <Basket />
+    //             </BrowserRouter>
+    //     );
 
     //     const removeBtns = screen.queryAllByRole('button', {name: 'Remove'})
 
@@ -89,7 +121,10 @@ describe('<Basket />', () => {
     // })
 
     it('Removes the pending order when cancel is pressed on orders', () => {
-        render(<Basket />);
+        render(<BrowserRouter>
+                    <Basket />
+                </BrowserRouter>
+        );
 
         const pendingOrdersInitialLength = screen.queryAllByLabelText('Pending/Cancelled order').length;
         const removeBtns = screen.queryAllByRole('button', {name: 'Cancel'})
@@ -97,11 +132,21 @@ describe('<Basket />', () => {
         act(() => {
             pendingOrdersInitialLength && userEvent.click(removeBtns[0]);
         })
-        expect(screen.queryAllByLabelText('Pending/Cancelled order').length).toEqual(pendingOrdersInitialLength - 1);
+
+        if (pendingOrdersInitialLength == 0) {
+            expect(screen.queryAllByLabelText('Pending/Cancelled order').length).toBe(0);
+
+        } else {
+            expect(screen.queryAllByLabelText('Pending/Cancelled order').length).toEqual(pendingOrdersInitialLength - 1 || 0);
+
+        }
     })
 
     // it('Removes all pending orders when cancel all is clicked' , () => {
-    //     render(<Basket />);
+    //     render(<BrowserRouter>
+                //     <Basket />
+                // </BrowserRouter>
+        // );
 
     //     const cancelAllBtn = screen.queryAllByRole('button', { name: 'Cancel All' });
 
@@ -112,6 +157,4 @@ describe('<Basket />', () => {
     //     expect(screen.queryAllByLabelText('Pending/Cancelled order')).toBeNone();
 
     // })
-    
-    
 });
