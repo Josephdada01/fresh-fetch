@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from rest_framework import generics, viewsets
-from rest_framework.permissions import isAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from product.models import Product
 from product.serializers import ProductSerializer
 from users.models import User
 
-class isVendor(isAuthenticated):
+class isVendor(IsAuthenticated):
     """
     Custom permission to allow only vendors to create, update, and delete products.
     """
@@ -26,7 +26,7 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-class ProductViewSet(viewsets.ModelViewset):
+class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [isVendor]
