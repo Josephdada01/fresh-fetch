@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import Header from "../components/Header";
 import VendorOrder from "../components/VendorOrder";
+import VendorProducts from "../components/VendorProducts"
 
 import tomatoImg from "../images/tomato.jpg";
 import onionImg from "../images/onion.jpg";
@@ -55,6 +56,38 @@ export default function Dashboard() {
                 status: statuses.pending,
                 pic: onionImg,
             }
+        ],
+        products: [
+            {
+                id: "1",
+                name: "Heirloom Tomato",
+                pricePerPound: 5.99,
+                vendor: "Wall-Mart",
+                quantity: 1,
+                price: 0,
+                status: null,
+                pic: tomatoImg,
+            },
+            {
+                id: "2",
+                name: "Organic Ginger",
+                pricePerPound: 12.99,
+                vendor: "Kmart",
+                quantity: 1,
+                price: 0,
+                status: null,
+                pic: gingerImg,
+            },
+            {
+                id: "3",
+                name: "Sweet Onion",
+                pricePerPound: 2.99,
+                vendor: "target",
+                quantity: 1,
+                price: 0,
+                status: null,
+                pic: onionImg,
+            }
         ]
     });
 
@@ -69,6 +102,8 @@ export default function Dashboard() {
 
         setUser(prevUser => ({ ...prevUser, orders: newOrders }));
     }
+
+    function removeOrder(id) {}
 
     return (
         <main>
@@ -91,6 +126,22 @@ export default function Dashboard() {
                                      handleFulfill={handleFulfill} />
                     ))
                 }
+            </div>
+            
+            <div className="my-products-container">
+                <div className="products-header-container">
+                <h2 className="products-header">My products</h2>
+
+                    <button className="new-btn">+ New</button>
+                </div>
+                <hr />
+
+                <div className="vendor-products">
+                    {user.products.map((product) => (
+                        <VendorProducts key={product.id} product={product}
+                                 removeProduct={removeOrder} />
+                    ))}
+                </div>
             </div>
         </main>
     )

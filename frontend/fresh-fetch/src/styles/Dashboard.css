@@ -19,10 +19,27 @@
 }
 
 /* Header unique to the vendor's dashboard */
-.vendor-header {
+.vendor-header, .products-header {
     margin-inline: 9vw;
     font-size: var(--font-size-large);
     font-weight: var(--font-weight-regular);
+}
+
+.products-header-container {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 9vw;;
+}
+
+.products-header-container .new-btn {
+    margin-top: 13px;
+    width: var(--button-width);
+    height: var(--button-height);
+    font-size:var(--button-font-size);
+    border: none;
+    border-radius: 5px;
+    background-color: var(--primary-orange);
+    color: var(--primary-white);
 }
 
 /* Container for all the orders */
@@ -34,4 +51,15 @@
     gap: clamp(20px, 4vw, 30px);
     grid-template-columns: 1fr;
     margin-bottom: 60px;
+}
+
+/* Container for all products */
+.vendor-products {
+    margin-inline: 3vw;
+    margin-bottom: 60px;
+    max-width: 100%;
+    display: grid;
+    justify-content: center;
+    gap: 5vw;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
