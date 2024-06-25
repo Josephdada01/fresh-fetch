@@ -24,6 +24,21 @@ class ReviewCreateView(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated, IsUser]
 
+    def get_queryset(self):
+        """
+        This view should return a list of all the reviews
+        for the specified product.
+        """
+        product_id = self.kwargs['product_id']
+        return Review.objects.filter(product_id=product_id)
+
+    def perform_create(self, serializer):
+        """
+        Save the new review with the user and product_id.
+        """
+        product_id = self.kwargs['product_id']
+        serializer.save(user=self.request.user, product_id=product_id)
+
 
 class ReviewUpdateView(generics.UpdateAPIView):
     """
@@ -34,6 +49,12 @@ class ReviewUpdateView(generics.UpdateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated, IsUser]
     lookup_field = 'id'
+
+    def perform_update(self, serializer):
+        """
+        Save the updated review with the user and product_id.
+        """
+        serializer.save(user=self.request.user)
 
 
 class ReviewDeleteView(generics.DestroyAPIView):

@@ -3,6 +3,7 @@ Review model serializer module
 """
 from rest_framework import serializers
 from .models import Review
+from product.models import Product
 
 
 class ReviewSerializer(serializers.Serializer):
@@ -32,6 +33,16 @@ class ReviewSerializer(serializers.Serializer):
         
         user = request.user
         content = validated_data.get('content')
-        #product_id = validated_data.get('product_id')
+        product_id = validated_data.get('product_id')
+        product = Product.objects.get(id=product_id)
 
-        return Review.objects.create(user=user, content=content)
+        return Review.objects.create(user=user, content=content, product=product)
+
+    def update(self, instance, validated_data):
+        """
+        Update and return an existing `Review` instance, given the validated data.
+        """
+        instance.content = validated_data.get('content', instance.content)
+        instance.save()
+        return instance
+    

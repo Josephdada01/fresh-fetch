@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import User
+from product.models import Product
 
 
 class Review(models.Model):
@@ -9,7 +10,7 @@ class Review(models.Model):
 
     content = models.CharField(max_length=500)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self):
         """
