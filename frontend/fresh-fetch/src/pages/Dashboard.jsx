@@ -66,7 +66,7 @@ export default function Dashboard() {
                 vendor: "Wall-Mart",
                 quantity: 1,
                 price: 0,
-                status: null,
+                // status: null,
                 pic: tomatoImg,
             },
             {
@@ -76,7 +76,7 @@ export default function Dashboard() {
                 vendor: "Kmart",
                 quantity: 1,
                 price: 0,
-                status: null,
+                // status: null,
                 pic: gingerImg,
             },
             {
@@ -86,7 +86,7 @@ export default function Dashboard() {
                 vendor: "target",
                 quantity: 1,
                 price: 0,
-                status: null,
+                // status: null,
                 pic: onionImg,
             }
         ]

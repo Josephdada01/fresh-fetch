@@ -74,11 +74,11 @@ export default function ProducePage() {
     }
 
     const goToLogin = () => {
-        navigate('/login');
+        navigate('/login' , { state: { login: handleLogin }});
     }
 
     const goToSignup = () => {
-        navigate('/signup');
+        navigate('/signup', { state: { signup : handleSignup }});
     }
 
     const addToBasket = (produce) => {
@@ -90,6 +90,14 @@ export default function ProducePage() {
             ]
         }))
     }
+
+    function handleLogin() {
+        setUser(devUser)
+    };
+
+    function handleSignup() {
+        setUser(devUser)
+    };
 
     function handleLogout() {
         setUser(null);

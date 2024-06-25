@@ -81,10 +81,9 @@ export default function Basket() {
         setUnmadeOrders(unmade);
     }, [user.basket]);
 
-    useEffect(() => {
-        setMadeOrders((pendingOrders));
-    });
-
+    // if (pendingOrders != madeOrders) {
+    //     setMadeOrders((pendingOrders));
+    // }
 
     function handleChangeQuantity(e, id) {
         const value = e.target.value;
