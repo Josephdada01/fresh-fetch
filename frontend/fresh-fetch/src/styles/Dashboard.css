@@ -44,7 +44,7 @@
 
 /* Container for all the orders */
 .all-orders {
-    margin-inline: 6vw;
+    margin-inline: 4vw;
     max-width: 100%;
     display: grid;
     justify-content: center;
@@ -55,7 +55,7 @@
 
 /* Container for all products */
 .vendor-products {
-    margin-inline: 3vw;
+    margin-inline: 5vw;
     margin-bottom: 60px;
     max-width: 100%;
     display: grid;

@@ -142,7 +142,7 @@ img {
 
 /* Container for all the produce components */
 .produces {
-    margin-inline: 3vw;
+    margin-inline: 5vw;
     margin-bottom: 60px;
     max-width: 100%;
     display: grid;
