@@ -4,6 +4,7 @@ from dj_rest_auth.registration.serializers import RegisterSerializer as BaseSeri
 from dj_rest_auth.serializers import LoginSerializer as BaseLoginSerializer
 from rest_framework import serializers
 from .models import User
+from .mixins import WritableOnCreateReadOnlyOnUpdateMixin
 
 
 class RegisterSerializer(BaseSerializer):
@@ -54,11 +55,13 @@ class LoginSerializer(BaseLoginSerializer):
     username = None
 
 
-class UserDetailsSerializer(serializers.ModelSerializer):
+class UserDetailsSerializer(WritableOnCreateReadOnlyOnUpdateMixin, serializers.ModelSerializer):
     """
     Specifies the User details return
     """
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'is_vendor']
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'is_vendor', 'image']
+        writable_on_create_read_only_on_update = ['is_vendor']
+        flexible_edit = ['first_name', 'last_name', 'email', 'phone_number', 'image']
