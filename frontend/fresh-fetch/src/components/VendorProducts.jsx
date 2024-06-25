@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 
 import '../styles/VendorProducts.css';
 
-export default function VendorProduct({ product, removeProduct }) {
+export default function VendorProduct({ product, changeQuantity, removeProduct }) {
     // This component is for the individual product items that will be displayed
     // on the product page
 
@@ -18,14 +18,6 @@ export default function VendorProduct({ product, removeProduct }) {
         setQuantity("");
     };
 
-    const makeOrder = () => {
-        const pricePerPound = product.pricePerPound;
-        // product.quantity = Number(quantity);
-        const price = pricePerPound * Number(quantity);
-        console.log('PpP: ', pricePerPound, 'quanitity:', 'price:', price)
-        navigate('/summary', { state: { orders: [product] } });
-    }
-
     function handleChangeQuantity(e) {
         setQuantity(e.target.value);
     }
@@ -38,7 +30,10 @@ export default function VendorProduct({ product, removeProduct }) {
                        placeholder="1lb" onChange={handleChangeQuantity} />
                 <br />
                 <button className="enter-quantity-btn"
-                        onClick={makeOrder}
+                        onClick={() => {
+                            changeQuantity(Number(quantity), product.id);
+                            toggleQuantityModal();
+                        }}
                         disabled={quantity === ""}>Continue</button>
             </div>
         </>
@@ -63,7 +58,7 @@ export default function VendorProduct({ product, removeProduct }) {
                     <div className="product-btns">
                         <button className="change-quantity-btn"
                                 onClick={toggleQuantityModal}>
-                                    Add quantity
+                                    Change quantity
                         </button>
                         <button className="remove-product"
                             onClick={() => removeProduct(product.id)}>

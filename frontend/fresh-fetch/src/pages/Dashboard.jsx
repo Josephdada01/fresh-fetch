@@ -9,6 +9,7 @@ import onionImg from "../images/onion.jpg";
 import gingerImg from "../images/ginger.jpg";
 
 import "../styles/Dashboard.css";
+import { prettyDOM } from "@testing-library/react";
 
 export default function Dashboard() {
     const statuses = {
@@ -108,6 +109,17 @@ export default function Dashboard() {
         setUser(prevUser => ({ ...prevUser, products: newProducts }));
     }
 
+    function changeQuantity(value, id) {
+        const newProducts = user.products.map(product => {
+            if (product.id == id) {
+                return { ...product, quantity: value };
+            } else {
+                return product;
+            }
+        });
+        setUser(prevUser => ({ ...prevUser, products: newProducts }));
+    }
+
     return (
         <main>
             <div className="vendor-header">
@@ -140,11 +152,12 @@ export default function Dashboard() {
                 <hr />
 
                 <div className="vendor-products">
-                    {user.products ? (
+                    {user.products.length === 0 ? (
                         <p className="no-products">You have no products. Create one!</p>
                     ) : user.products.map((product) => (
                         <VendorProducts key={product.id} product={product}
-                                 removeProduct={removeOrder} />
+                                        changeQuantity={changeQuantity}
+                                        removeProduct={removeOrder} />
                     ))}
                 </div>
             </div>
