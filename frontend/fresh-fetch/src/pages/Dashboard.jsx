@@ -103,7 +103,10 @@ export default function Dashboard() {
         setUser(prevUser => ({ ...prevUser, orders: newOrders }));
     }
 
-    function removeOrder(id) {}
+    function removeOrder(id) {
+        const newProducts = user.products.filter((product) => product.id !== id)
+        setUser(prevUser => ({ ...prevUser, products: newProducts }));
+    }
 
     return (
         <main>
@@ -137,7 +140,9 @@ export default function Dashboard() {
                 <hr />
 
                 <div className="vendor-products">
-                    {user.products.map((product) => (
+                    {user.products ? (
+                        <p className="no-products">You have no products. Create one!</p>
+                    ) : user.products.map((product) => (
                         <VendorProducts key={product.id} product={product}
                                  removeProduct={removeOrder} />
                     ))}

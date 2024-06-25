@@ -54,6 +54,11 @@
 }
 
 /* Container for all products */
+
+.vendor-products .no-products {
+    text-align: center;
+    font-size: var(--font-size-medium);
+}
 .vendor-products {
     margin-inline: 5vw;
     margin-bottom: 60px;

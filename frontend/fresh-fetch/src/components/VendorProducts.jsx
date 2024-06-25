@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 
 import '../styles/VendorProducts.css';
 
-export default function VendorProduct({ product, handleRemoveBasket }) {
+export default function VendorProduct({ product, removeProduct }) {
     // This component is for the individual product items that will be displayed
     // on the product page
 
@@ -66,7 +66,7 @@ export default function VendorProduct({ product, handleRemoveBasket }) {
                                     Add quantity
                         </button>
                         <button className="remove-product"
-                            onClick={() => handleRemoveBasket(product.id)}>
+                            onClick={() => removeProduct(product.id)}>
                                 Remove
                     </button>
                     </div>
