@@ -1,12 +1,11 @@
-import gingerImg from "../images/ginger.jpg";
 import '../styles/VendorOrder.css'
 
-export default function VendorOrder({ order }) {
+export default function VendorOrder({ order, handleFulfill }) {
     return (
         <div className="vendor-order" aria-label="Vendor order">
             {/* This image will be repalced by an image we fetch 
                 from the api eventually */}
-            <img src={order.pic} alt="Image of the order" />
+            <img src={order.pic} alt="order" />
 
             {/* This static data will also be replaced by data coming
                 from the api */}
@@ -27,7 +26,10 @@ export default function VendorOrder({ order }) {
                 button */}
             {order.status === "Pending" && (
                 <div className="btn-container">
-                    <button className="fulfill-btn">Fulfill</button>
+                    <button className="fulfill-btn"
+                            onClick={() => {handleFulfill(order.id)}}>
+                                Fulfill
+                    </button>
                 </div>
             )}
             
