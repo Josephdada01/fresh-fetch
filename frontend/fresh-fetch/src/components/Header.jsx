@@ -1,11 +1,12 @@
 import "../styles/Header.css";
 import { useNavigate } from "react-router";
 
-export default function Header({ isVendor }) {
+export default function Header({ isVendor, user }) {
     const navigate = useNavigate();
 
     const goToProducePage = () => {
-        navigate('/produce');
+        console.log('User in header:', user);
+        navigate('/produce', { state: { user: user}});
     }
 
     const goToVendorDashboard = () => {

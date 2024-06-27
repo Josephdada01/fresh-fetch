@@ -27,15 +27,15 @@ export default function ProducePage() {
     const location = useLocation();
     const state = location.state;
 
-    // console.log("User:", state.user)
-
     const [ user, setUser ] = useState(state ? {
         userId: state.user.id,
-        firstName: state.user.first_name,
-        lastName: state.user.last_name,
-        basket: [],
-        profilePic: state.user.image,
+        first_name: state.user.first_name,
+        last_name: state.user.last_name,
+        basket: state?.user?.basket || [],
+        image: profilePic,
     } : null);
+
+    console.log("React user at produce:", user);
 
     const products = getProducts();
     const [ displayProducts, setDisplayProducts ] = useState(products.length > 0 ? [
@@ -121,7 +121,7 @@ export default function ProducePage() {
     const navigate = useNavigate();
 
     const goToBasket = () => {
-        navigate('/basket');
+        navigate('/basket', { state: { user: user }});
     }
 
     function handleSearchReturn(name) {
@@ -184,9 +184,9 @@ export default function ProducePage() {
 
             {user !== null && (
                 <div className="profile-container" aria-label="User Profile">
-                <Profile profilePic={profilePic} />
+                <Profile profilePic={user.image} />
                 <div className="user-info">
-                    <h2 className="user-header">Welcome {user?.firstName}</h2>
+                    <h2 className="user-header">Welcome {user?.first_name}</h2>
                     <Logout handleLogout={handleLogout}/>
                 </div>
             </div>

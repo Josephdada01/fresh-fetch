@@ -58,7 +58,7 @@ export default function Produce({ product, addToBasket, handleMakeOrder }) {
             {/* This data will also be replaced by data from the API. */}
             <div className="produce-info">
                 <div className="produce-details">
-                    <h3 className="prodice-name">{product.name}</h3>
+                    <h3 className="produce-name">{product.name}</h3>
                     <p className="price-per-pound">${product.pricePerPound} / kg</p>
                     <p className="vendor">Vendor: {product.vendor}</p>
                 </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 
 import Header from "../components/Header";
 import basketImg from "../images/basket.jpg";
@@ -9,64 +9,57 @@ import Profile from "../components/Profile";
 
 import "../styles/Basket.css";
 
-import profilePic from "../images/pic-person-01.jpg";
-import tomatoImg from "../images/tomato.jpg";
-import gingerImg from "../images/ginger.jpg";
-import onionImg from "../images/onion.jpg";
-
 
 export default function Basket() {
     // This is a component that will display the basket page
 
-    // const statuses = {
-    //     completed: "Completed",
-    //     pending: "Pending",
-    //     cancelled: "cancelled",
-    // }
+    const location = useLocation();
+    const state = location.state;
+    const [ user, setUser ] = useState(state.user);
 
     // User state is empty to represent users that are not logged in
-    const [ user, setUser ] = useState({
-        userId: "1",
-        firstName: "Benoni",
-        lastName: "Esckinder",
-        basket: [
-            {
-                id: "1",
-                productId: "1",
-                name: "Heirloom tomato",
-                pricePerPound: 5.99,
-                vendor: "Wall-Mart",
-                quantity: 1,
-                price: 0,
-                orderStatus: null,
-                paidStatus: false,
-                pic: tomatoImg,
-            },
-            {
-                id: "2",
-                productId: "2",
-                name: "Organic ginger",
-                pricePerPound: 12.99,
-                vendor: "Wall-Mart",
-                quantity: 1,
-                price: 0,
-                status: null,
-                pic: gingerImg,
-            },
-            {
-                id: "3",
-                productId: "3",
-                name: "Sweet onion",
-                pricePerPound: 14.95,
-                vendor: "Fresh Corner",
-                quantity: 1,
-                price: 0,
-                status: null,
-                pic: onionImg,
-            },
-        ],
-        profilePic: profilePic,
-    });
+    // const [ user, setUser ] = useState({
+    //     userId: "1",
+    //     firstName: "Benoni",
+    //     lastName: "Esckinder",
+    //     basket: [
+    //         {
+    //             id: "1",
+    //             productId: "1",
+    //             name: "Heirloom tomato",
+    //             pricePerPound: 5.99,
+    //             vendor: "Wall-Mart",
+    //             quantity: 1,
+    //             price: 0,
+    //             orderStatus: null,
+    //             paidStatus: false,
+    //             pic: tomatoImg,
+    //         },
+    //         {
+    //             id: "2",
+    //             productId: "2",
+    //             name: "Organic ginger",
+    //             pricePerPound: 12.99,
+    //             vendor: "Wall-Mart",
+    //             quantity: 1,
+    //             price: 0,
+    //             status: null,
+    //             pic: gingerImg,
+    //         },
+    //         {
+    //             id: "3",
+    //             productId: "3",
+    //             name: "Sweet onion",
+    //             pricePerPound: 14.95,
+    //             vendor: "Fresh Corner",
+    //             quantity: 1,
+    //             price: 0,
+    //             status: null,
+    //             pic: onionImg,
+    //         },
+    //     ],
+    //     profilePic: profilePic,
+    // });
 
     // const location = useLocation();
     // const allPending = [];
@@ -164,16 +157,17 @@ export default function Basket() {
         navigate('/summary', { state: { orders: user.basket } });
     }
 
+
     return (
         <>
             <div className="header-container">
-                <Header />
+                <Header user={user}/>
             </div>
 
             <div className="profile-container" aria-label="User Profile">
-                <Profile profilePic={user.profilePic} />
+                <Profile profilePic={user.image} />
                 <div className="user-info">
-                    <h2 className="user-header">{user.firstName}'s Basket</h2>
+                    <h2 className="user-header">{user.first_name}'s Basket</h2>
                 </div>
             </div>
 

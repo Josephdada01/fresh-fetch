@@ -1,17 +1,24 @@
 import { render, screen, act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { MemoryRouter, Routes, Route  } from 'react-router-dom';
 
 import App from './App';
 
+
 describe('<App /> when user is not logged in', () => {
   it('renders the Produce page by default', () => {
-    render(<App />);
+    render(<App />, {
+      route: '/',
+      state: null,
+    });
     
-    expect(screen.getByText(/Produce/i)).toBeInTheDocument();
+    expect(screen.getByText(/Produce/)).toBeInTheDocument();
   });
 
   it('renders the default header', () => {
-    render(<App />);
+    render(<App />, {
+      route: '/',
+      state: null,
+    });
 
     expect(screen.getByRole('heading', {name: 'Fresh Fetch'})).toBeInTheDocument();
 
@@ -49,20 +56,29 @@ describe('<App /> when user is not logged in', () => {
   //   expect(screen.queryByRole('button', {name: 'Logout'})).toBeNull();
   // })
 
-  it('renders the Produce header', () => {
-    render(<App />);
+  it('renders the App header', () => {
+    render(<App />, {
+      route: '/',
+      state: null,
+    });
 
     expect(screen.getByRole('heading', { name: 'Produce' })).toBeInTheDocument();
   });
   
   it('Renders a search button', () => {
-    render(<App />);
+    render(<App />, {
+      route: '/',
+      state: null,
+    });
 
     expect(screen.getByRole('button', { name: /Search/})).toBeInTheDocument();
   });
 
   it('Renders product element(s)', () => {
-    render(<App />);
+    render(<App />, {
+      route: '/',
+      state: null,
+    });
 
     expect(screen.getAllByLabelText('Produce item').length).toBeGreaterThanOrEqual(1);
   });
@@ -79,7 +95,6 @@ describe('<App /> when user is not logged in', () => {
   //   await expect(window.location.href).toContain('/basket');
 
   // })
-  
-  
+
 });
 
