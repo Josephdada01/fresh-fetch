@@ -18,25 +18,59 @@ class isVendor(IsAuthenticated):
 """
 
 # Create your views here.
-class ProductList(generics.ListCreateAPIView):
-    """listing the views"""
+class ProductList(generics.ListAPIView):
+    """listing the views to all users"""
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
-    """listing the detailviews"""
+class ProductDetail(generics.RetrieveAPIView):
+    """listing the product details"""
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    lookup_field = 'product_id'
 
+
+class ProductCreateView(generics.CreateAPIView):
+    """
+    views for creating a product, and restricting the access
+    to only authenticated user and vendors
+    """
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [IsAuthenticated, IsVendor]
+
+class ProductUpdateView(generics.UpdateAPIView):
+    """
+    views for updatingting a product, and restricting the access
+    to only authenticated user and vendors
+    """
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [IsAuthenticated, IsVendor]
+
+class ProductDeleteView(generics.DestroyAPIView):
+    """
+    views for deleting a product, and restricting the access
+    to only authenticated user and vendors
+    """
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [IsAuthenticated, IsVendor]
+    lookup_field = 'product_id'
+
+############################################## DO NOT DELETE ##################################
+# this will work if we want to handle the  CRUD all at once
+"""
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsVendor]
 
     def perform_create(self, serializer):
-        """vendor can perform the creation"""
+        vendor can perform the creation
         serializer.save(user=self.request.user)
 
     def perform_update(self, serializer):
-        """vendor can perform the update"""
+        vendor can perform the update
         serializer.save(user=self.request.user)
+"""
