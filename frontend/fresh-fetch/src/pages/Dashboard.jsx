@@ -1,15 +1,19 @@
 import { useState } from "react";
+import { useNavigate, useLocation } from "react-router";
 
 import Header from "../components/Header";
 import VendorOrder from "../components/VendorOrder";
-import VendorProducts from "../components/VendorProducts"
+import VendorProducts from "../components/VendorProducts";
+import CreateNewProduct from "../components/CreateNewProduct";
+import Profile from "../components/Profile";
+import Logout from "../components/Logout";
 
+import profilePic from '../images/pic-person-01.jpg';
 import tomatoImg from "../images/tomato.jpg";
 import onionImg from "../images/onion.jpg";
 import gingerImg from "../images/ginger.jpg";
 
 import "../styles/Dashboard.css";
-import { prettyDOM } from "@testing-library/react";
 
 export default function Dashboard() {
     const statuses = {
@@ -19,16 +23,24 @@ export default function Dashboard() {
         cancelled: "cancelled",
     }
 
-    const [ user, setUser ] = useState({
-        userId: "1",
-        firstName: "Benoni",
-        lastName: "Esckinder",
+    const location = useLocation();
+    const state = location.state;
+    const navigate = useNavigate();
+
+    function goToLogin() {
+        navigate('/login');
+    }
+
+    const [ user, setUser ] = useState(state ? {
+        userId: state.user?.id,
+        firstName: state.user?.first_name,
+        lastName: state.user?.last_name,
         orders: [
             {
                 id: "1",
                 productId: "1",
                 name: "Heirloom tomato",
-                pricePerPound: "$5.99 / lb",
+                pricePerPound: "$5.99 / kg",
                 vendor: "Wall-Mart",
                 quantity: 5,
                 price: "$5.99",
@@ -90,7 +102,88 @@ export default function Dashboard() {
                 pic: onionImg,
             }
         ]
+    } : {
+        userId: "",
+        firstName: "",
+        lastName: "",
+        orders: [
+            {
+                id: "1",
+                productId: "1",
+                name: "Heirloom tomato",
+                pricePerPound: "$5.99 / kg",
+                vendor: "Wall-Mart",
+                quantity: 5,
+                price: "$5.99",
+                status: statuses.enRoute,
+                pic: tomatoImg,
+            },
+            {
+                id: "2",
+                productId: "2",
+                name: "Organic ginger",
+                pricePerPound: "$12.99 / lb",
+                vendor: "Wall-Mart",
+                quantity: 1,
+                price: "$6.50",
+                status: statuses.completed,
+                pic: gingerImg,
+            },
+            {
+                id: "3",
+                productId: "3",
+                name: "Sweet onion",
+                pricePerPound: "$14.95 / lb",
+                vendor: "Fresh Corner",
+                quantity: .5,
+                price: "$14.95",
+                status: statuses.pending,
+                pic: onionImg,
+            }
+        ],
+        products: [
+            {
+                id: "1",
+                name: "Heirloom Tomato",
+                pricePerPound: 5.99,
+                vendor: "Wall-Mart",
+                quantity: 1,
+                price: 0,
+                // status: null,
+                pic: tomatoImg,
+            },
+            {
+                id: "2",
+                name: "Organic Ginger",
+                pricePerPound: 12.99,
+                vendor: "Kmart",
+                quantity: 1,
+                price: 0,
+                // status: null,
+                pic: gingerImg,
+            },
+            {
+                id: "3",
+                name: "Sweet Onion",
+                pricePerPound: 2.99,
+                vendor: "target",
+                quantity: 1,
+                price: 0,
+                // status: null,
+                pic: onionImg,
+            }
+        ] 
     });
+
+    const [ modal, setModal ] = useState(false);
+    function toggleModal() {
+        setModal(prevModal => !prevModal);
+    }
+
+    function handleNewProduct(porduct) {
+        // call create product api 
+        console.log(porduct)
+    }
 
     function handleFulfill(id) {
         const newOrders = user.orders.map(order => {
@@ -111,7 +204,7 @@ export default function Dashboard() {
 
     function changeQuantity(value, id) {
         const newProducts = user.products.map(product => {
-            if (product.id == id) {
+            if (product.id === id) {
                 return { ...product, quantity: value };
             } else {
                 return product;
@@ -120,11 +213,26 @@ export default function Dashboard() {
         setUser(prevUser => ({ ...prevUser, products: newProducts }));
     }
 
+    function handleLogout() {
+        setUser(null);
+        goToLogin()
+    }
+
     return (
         <main>
             <div className="vendor-header">
-                <Header />
+                <Header isVendor={true} />
             </div>
+
+            {state !== null && (
+                <div className="profile-container" aria-label="User Profile">
+                <Profile profilePic={profilePic} />
+                <div className="user-info">
+                    <h2 className="user-header">{user.firstName}</h2>
+                    <Logout handleLogout={handleLogout}/>
+                </div>
+            </div>
+            )}
 
             <h2 className="vendor-header">Orders</h2>
             <hr />
@@ -147,9 +255,13 @@ export default function Dashboard() {
                 <div className="products-header-container">
                 <h2 className="products-header">My products</h2>
 
-                    <button className="new-btn">+ New</button>
+                    <button className="new-btn"
+                            onClick={toggleModal}
+                        >+ New</button>
                 </div>
                 <hr />
+
+                {modal && <CreateNewProduct createProduct={handleNewProduct}/>}
 
                 <div className="vendor-products">
                     {user.products.length === 0 ? (

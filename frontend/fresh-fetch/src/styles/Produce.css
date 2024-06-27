@@ -97,6 +97,16 @@
         border-radius: 5px;
     }
 
+    .quantity-input-container .cancel-quantity-btn {
+        background-color: var(--primary-red);
+        color: var(--primary-white);
+        width: 90%;
+        height: 30px;
+        font-size: 80%;
+        border: none;
+        border-radius: 5px;
+    }
+
     .produce .produce-btns {
         display: flex;
         flex-direction: column;
@@ -107,7 +117,7 @@
 
     .produce .produce-btns button {
         width: 105%;
-        height: 75%;
+        height: clamp(40px, 8vw, 50px);
         font-size: 80%;
         border: none;
         border-radius: 5px;

@@ -41,7 +41,7 @@ body {
     border-radius: 5px;
 }
 
-.login-container .login-header {
+.login-container h2, h3 .login-header {
     margin-top: 50px;
     font-family: var(--font-family-title);
     font-weight: var(--font-weight-bold);
@@ -61,7 +61,19 @@ body {
 .login-container input {
     margin: auto;
     width: 70%;
-    height: 25px;
+    height: 35px;
+    padding-left: 10px;
+    border: 1px solid var(--primary-black);
+    border-radius: 10px;
+}
+
+.login-error-message {
+    /* margin-top: -20px; */
+    line-height: 1.2;
+    width: 70%;
+    text-align: center;
+    color: var(--primary-red);
+    font-size: var(--font-size-extra-small);
 }
 
 .login-container label {
