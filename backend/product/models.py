@@ -32,8 +32,7 @@ class Product(models.Model):
                                     blank=False, null=True, default=Decimal('2.99'))
     product_status = models.CharField(
         choices=STATUS, max_length=15, default="available")
-    stock_count = models.IntegerField(
-        max_length=100, default="10", null=True, blank=True)
+    stock_count = models.IntegerField(default="10", null=True, blank=True)
     quantity = models.FloatField(blank=False, null=False, default=1.0)
     date_added = models.DateTimeField(auto_now_add=True)
 
