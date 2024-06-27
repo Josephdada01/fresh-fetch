@@ -1,8 +1,10 @@
 from django.db import models
 from users.models import User
+from decimal import Decimal
 #from vendor.models import Vendor
 from django.utils.html import mark_safe
 from shortuuid.django_fields import ShortUUIDField
+from django.core.exceptions import ValidationError
 STATUS = (
     ("available", "Available"),
     ("out_of_stock", "Out Of Stock"),
@@ -19,19 +21,20 @@ def user_directory_path(instance, filename):
 # Create your models here.
 class Product(models.Model):
     """class for the products object"""
-    product_id = ShortUUIDField(blank=True, length=8, alphabet="1234567890")
+    product_id = ShortUUIDField(primary_key=True, unique=True, blank=True, length=8, alphabet="1234567890")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, default="groceries")
+    name = models.CharField(max_length=100, blank=False, null=False, default='')
     #vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True, related_name="product")
-    image = models.ImageField(upload_to=user_directory_path, default="product.jpg")
-    description = models.TextField(null=True, blank=True, default="This is the product")
-    price = models.DecimalField(max_digits=12, decimal_places=2, default="0.00")
-    old_price = models.DecimalField(
-        max_digits=12, decimal_places=2, default="2.99")
+    image = models.ImageField(upload_to=user_directory_path, blank=False, null=True, default="product.jpg")
+    description = models.TextField(null=True, blank=False, default='')
+    price = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    old_price = models.DecimalField(max_digits=12, decimal_places=2,
+                                    blank=False, null=True, default=Decimal('2.99'))
     product_status = models.CharField(
         choices=STATUS, max_length=15, default="available")
-    stock_count = models.CharField(
+    stock_count = models.IntegerField(
         max_length=100, default="10", null=True, blank=True)
+    quantity = models.FloatField(blank=False, null=False, default=1.0)
     date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -43,6 +46,11 @@ class Product(models.Model):
     def __str__(self):
         """returning string representation of string"""
         return self.name
+    
+    def clean(self):
+        """Custom validation for the image field"""
+        if not self.image:
+            raise ValidationError('Image field cannot be empty')
 
     def get_percentage(self):
         """caluculating the percentage off, or something like 30 percent off"""
