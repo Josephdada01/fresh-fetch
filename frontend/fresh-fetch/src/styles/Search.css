@@ -13,12 +13,12 @@
 /* The search components
   ========================================== */
 
-    .search {
-        margin-right: 4vw;
+    .search-button {
+        margin-left: 15vw;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: clamp(80px, 27%, 150px);
+        max-height: 60px;
         background-color: var(--primary-black);
         text-align: center;
         border-radius: 10px;
@@ -26,14 +26,73 @@
         padding: 0px 20px;
     }
 
-    .search p {
+    .search-button p {
         color: var(--primary-white);
         font-size: clamp(14px, 3vw + .3rem, 18px);
         font-family: var(--font-family-base);
         text-align: center;
     }
 
-    .search img {
+    .search-button img {
         max-width: 45%;
     }
+
+    .active-search-container {
+        width: 200%;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        border: 1px soild red;
+    }
+
+    .active-search-container button {
+        border: 1px solid var(--primary-black);
+        background-color: transparent;
+        border-radius: 50%;
+
+    }
+
+    .close-icon {
+        width: clamp(15px, 3vw, 25px);
+        height: clamp(15px, 3vw, 25px);
+    }
+
+    .search-input {
+        margin-right: 15vw;
+        position: relative;
+        width: clamp(80px, 27%, 380px);
+        margin-left: 10px;
+      }
+
+      .search-field {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        box-sizing: border-box;
+        border-radius: 5px;
+      }
+      
+      .search-field {
+        border: 1px solid #ccc;
+      }
+      
+      .results-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 10px 0 0;
+        max-height: 200px; /* Ensure the results list doesn't get too tall */
+        overflow-y: auto; /* Add scrolling if the list is too tall */
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .results-list li {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+      
+      .results-list li:last-child {
+        border-bottom: none;
+      }
   /* ============================================== */

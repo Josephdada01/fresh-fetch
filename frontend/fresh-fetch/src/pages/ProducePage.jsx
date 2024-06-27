@@ -102,6 +102,8 @@ export default function ProducePage() {
         }
     ]);
 
+    const [searchResult, setSearchResult ] = useState([])
+
     async function getProducts() {
         const response = await fetch('http://127.0.0.1:8000/api/v1/products', {
             method: 'get',
@@ -113,13 +115,17 @@ export default function ProducePage() {
         } else {
             console.log("I am not okay");
         }
-        console.log(products);
+        // console.log(products);
         return products;
     }
     const navigate = useNavigate();
 
     const goToBasket = () => {
         navigate('/basket');
+    }
+
+    function handleSearchReturn(name) {
+        setSearchResult(displayProducts.filter(product => product.name === name))
     }
 
     const goToLogin = () => {
@@ -191,14 +197,14 @@ export default function ProducePage() {
                     button */}
                 <div className="secondary-header">
                     <h2>Produce</h2>
-                    <Search />
+                    <Search products={displayProducts} handleSearchReturn={handleSearchReturn}/>
                 </div>
                 <hr />
                 
 
                 {/* A few of the available produces */}
                 <div className="produces">
-                    {displayProducts.map((product) => (
+                    {(searchResult.length !== 0 ? searchResult : displayProducts).map((product) => (
                         <Produce key={product.id} product={product}
                                  handleMakeOrder={handleMakeOrder}
                                  addToBasket={user ? addToBasket : goToLogin} />
