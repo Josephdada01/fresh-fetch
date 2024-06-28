@@ -32,7 +32,7 @@ export default function Dashboard() {
     // Get user from login and save it in a user state
     const [ user, setUser ] = useState(state ? {
         userId: state.user?.id,
-        first_name: state.user?.firstName,
+        first_name: state.user?.first_name,
         last_name: state.user?.last_name,
         // To be removed. This will be retireved from the api or from the user
         orders: [
