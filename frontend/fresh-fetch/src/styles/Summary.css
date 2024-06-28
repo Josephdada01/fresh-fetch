@@ -74,4 +74,9 @@
     .pay-btn button img {
         width: clamp(30px, 15%, 70px);
     }
+
+    .pay-btn button:hover {
+        font-weight: var(--font-weight-bold);
+        transition: .1s ease;
+    }
   /* ======================================================== */

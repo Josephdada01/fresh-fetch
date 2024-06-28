@@ -113,17 +113,6 @@ body {
     justify-content: center;
 }
 
-.continue {
-    width: clamp(80px, 27%, 150px);
-    height: 40px;
-    color: var(--primary-white);
-    background-color: var(--primary-black);
-    border: none;
-    border-radius: 5px;
-    margin-top: 30px auto;
-    font-size: var(--font-size-medium);
-}
-
 .submit-error {
     line-height: 1.2;
     text-align: center;

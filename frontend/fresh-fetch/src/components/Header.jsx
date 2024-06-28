@@ -5,7 +5,7 @@ export default function Header({ isVendor, user }) {
     const navigate = useNavigate();
 
     const goToProducePage = () => {
-        console.log('User in header:', user);
+        // console.log('User in header:', user);
         navigate('/produce', { state: { user: user}});
     }
 

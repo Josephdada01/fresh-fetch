@@ -40,7 +40,7 @@ export default function Produce({ product, addToBasket, handleMakeOrder }) {
         <>
             <div className="quantity-input-container">
             <label htmlFor="quantity-input">Quantity: </label>
-                <input type="text" name='quantity-input' id='quantity-input'
+                <input type="number" name='quantity-input' id='quantity-input'
                        placeholder="1kg" onChange={handleChangeQuantity} />
                 <br />
                {continueOrCancel}

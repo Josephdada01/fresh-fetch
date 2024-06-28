@@ -78,9 +78,7 @@ body {
 
 .login-container label {
     font-weight: var(--font-weight-bold);
-}
-
-.login-container 
+} 
 
 .green {
     color: var(--primary-green);
@@ -93,10 +91,17 @@ body {
 
 .continue {
     width: clamp(80px, 27%, 150px);
+    height: clamp(20px, 10vw, 40px);
     color: var(--primary-white);
     background-color: var(--primary-black);
     border: none;
     border-radius: 5px;
     margin: 30px auto;
     font-size: var(--font-size-medium);
+}
+
+.continue:hover {
+    font-weight: var(--font-weight-bold);
+    transition: .3s ease;
+    height: clamp(25px, 10vw, 45px);
 }

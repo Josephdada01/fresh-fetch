@@ -180,9 +180,26 @@ export default function Dashboard() {
         setModal(prevModal => !prevModal);
     }
 
-    function handleNewProduct(porduct) {
+    async function handleNewProduct(product) {
         // call create product api 
-        console.log(porduct)
+        // console.log(product)
+
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/v1/products/', {
+                method: 'POST',
+                body: JSON.stringify(product)
+            })
+
+            if (response.ok) {
+                const product = await response.json();
+                console.log('Created new product:', product);
+
+            } else {
+                console.log("I am not okay");
+            }
+        } catch(error) {
+            console.log("Failed to submit form", error);
+        }  
     }
 
     function handleFulfill(id) {

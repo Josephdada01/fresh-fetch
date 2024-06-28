@@ -70,7 +70,7 @@ describe('<Order />', () => {
             </BrowserRouter>);
 
 
-        expect(screen.getByRole('textbox')).toBeInTheDocument();
+        expect(screen.getByRole('spinbutton')).toBeInTheDocument();
         expect(screen.getByAltText('A pencil')).toBeInTheDocument();
     });
     

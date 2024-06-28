@@ -30,7 +30,7 @@
         justify-self: center;
         background-color: var(--order-background);
         width: clamp(152px, 95%, 950px);
-        max-height: clamp(105px, 22vw, 150px);
+        max-height: clamp(105px, 26vw, 150px);
         border: 2px solid var(--border-color);
         border-radius: 20px; 
     }
@@ -74,22 +74,35 @@
 
     .order .order-btns button {
         width: clamp(70px, 20vw, 140px);
-        height: clamp(30px, 5vw, 50px);
+        height: clamp(30px, 8vw, 50px);
         font-size: clamp(10px, 3vw, 20px);
         border: none;
         border-radius: 5px;
         margin-bottom: 20px;
     }
 
+
+
     .order .order-btns .order-now-btn {
         background-color: var(--primary-green);
         color: var(--primary-white);
+    }
+
+    .order .order-btns .order-now-btn:hover {
+        background-color: var(--hover-green);
+        transition: .3s ease;
     }
 
     .order .order-btns .remove-btn {
         background-color: var(--primary-red);
         color: var(--primary-white);
         border: none;
+    }
+
+    .order .order-btns .remove-btn:hover {
+        transition: .3s ease;
+        font-weight: var(--font-weight-bold);
+        border: 1px solid var(--primary-white);
     }
 
 .quantity-input {
@@ -113,8 +126,12 @@
     outline: none;
     padding: 10px 10px 10px 0;
     font-size: var(--font-size-extra-small);
-    width: 25px;
+    width: 50px;
     background-color: transparent;
+}
+
+.quantity-input:hover {
+    border: 1px solid var(--primary-black)
 }
 
 .quantity-input #hiddenLabel {

@@ -56,13 +56,13 @@
         border-radius: 5%;
         background-color: var(--primary-white);
         color: var(--primary-black);
-    };
-
-    .user-auth-container .login-btn {
-        background-color: var(--primary-black);
-        color: var(--primary-white);
     }
 
+    .user-auth-container button:hover {
+        background-color: var(--primary-black);
+        color: var(--primary-white);
+        transition : .3s ease-in;
+    }
     .basket-btn {
         margin-top: 10px;
         background-color: transparent;
@@ -78,6 +78,9 @@
         font-size: clamp(15px, 2vw + 0.2rem, 35px);
         margin: 0;
         margin-top: 10px;
+    }
+    .basket-btn:hover p {
+        text-decoration: underline;
     }
 
     .basket-btn img {

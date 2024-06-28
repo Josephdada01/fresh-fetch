@@ -20,6 +20,8 @@
     --status-confirmed: var(--primary-green);
     --status-canceled: var(--primary-red);
 
+    --hover-orange: #f5a207;
+
 
     --font-family-base: 'Inter', Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
     --font-size-large: clamp(20px, 2vw + 1rem, 70px);
@@ -43,6 +45,10 @@
         height: clamp(105px, 22vw, 150px);
         border: 2px solid var(--border-color);
         border-radius: 20px; 
+    }
+
+    .vendor-order:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 
     .vendor-order img {
@@ -88,7 +94,7 @@
         margin-right: 10px;
         margin-bottom: 15px;
         width: clamp(70px, 20vw, 140px);
-        height: clamp(30px, 5vw, 50px);
+        height: clamp(30px, 10vw, 50px);
         font-size: clamp(12px, 3vw, 20px);
         border: none;
         border-radius: 5px;
@@ -97,6 +103,11 @@
     .vendor-order .btn-container .fulfill-btn {
         background-color: var(--primary-orange);
         color: var(--primary-white);
+    }
+
+    .vendor-order .btn-container .fulfill-btn:hover {
+        background-color: var(--hover-orange);
+        transition: .3s ease;
     }
 
     .vendor-order .status {

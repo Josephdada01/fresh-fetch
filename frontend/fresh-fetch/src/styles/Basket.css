@@ -76,6 +76,11 @@
         background-color: var(--primary-green);
         color: var(--primary-white);
     }
+
+    .basket-header .order-all-btn:hover {
+        background-color: var(--hover-green);
+        transition: .3s ease;;
+    }
   /* ============================================= */
 
 /* styling for all types of order components */
@@ -127,5 +132,10 @@
         border-radius: 5px;
         background-color: var(--primary-red);
         color: var(--primary-white);
+    }
+
+    .pending-header .cancel-all-btn:hover {
+        font-weight: var(--font-weight-bold);
+        transition: .3s ease;
     }
   /* ==================================================== */

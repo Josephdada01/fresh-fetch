@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import searchIcon from "../images/search-icon.png";
+import { FaSearch } from "react-icons/fa";
 import { AiOutlineClose } from 'react-icons/ai';
 
 import "../styles/Search.css"
@@ -51,7 +51,7 @@ export default function Search({ products, handleSearchReturn }) {
         ) : (
           <button onClick={toggleSearch} className="search-button">
             <p>Search</p>
-            <img src={searchIcon} alt="Search icon" />
+            <FaSearch className="search-icon" />
           </button>
         )}
         {isSearchActive && (

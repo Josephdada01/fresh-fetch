@@ -32,6 +32,10 @@
         border-radius: 20px; 
     }
 
+    .product:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
     .product img {
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
@@ -90,11 +94,16 @@
     .quantity-input-container .enter-quantity-btn {
         background-color: var(--primary-green);
         color: var(--primary-white);
-        width: 90%;
+        width: 80%;
         height: 30px;
         font-size: 80%;
         border: none;
         border-radius: 5px;
+    }
+
+    .quantity-input-container .enter-quantity-btn:hover {
+        font-weight: 550;
+        height: 35px
     }
 
     .product .product-btns {
@@ -117,6 +126,11 @@
     .product .product-btns .change-quantity-btn {
         background-color: var(--primary-white);
         color: var(--dark-gray);
+        border: 1px solid var(--dark-gray);
+    }
+
+    .product .product-btns .change-quantity-btn:hover {
+        color: var(--primary-black);
         border: 1px solid var(--primary-black);
     }
 
@@ -124,5 +138,9 @@
         background-color: var(--primary-red);
         color: var(--primary-white);
         margin-bottom: 10px;
+    }
+
+    .product .product-btns .remove-product:hover {
+        font-weight: 550;
     }
   /*=================================================*/
