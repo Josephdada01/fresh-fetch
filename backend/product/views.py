@@ -6,7 +6,8 @@ from rest_framework.views import APIView
 from product.models import Product
 from product.serializers import ProductSerializer
 from users.models import User
-from reviews.permissions import IsUser
+from product.permissions import IsVendor
+#from reviews.permissions import IsUser
 """
 class isVendor(IsAuthenticated):
     
@@ -27,7 +28,7 @@ class ProductDetail(generics.RetrieveAPIView):
     """listing the product details"""
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    lookup_field = 'product_id'
+    #lookup_field = 'product_id'
 
 
 class ProductCreateView(generics.CreateAPIView):
@@ -37,7 +38,7 @@ class ProductCreateView(generics.CreateAPIView):
     
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated, IsUser]
+    permission_classes = [IsAuthenticated, IsVendor]
 
 class ProductUpdateView(generics.UpdateAPIView):
     
@@ -46,7 +47,8 @@ class ProductUpdateView(generics.UpdateAPIView):
     
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated, IsUser]
+    permission_classes = [IsAuthenticated, IsVendor]
+    lookup_field = 'pk'
 
 class ProductDeleteView(generics.DestroyAPIView):
     
@@ -55,12 +57,12 @@ class ProductDeleteView(generics.DestroyAPIView):
     
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated, IsUser]
-    lookup_field = 'product_id'
+    permission_classes = [IsAuthenticated, IsVendor]
+    lookup_field = 'pk'
 
 ############################################## DO NOT DELETE ##################################
 # this will work if we want to handle the  CRUD all at once
-
+"""
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -74,4 +76,4 @@ class ProductViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         #vendor can perform the update
         serializer.save(user=self.request.user.is_vendor)
-
+"""
