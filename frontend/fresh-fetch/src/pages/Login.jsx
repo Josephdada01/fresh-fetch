@@ -157,7 +157,15 @@ export default function Login() {
                     console.log("Form submitted successfully")
                 }
             } else {
-                console.error("I am not ok");
+                if (responseToken.status >= 400) {
+                    setMessage(<p className="submit-error">
+                        Incorrect email or password
+                    </p>)
+                    return;
+                } else {
+                    console.error("I am not ok");
+                    return;
+                }
             }
 
             // use the session ID to retrieve the user object
@@ -170,11 +178,16 @@ export default function Login() {
 
             if (responseUser.ok) {
                 console.log("Getting user...");
+                if (responseToken.status == 400) {
+                    return;
+                }
                 const returnedUser = await responseUser.json();
 
                 // Pass the returned user to the pages
                 returnedUser.is_vendor ? goToDashboard(returnedUser) : goHome(returnedUser); 
 
+            } else {
+                console.log(responseUser)
             }
         } catch(error) {
             console.error('Failed to submit form:', error)
