@@ -29,11 +29,11 @@ class ProductDetail(generics.RetrieveAPIView):
     serializer_class = ProductSerializer
     lookup_field = 'product_id'
 
-"""
+
 class ProductCreateView(generics.CreateAPIView):
     
-    views for creating a product, and restricting the access
-    to only authenticated user and vendors
+    # views for creating a product, and restricting the access
+    # to only authenticated user and vendors
     
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -41,8 +41,8 @@ class ProductCreateView(generics.CreateAPIView):
 
 class ProductUpdateView(generics.UpdateAPIView):
     
-    views for updatingting a product, and restricting the access
-    to only authenticated user and vendors
+    # views for updatingting a product, and restricting the access
+    # to only authenticated user and vendors
     
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -50,14 +50,14 @@ class ProductUpdateView(generics.UpdateAPIView):
 
 class ProductDeleteView(generics.DestroyAPIView):
     
-    views for deleting a product, and restricting the access
-    to only authenticated user and vendors
+    # views for deleting a product, and restricting the access
+    # to only authenticated user and vendors
     
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated, IsUser]
     lookup_field = 'product_id'
-"""
+
 ############################################## DO NOT DELETE ##################################
 # this will work if we want to handle the  CRUD all at once
 
@@ -69,9 +69,9 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         #vendor can perform the creation
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user.is_vendor)
 
     def perform_update(self, serializer):
         #vendor can perform the update
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user.is_vendor)
 
