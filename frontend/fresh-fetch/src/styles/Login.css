@@ -1,3 +1,4 @@
+/* Root variables */
 :root {
     --font-family-title: Newsreader, Raleway, Helvetica Neue, Helvetica, Arial, sans-serif;
     --font-family-base: 'Inter', Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
@@ -33,7 +34,6 @@ body {
 }
 
 .login-container{
-    /* position: absolute; */
     text-align: center;
     width: clamp(280px, 85%, 600px);
     margin-top: 50px;
@@ -68,7 +68,6 @@ body {
 }
 
 .login-error-message {
-    /* margin-top: -20px; */
     line-height: 1.2;
     width: 70%;
     text-align: center;
@@ -80,6 +79,7 @@ body {
     font-weight: var(--font-weight-bold);
 } 
 
+/* For the Sign Up link */
 .green {
     color: var(--primary-green);
     text-decoration: underline;
@@ -89,6 +89,7 @@ body {
     font-size: var(--font-size-small);
 }
 
+/* Login button */
 .continue {
     width: clamp(80px, 27%, 150px);
     height: clamp(20px, 10vw, 40px);

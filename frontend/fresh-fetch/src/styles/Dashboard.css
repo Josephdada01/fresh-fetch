@@ -18,7 +18,7 @@
     color: var(--primary-orange);
 }
 
-/* Header unique to the vendor's dashboard */
+/*Basic styling for all the header*/
 .vendor-header, .products-header {
     margin-inline: 9vw;
     font-size: var(--font-size-large);
@@ -58,12 +58,13 @@
     margin-bottom: 60px;
 }
 
-/* Container for all products */
-
+/* For the p that gets displayed when there are no products */
 .vendor-products .no-products {
     text-align: center;
     font-size: var(--font-size-medium);
 }
+
+/* Container for all products */
 
 .vendor-products {
     margin-inline: 5vw;
