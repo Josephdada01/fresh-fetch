@@ -1,8 +1,11 @@
+// imports from react
 import { useNavigate } from "react-router";
 import { useState } from "react";
 
+// Custom component import
 import Header from "../components/Header";
 
+// Styling import
 import "../styles/Login.css";
 
 export default function Login() {
@@ -11,13 +14,18 @@ export default function Login() {
         password: "",
     });
 
+    // keep track of all from errors on the page
     const [ errors, setErrors ] = useState({});
+    
+    // Sets a message when user tries to sign in with invalid information
     const [ message, setMessage ] = useState("");
     
+    // Keep track of all form changes
     function handleChange(e) {
         const { name, value } = e.target;
         setFormData(prevState => ({...prevState, [name]: value}));
 
+        // Check for errors everytime formData changes
         const newErrors = validateInput(name, value);
         setErrors(newErrors);
     }
@@ -28,18 +36,22 @@ export default function Login() {
         navigate('/signup');
     };
 
+    // If the user is a buyer, this is the "home page"
     function goHome (user) {
         navigate('/', { state: { user: user }});
     }
 
+    // If the user is a vendor, this is a "home page"
     function goToDashboard (user) {
         navigate('/dashboard', { state: { user: user }});
     }
 
+    // Takes care of all input validation
     function validateInput(name, value) {
         const newErrors = { ...errors }; // Copy existing errors
         switch(name) {
             case 'email':
+                // regualr expression for email
                 const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                 const parts = value.split('@');
                 if (!value || value === "") {
@@ -54,6 +66,7 @@ export default function Login() {
                     newErrors.email = (<p className='input-error'>
                         Please enter a valid email
                     </p>)
+                // This next one tests the length of each part of email separately
                 } else if (parts[0].length > 64 ||
                            parts[1].length > 255) {
                      newErrors.email = (<p className='input-error'>
@@ -72,7 +85,7 @@ export default function Login() {
                         newErrors.password = (<p className='input=error'>
                             password must be 8 or more characters
                         </p>)
-                    } else if(!/[A-Z]/.test(value)){
+                    } else if(!/[A-Z]/.test(value)) {
                         newErrors.password = (<p className='input-error'>
                             Password must contain at least one upper case letter
                         </p>)
@@ -94,31 +107,41 @@ export default function Login() {
                     break;
                 default: break;
         }
+
+        // Return any new errors that were found
         return newErrors;
     }
 
     async function handleSubmit(e) {
+        // Prevent default in case there are are any form errors
         e.preventDefault();
 
+        // Get all the keys and values of the formData object for
+        // final input validation 
         const formKeys = Object.keys(formData);
         const formValues = Object.values(formData);
 
         let newErrors = {};
 
+        // Final input validation vefore submitting
         for (let i = 0;  i < formKeys.length; i++) {
             newErrors = {...newErrors, ...validateInput(formKeys[i], formValues[i])};
         }
 
         setErrors(newErrors);
 
+        // bool
         const hasErrors = Object.keys(newErrors).length > 0;
         if (hasErrors) {
             setMessage(<p className="submit-error">Please fix all form errors before submitting</p>)
             return;
         }
             
+        // If there are no errors set the message to null
         setMessage(null);
+
         try {
+            // Send user to back-end for validation and retrieve session_id
             const responseToken = await fetch('http://127.0.0.1:8000/api-auth/users/login/', {
                 method: 'POST',
                 headers: {
@@ -127,7 +150,7 @@ export default function Login() {
                 body: JSON.stringify(formData)
             });
 
-            let returnedToken
+            let returnedToken;
             if (responseToken.ok) {
                 returnedToken = await responseToken.json();
                 if (responseToken.length !== 0) {
@@ -137,6 +160,7 @@ export default function Login() {
                 console.error("I am not ok");
             }
 
+            // use the session ID to retrieve the user object
             const responseUser = await fetch('http://127.0.0.1:8000/api-auth/users/user', {
                 method: 'GET',
                 headers: {
@@ -147,6 +171,8 @@ export default function Login() {
             if (responseUser.ok) {
                 console.log("Getting user...");
                 const returnedUser = await responseUser.json();
+
+                // Pass the returned user to the pages
                 returnedUser.is_vendor ? goToDashboard(returnedUser) : goHome(returnedUser); 
 
             }
@@ -158,7 +184,7 @@ export default function Login() {
     return (
         <>
             <div className="header-container">
-                <Header />
+                <Header user={null}/>
             </div>
 
             <main className="login">
@@ -176,6 +202,7 @@ export default function Login() {
                                aria-describedby={`email-error ${errors.email ? 'error' : ''}`}
                                required={true}
                             />
+                        {/* Display an error message if there is an issue with the input */}
                         <span id='email-error' className='login-error-message'>
                             {errors.email}
                         </span>
@@ -196,8 +223,8 @@ export default function Login() {
                             onClick={handleSubmit}>
                         Continue
                     </button>
+                    {/* Display a message if there are form errors */}
                     {message && message}
-
                 </div>
             </main>
         </>

@@ -1,5 +1,4 @@
 import "../styles/Order.css"
-import pencilImg from "../images/pencil.png";
 
 export default function Order({ order, removeOrder, handleChange, handleOrder }) {
     // This component is for the individual order items that will be displayed

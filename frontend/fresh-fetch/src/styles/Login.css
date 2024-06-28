@@ -41,14 +41,14 @@ body {
     border-radius: 5px;
 }
 
-.login-container h2, h3 .login-header {
+.login-container h2, .login-header {
     margin-top: 50px;
     font-family: var(--font-family-title);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-large);
 }
 
-.login-container h3 .login-header {
+.login-container .login-header {
     font-weight: var(--font-weight-regular);
 }
 

@@ -1,9 +1,9 @@
 import "../styles/PendingOrder.css"
 
 export default function PendingOrder({ order, cancelOrder, confirmOrder }) {
-    // This component is for the individual order items that will be displayed
-    // in the pending area of the basket. The orders are made and the user is
-    // waiting for them to be delivered.
+    /* This component is for the individual order items that will be displayed
+    in the pending area of the basket. The orders are made and the user is
+    waiting for them to be delivered.*/
 
 
     return (
@@ -20,12 +20,12 @@ export default function PendingOrder({ order, cancelOrder, confirmOrder }) {
                 <p className="quantity">Quantity: {order.quantity} kgs</p>
                 <p className="vendor">Vendor: {order.vendor}</p>
                 
-                <div className="order-btns">
+                {order.status === "Pending" && <div className="order-btns">
                     <button className="confirm-btn"
                             onClick={() => {confirmOrder(order.id)}}>Confirm</button>
                     <button className="cancel-btn"
                             onClick={() => {cancelOrder(order.id)}}>Cancel</button>
-                </div>
+                </div>}
             </div>
 
             {/* This status will be either pending, confirmed or cancelled */}

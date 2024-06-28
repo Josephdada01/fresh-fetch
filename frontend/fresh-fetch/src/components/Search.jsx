@@ -7,10 +7,15 @@ import "../styles/Search.css"
 
 export default function Search({ products, handleSearchReturn }) {
     // This component is for the search mechanism.
+
+    // Keeps track of weather the search button is pressed and displays a search input if it is
     const [isSearchActive, setIsSearchActive] = useState(false);
+    // Keeps track of changes in the search input field.
     const [searchTerm, setSearchTerm] = useState('');
+    // Keeps track of all the product names that match the search term
     const [filteredResults, setFilteredResults] = useState([]);
   
+    // This changes everytime the search term or the products array change
     useEffect(() => {
       if (searchTerm) {
         const results = products.filter(item =>
@@ -35,6 +40,7 @@ export default function Search({ products, handleSearchReturn }) {
   
     return (
       <div className="search-input">
+      {/* If search button is pressed display the input and the cancel button */}
         {isSearchActive ? (
             <div className="active-search-container">
                 <input
@@ -48,12 +54,15 @@ export default function Search({ products, handleSearchReturn }) {
                     <AiOutlineClose className="close-icon"/>
                 </button>
             </div>
+        // If not, display the search button
         ) : (
           <button onClick={toggleSearch} className="search-button">
             <p>Search</p>
             <FaSearch className="search-icon" />
           </button>
         )}
+
+        {/* Display all the matches of the search */}
         {isSearchActive && (
           <ul className="results-list">
             {filteredResults.map((result, index) => (

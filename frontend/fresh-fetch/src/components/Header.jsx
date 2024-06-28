@@ -5,15 +5,18 @@ export default function Header({ isVendor, user }) {
     const navigate = useNavigate();
 
     const goToProducePage = () => {
-        // console.log('User in header:', user);
-        navigate('/produce', { state: { user: user}});
+
+        user && navigate('/produce', { state: { user: user}});
     }
 
     const goToVendorDashboard = () => {
-        navigate('/dashboard');
+        user && navigate('/dashboard', { state: { user: user }});
     }
+
     return (
         <div className="header">
+            {/* If user is a buyer go to the produce page 
+                If user is a vendor go to the vendor dashboard*/}
                 {isVendor ? (
                     <h1 onClick={goToVendorDashboard}>Fresh Fetch</h1>
                 ): (

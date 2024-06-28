@@ -4,7 +4,12 @@ import '../styles/CreateNewProduct.css';
 
 
 function CreateNewProduct({ createProduct }) {
-    const [isOpen, setIsOpen] = useState(true);
+
+  // Get all the info necessary to create a new product
+  
+  // Keep track of the popup form state
+  const [isOpen, setIsOpen] = useState(true);
+
   const [formData, setFormData] = useState({
     image: null,
     name: '',
@@ -12,6 +17,7 @@ function CreateNewProduct({ createProduct }) {
     stock: ''
   });
 
+  // Handles all form change and updates the state
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     setFormData({
@@ -22,8 +28,13 @@ function CreateNewProduct({ createProduct }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // If all of these input fields are not empty
     if (formData.image && formData.name && formData.price && formData.stock) {
+
+      // Calls a function from the parent component that creates the product
       createProduct(formData);
+      // closes the popup form
       setIsOpen(false);
       setFormData({
         image: null,
@@ -38,16 +49,16 @@ function CreateNewProduct({ createProduct }) {
     setIsOpen(!isOpen);
   };
 
+  // Makes sure all form data is not empty
   const isFormIncomplete = formData.name && formData.price && formData.stock;
+
+  // If form not complete, display a cancel button. Else, a submit button
   const createOrCancel = isFormIncomplete ?
-                                <button type="submit" disabled={!isFormIncomplete}>Submit</button> 
+                                <button type="submit" disabled={!isFormIncomplete}>Create</button> 
                             :
                             <button onClick={toggleForm} className="cancel-btn">Cancel</button> 
   return (
     <div className="new-product-form">
-      {/* <button onClick={toggleForm}>
-        {isOpen ? (isFormIncomplete ? 'Create' : 'Cancel') : 'New'}
-      </button> */}
       {isOpen && (
         <div className="form-popup">
           <form onSubmit={handleSubmit}>
@@ -67,7 +78,8 @@ function CreateNewProduct({ createProduct }) {
               Available Stock(in kg):
               <input type="number" name="stock" id="stock" value={formData.stock} onChange={handleChange} required />
             </label>
-            {createOrCancel}
+            {/* Disable the button if form is incomplete */}
+            <button type="submit" disabled={!isFormIncomplete}>Create</button> 
           </form>
         </div>
       )}

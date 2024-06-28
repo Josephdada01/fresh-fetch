@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import '../styles/Produce.css';
 
@@ -7,17 +6,18 @@ export default function Produce({ product, addToBasket, handleMakeOrder }) {
     // This component is for the individual produce items that will be displayed
     // on the produce page
 
+    // Keeps track of weather the quantity input box should be displayed or not
     const [ quantityModal, setQuantityModal ] = useState(false);
+
+    // Individual state to keep track of the entered quantity
     const [ quantity, setQuantity ] = useState("");
-
-    const navigate = useNavigate();
-
 
     const toggleQuantityModal = () => {
         setQuantityModal(!quantityModal);
         setQuantity("");
     };
 
+    // Display a continue button if qunatity is not set. A cencel button if not
     const continueOrCancel = (
         quantity === "" ? (
             <button className="cancel-quantity-btn"
@@ -32,6 +32,7 @@ export default function Produce({ product, addToBasket, handleMakeOrder }) {
         )
     )
 
+    // Handles changes in the qunaitty input field.
     function handleChangeQuantity(e) {
         setQuantity(e.target.value);
     }
@@ -50,12 +51,10 @@ export default function Produce({ product, addToBasket, handleMakeOrder }) {
 
     return (
         <div className="produce" aria-label='Produce item'>
-            {/* This image will eventually be replaced by an image coming from an API */}
             <div className="produce-image">
                 <img src={ product.pic } alt="Image of produce" />
             </div>
 
-            {/* This data will also be replaced by data from the API. */}
             <div className="produce-info">
                 <div className="produce-details">
                     <h3 className="produce-name">{product.name}</h3>
@@ -63,6 +62,8 @@ export default function Produce({ product, addToBasket, handleMakeOrder }) {
                     <p className="vendor">Vendor: {product.vendor}</p>
                 </div>
 
+                {/* When order now is clicked, a quantity input will replace order now and
+                    Add to basket buttons */}
                 {quantityModal ? quantityInput : (
                     <div className="produce-btns">
                         <button className="order-now-btn"

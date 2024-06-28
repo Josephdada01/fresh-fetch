@@ -1,12 +1,15 @@
+// Imports from react
 import { useState } from 'react';
 import { useNavigate } from "react-router";
 
-
+// COmponent imports
 import Header from "../components/Header";
 
+// Styling imports
 import "../styles/Signup.css"
 
 export default function Signup() {
+    // Keep track of all the form data
     const [ formData, setFormData ] = useState({
         first_name: "",
         last_name: "",
@@ -19,14 +22,19 @@ export default function Signup() {
         is_vendor: null,
     });
 
+    // Keep track of al lthe form errors
     const [errors, setErrors] = useState({});
+
+    // Set a message to display when there are for errors
     const [ message, setMessage ] = useState("");
 
     const navigate = useNavigate();
 
+    // Handle all form changes
     function handleChange(e) {
         let { name, value } = e.target;
 
+        // Convert the string type to bool for the is_vendor attribute
         if (name === "is_vendor") {
             if (value === "true") {
                 value = true
@@ -36,6 +44,7 @@ export default function Signup() {
         }
         setFormData(prevState => ({...prevState, [name]: value}));
 
+        // Validate inpiut every time form data changes
         const newErrors = validateInput(name, value);
         setErrors(newErrors);
     }
@@ -44,6 +53,7 @@ export default function Signup() {
         navigate('/login');
     };
 
+    // Handles al linput validation
     function validateInput(name, value) {
         const newErrors = { ...errors }; // Copy existing errors
         switch (name) {
@@ -74,6 +84,7 @@ export default function Signup() {
                 }
                 break;
             case 'email':
+                // Regual expression for email validation
                 const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                 const parts = value.split('@');
                 if (!value || value === "") {
@@ -155,6 +166,7 @@ export default function Signup() {
                     }
                     break;
                 case 'password2':
+                    // Get the first password
                     const passwd = formData.password1;
                     if(value !== passwd) {
                         newErrors.password2 = (<p className='input-error'>
@@ -180,24 +192,30 @@ export default function Signup() {
     }
 
     async function handleSubmit(e) {
+        // Prevent default in case there are form errors
         e.preventDefault();
 
+        // Get all the keys and values of th formData
+        // For final form validation
         const formKeys = Object.keys(formData);
         const formValues = Object.values(formData);
 
         let newErrors = {};
 
+        // Final form validation
         for (let i = 0;  i < formKeys.length; i++) {
             newErrors = {...newErrors, ...validateInput(formKeys[i], formValues[i])};
         }
 
         setErrors(newErrors);
 
+        // bool
         const hasErrors = Object.keys(newErrors).length > 0;
         if (hasErrors) {
             setMessage(<p className="submit-error">Please fix all form errors before submitting</p>)
             return;
         }
+        // Send a request to register the user
         try {
             const jsonData = JSON.stringify(formData);
             const response = await fetch('http://127.0.0.1:8000/api-auth/users/register/', {
@@ -225,7 +243,7 @@ export default function Signup() {
     return (
         <>
             <div className="header-container">
-                <Header />
+                <Header user={null}/>
             </div>
 
             <main className="signup">
@@ -243,6 +261,7 @@ export default function Signup() {
                                aria-describedby={`first_name-error ${errors.first_name ? 'error' : ''}`}
                                required={true}
                             />
+                        {/* Display an error message if there is an issue with the input */}
                         <span id='first_name-error' className='error-message'>
                             {errors.first_name}
                         </span>
@@ -321,6 +340,7 @@ export default function Signup() {
                             {errors.password2}
                         </span>
 
+                        {/* Define user type */}
                         <div className="radio-container">
                             <div className="buyer">
                                 <input type="radio" name="is_vendor" id="buyer" value={false}

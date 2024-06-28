@@ -23,10 +23,11 @@ import gingerImg from "../images/ginger.jpg";
 export default function ProducePage() {
     // This component displays all the available produces to the user
     
-    // User state is empty to represent users that are not logged in
     const location = useLocation();
     const state = location.state;
 
+    // Recieves the user from teh Login page at first.
+    // Also recieves the user from the basket and the summary pages
     const [ user, setUser ] = useState(state ? {
         userId: state.user?.id,
         first_name: state.user?.first_name,
@@ -35,9 +36,10 @@ export default function ProducePage() {
         image: profilePic,
     } : null);
 
-    // console.log("React user at produce:", user);
 
+    // Get products from the API
     const products = getProducts();
+
     const [ displayProducts, setDisplayProducts ] = useState(products.length > 0 ? [
         {
             id: products[0]?.id,
@@ -70,6 +72,7 @@ export default function ProducePage() {
             pic: onionImg,
         }
     ]: [
+        // Fake products for dev. To be removed
         {
             id: "1",
             name: "Heirloom tomato",
@@ -105,6 +108,7 @@ export default function ProducePage() {
     const [searchResult, setSearchResult ] = useState([])
 
     async function getProducts() {
+        // Gets all products form the back-end
         const response = await fetch('http://127.0.0.1:8000/api/v1/products', {
             method: 'get',
         });
@@ -115,16 +119,17 @@ export default function ProducePage() {
         } else {
             console.log("I am not okay");
         }
-        // console.log(products);
         return products;
     }
 
     const navigate = useNavigate();
 
+    // Pass user to basket
     const goToBasket = () => {
         navigate('/basket', { state: { user: user }});
     }
 
+    // Limit the displayed products to the ones that are in the search
     function handleSearchReturn(name) {
         setSearchResult(displayProducts.filter(product => product.name === name))
     }
@@ -137,13 +142,17 @@ export default function ProducePage() {
         navigate('/signup');
     }
 
+    // Handles making order directly from the produce page instead of from the basket
     const handleMakeOrder = (id) => {
         const product = displayProducts.filter(product => product.id === id)
+        // If the user is logged in, go to the summary page
         user ? navigate('/summary', { state: { user: user, orders: product} })
+            // if not go to the login page
              : goToLogin();
     }
 
     const addToBasket = (produce) => {
+        // Set user with updated basket
         setUser((prevState) => ({
             ...prevState,
             basket: [
@@ -154,11 +163,12 @@ export default function ProducePage() {
     }
 
     function handleLogout() {
+        // Sets user to null
         setUser(null);
     }
 
     /* Depending on weather the user is logged in or not, this area will either
-       display a login/signup button OR a basket page*/
+       display a login/signup button Or a basket button*/
     const conditionalComponent = user ? (
         <div className="basket-container">
             <button className="basket-btn" onClick={goToBasket}>
@@ -183,6 +193,7 @@ export default function ProducePage() {
 
             </div>
 
+            {/* Don't displaya user profile if user is not logged in */}
             {user !== null && (
                 <div className="profile-container" aria-label="User Profile">
                 <Profile profilePic={user.image} />

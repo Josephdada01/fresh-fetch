@@ -3,12 +3,7 @@ import '../styles/VendorOrder.css'
 export default function VendorOrder({ order, handleFulfill }) {
     return (
         <div className="vendor-order" aria-label="Vendor order">
-            {/* This image will be repalced by an image we fetch 
-                from the api eventually */}
             <img src={order.pic} alt="order" />
-
-            {/* This static data will also be replaced by data coming
-                from the api */}
             
             <div className="order-details">
                 <h3 className="order-name">{order.name}</h3>
@@ -16,8 +11,7 @@ export default function VendorOrder({ order, handleFulfill }) {
                 <p className="quantity">Quantity: {order.quantity}kg</p>
             </div>
 
-            {/* This status will be either pending, confirmed or cancelled
-                For now, it is just pending */}
+            {/* This status will be either pending, confirmed or cancelled */}
             <div className="status">
                 <small className={order.status}>{order.status}</small>
             </div>

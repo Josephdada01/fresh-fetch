@@ -7,12 +7,13 @@ export default function VendorProduct({ product, changeQuantity, removeProduct }
     // This component is for the individual product items that will be displayed
     // on the product page
 
+    // Keeps track of weather change quantity is clicked or not
     const [ quantityModal, setQuantityModal ] = useState(false);
+    // Keeps track of the quantity input 
     const [ quantity, setQuantity ] = useState("");
 
-    const navigate = useNavigate();
-
-
+    // When the change qunatity button is pressed, display a quantity input
+    // When cancel/continue is pressed, display the change quantity and remove buttons instead
     const toggleQuantityModal = () => {
         setQuantityModal(!quantityModal);
         setQuantity("");
@@ -22,6 +23,7 @@ export default function VendorProduct({ product, changeQuantity, removeProduct }
         setQuantity(e.target.value);
     }
 
+    // If quantity input is emtpy, display a cancel button. Else display a continue button
     const continueOrCancel = (
         quantity === "" ? (
             <button className="cancel-quantity-btn"

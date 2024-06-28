@@ -1,12 +1,15 @@
+// imports from React
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router";
 
+// Custom component imports
 import Header from "../components/Header";
 import basketImg from "../images/basket.jpg";
 import Order from "../components/Order";
 import PendingOrder from "../components/PendingOrder";
 import Profile from "../components/Profile";
 
+// Style imports
 import "../styles/Basket.css";
 
 
@@ -15,60 +18,17 @@ export default function Basket() {
 
     const location = useLocation();
     const state = location.state;
+
+    // Receive the user from the Produce/Summary page
     const [ user, setUser ] = useState(state.user);
 
-    // User state is empty to represent users that are not logged in
-    // const [ user, setUser ] = useState({
-    //     userId: "1",
-    //     firstName: "Benoni",
-    //     lastName: "Esckinder",
-    //     basket: [
-    //         {
-    //             id: "1",
-    //             productId: "1",
-    //             name: "Heirloom tomato",
-    //             pricePerPound: 5.99,
-    //             vendor: "Wall-Mart",
-    //             quantity: 1,
-    //             price: 0,
-    //             orderStatus: null,
-    //             paidStatus: false,
-    //             pic: tomatoImg,
-    //         },
-    //         {
-    //             id: "2",
-    //             productId: "2",
-    //             name: "Organic ginger",
-    //             pricePerPound: 12.99,
-    //             vendor: "Wall-Mart",
-    //             quantity: 1,
-    //             price: 0,
-    //             status: null,
-    //             pic: gingerImg,
-    //         },
-    //         {
-    //             id: "3",
-    //             productId: "3",
-    //             name: "Sweet onion",
-    //             pricePerPound: 14.95,
-    //             vendor: "Fresh Corner",
-    //             quantity: 1,
-    //             price: 0,
-    //             status: null,
-    //             pic: onionImg,
-    //         },
-    //     ],
-    //     profilePic: profilePic,
-    // });
-
-    // const location = useLocation();
-    // const allPending = [];
-    // const pendingOrdersState = location.state;
-    // let pendingOrders = pendingOrdersState ? pendingOrdersState.pendingOrders : [];
-
+    // Orders that have already been paid for
     const [ madeOrders, setMadeOrders ] = useState([]);
+
+    // Orders that are jsut sitting there(haven't been sent out yet)
     const [ unmadeOrders, setUnmadeOrders ] = useState(user.basket);
 
+    // Every time the basket changes, reset made and unmade orders
     useEffect(() => {
         const unmade = user.basket.filter(order => !order.status);
         const made = user.basket.filter(order => order.status);
@@ -77,19 +37,20 @@ export default function Basket() {
         setMadeOrders(made);
     }, [user.basket]);
 
-    // if (pendingOrders != madeOrders) {
-    //     setMadeOrders((pendingOrders));
-    // }
-
     function handleChangeQuantity(e, id) {
         const value = e.target.value;
         const newBasket = user.basket.map((item) => {
+            // If this is the item whose quantity is being changed...
             if(item.id === id) {
+                // Return the item with the qunatity changed
                 return { ...item, quantity: value };
             } else {
+                // Else just return te item
             return item;
             }
         })
+
+        // Set the user with the new basket
         setUser((prevState) => ({
             ...prevState,
             basket: newBasket,
@@ -98,22 +59,17 @@ export default function Basket() {
 
 
     function removeOrder(id) {
+        // Remove the order from the basket completely
         const newBasket = user.basket.filter(order => order.id !== id);
-        setUser((prevState) => ({
-            ...prevState,
-            basket: newBasket,
-        }));
-    }
-
-    function cancelOrder(id) {
-        const newBasket = madeOrders.filter(order => order.id !== id);
         setUser((prevState) => ({...prevState, basket: newBasket}));
-    };
-
-    function cancelAllPending() {
-        setMadeOrders([]);
     }
 
+    // Removes all of the orders that are pending
+    function cancelAllPending() {
+        setUser(prevUser => ({...prevUser, basket: unmadeOrders }));
+    }
+
+    // Changes the status of the order from pending to completed
     function confirmOrder(id) {
         const newMadeOrders = madeOrders.map((order => {
             if (order.id === id) {
@@ -127,39 +83,20 @@ export default function Basket() {
 
     const navigate = useNavigate();
 
-    function updateOrder(id) {
-        setUser((prevState) => ({
-            ...prevState,
-            basket: prevState.basket.map((item) => {
-                if (item.id === String(id)) {
-                    const price = item.pricePerPound * item.quantity;
-                    return {...item, price: price};
-                } else {
-                    return item;
-                }
-            }),
-        }));
-        const item = user.basket.filter(item => item.id === id);
-        // Returns the item instead of the filtered array
-        return item[0];
-    }
-
+    // Handles an individual order being made
     function handleOrderNow(id) {
-        // setPrice returns the object that was ordered and
-        // updates it's price attribute
-        const order = updateOrder(id);
+        // Identify the order that is being made
+        const order = user.basket.filter(order => order.id === id);
 
-        // Summary always recieves an array of prices
-        removeOrder(id);
-        navigate('/summary', { state: { user: user, orders: Array.of(order)}});
+        // Go to the summary page with the user and the order
+        navigate('/summary', { state: { user: user, orders: order}});
     }
 
+    // Handles ordering everything in basket that is not already ordered
     function handleOrderAll(id) {
-
-        navigate('/summary', { state: { user: user, orders: user.basket } });
+        navigate('/summary', { state: { user: user, orders: unmadeOrders } });
     }
 
-    console.log('User from summary', user);
     return (
         <>
             <div className="header-container">
@@ -186,7 +123,8 @@ export default function Basket() {
                     </div>
 
                     <button className="order-all-btn"
-                            onClick={handleOrderAll}>Order all</button>
+                            onClick={handleOrderAll}
+                            disabled={unmadeOrders.length <= 0}>Order all</button>
                 </div>
                 <hr />
 
@@ -203,11 +141,6 @@ export default function Basket() {
                                     handleOrder={handleOrderNow} />
                             ))
                         }
-                    {/* {preOrders.map((order) => (
-                        <Order key={order.id}
-                               order={order} 
-                               removeOrder={removeOrder} />
-                    ))} */}
                 </div>
 
                 {/* This div contains the "pending" header and the cancel-all
@@ -219,21 +152,24 @@ export default function Basket() {
                         <small className="item-count">{madeOrders.length} item(s)</small>
                     </div>
                     <button className="cancel-all-btn"
-                            onClick={cancelAllPending}>Cancel all</button>
+                            onClick={cancelAllPending}
+                            >Cancel all</button>
                 </div>
                 <hr />
 
                 {/* This div is for all the orders that have been made(sent out)
-                    but still not delivered yet. */}
+                    but still not delivered to the user yet. */}
 
                 <div className="pending-orders">
+                    {/* If there are no pending orders display an informative paragraph */}
                     {madeOrders.length === 0 ? (
                         <p className="basket-p">You have no pending orders</p>
-                    ) :                     
+                    ) :
+                    // Map through all the pending orders and pass them to the PendingOrders component                     
                         madeOrders.map((order) => (
                                 <PendingOrder key={order.id}
                                               order={order}
-                                              cancelOrder={cancelOrder}
+                                              cancelOrder={removeOrder}
                                               confirmOrder={confirmOrder} />
                             ))
                         }
