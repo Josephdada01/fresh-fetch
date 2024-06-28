@@ -12,6 +12,8 @@ export default function Summary() {
     const location = useLocation();
     const state = location.state;
     const orders = state.orders;
+    console.log("Order at basket:", orders)
+    const user = state.user;
 
     const subTotal = orders.reduce((acc, current) => {
         return acc + current.pricePerPound * current.quantity;
@@ -21,10 +23,26 @@ export default function Summary() {
     const tax = 2.00;
     const total = subTotal + delivery + tax;
 
+    for (const order of orders) {
+        if(!user.basket.includes(order)) {
+            user.basket.push(order);
+        }
+    }
+
     const navigate = useNavigate();
     function goBackToBasket() {
-        const pendingOrders = orders.map(order => ({ ...order, status: "Pending", price: order.pricePerPound * order.quantity }));
-        navigate('/basket', { state: { pendingOrders: pendingOrders }});
+        const newUser = {
+            ...user,
+            basket: user.basket.map(order => {
+                if (orders.includes(order)) {
+                    return { ...order, status: "Pending", paidStatus: true }
+                } else {
+                    return order
+                }
+            })
+        }
+        console.log("New basket:", user.basket);
+        navigate('/basket', { state: { user: newUser }});
     }
 
     return (
@@ -52,5 +70,4 @@ export default function Summary() {
             </main>
         </>
     )
-
 }

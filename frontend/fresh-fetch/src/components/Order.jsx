@@ -33,7 +33,6 @@ export default function Order({ order, removeOrder, handleChange, handleOrder })
                 <input type="number" placeholder="1kg"
                        default="1lb" name="quantity input" aria-labelledby='hiddenLabel'
                        onChange={(e) => handleChange(e, order.id)} />
-                <img src={pencilImg} alt="A pencil" />
             </div>
         </div>
     )

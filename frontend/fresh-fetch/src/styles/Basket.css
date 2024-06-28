@@ -135,7 +135,7 @@
     }
 
     .pending-header .cancel-all-btn:hover {
-        font-weight: var(--font-weight-bold);
+        background-color: var(--hover-red);
         transition: .3s ease;
     }
   /* ==================================================== */

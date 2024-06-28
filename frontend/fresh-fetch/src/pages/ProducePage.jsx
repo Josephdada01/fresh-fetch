@@ -42,7 +42,7 @@ export default function ProducePage() {
         {
             id: products[0]?.id,
             name: products[0]?.title,
-            pricePerPound: products[0]?.price,
+            pricePerPound: Number(products[0]?.price),
             vendor: products[0]?.description,
             quantity: 1,
             price: 0,
@@ -73,7 +73,7 @@ export default function ProducePage() {
         {
             id: "1",
             name: "Heirloom tomato",
-            pricePerPound: "5.99",
+            pricePerPound: 5.99,
             vendor: "Wall-mart",
             quantity: 1,
             price: 0,
@@ -139,7 +139,7 @@ export default function ProducePage() {
 
     const handleMakeOrder = (id) => {
         const product = displayProducts.filter(product => product.id === id)
-        user ? navigate('/summary', { state: { orders: [product] } })
+        user ? navigate('/summary', { state: { user: user, orders: product} })
              : goToLogin();
     }
 

@@ -18,6 +18,9 @@
     --status-confirmed: var(--primary-green);
     --status-canceled: var(--primary-red);
 
+    --hover-blue: #2fa4e7;
+    --hover-red: #fa2f2f;
+
 
     --font-family-base: 'Inter', Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
     --font-size-large: clamp(20px, 2vw + 1rem, 70px);
@@ -35,9 +38,13 @@
         justify-self: center;
         background-color: var(--order-background);
         width: clamp(152px, 95%, 950px);
-        max-height: clamp(115px, 27vw, 150px);
+        height: clamp(115px, 28vw, 160px);
         border: 2px solid var(--border-color);
         border-radius: 20px; 
+    }
+
+    .pending-order:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 
     .pending-order img {
@@ -86,7 +93,7 @@
     .pending-order .order-btns button {
         display: inline;
         width: clamp(70px, 20vw, 140px);
-        height: clamp(30px, 5vw, 50px);
+        height: clamp(30px, 8vw, 50px);
         font-size: clamp(10px, 3vw, 20px);
         border: none;
         border-radius: 5px;
@@ -97,10 +104,21 @@
         color: var(--primary-white);
     }
 
+    .pending-order .order-btns .confirm-btn:hover {
+        background-color: var(--hover-blue);
+        transition: .3 ease;
+
+    }
+
     .pending-order .order-btns .cancel-btn {
         background-color: var(--primary-red);
         color: var(--primary-white);
         border: none;
+    }
+
+    .pending-order .order-btns .cancel-btn:hover {
+        background-color: var(--hover-red);
+        transition: .3 ease;
     }
 
     .pending-order .status {

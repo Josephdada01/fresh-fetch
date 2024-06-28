@@ -70,9 +70,11 @@ export default function Basket() {
     const [ unmadeOrders, setUnmadeOrders ] = useState(user.basket);
 
     useEffect(() => {
-        const unmade = user.basket;
+        const unmade = user.basket.filter(order => !order.status);
+        const made = user.basket.filter(order => order.status);
   
         setUnmadeOrders(unmade);
+        setMadeOrders(made);
     }, [user.basket]);
 
     // if (pendingOrders != madeOrders) {
@@ -105,7 +107,7 @@ export default function Basket() {
 
     function cancelOrder(id) {
         const newBasket = madeOrders.filter(order => order.id !== id);
-        setMadeOrders(newBasket);
+        setUser((prevState) => ({...prevState, basket: newBasket}));
     };
 
     function cancelAllPending() {
@@ -149,15 +151,15 @@ export default function Basket() {
 
         // Summary always recieves an array of prices
         removeOrder(id);
-        navigate('/summary', { state: { orders: Array.of(order)}});
+        navigate('/summary', { state: { user: user, orders: Array.of(order)}});
     }
 
     function handleOrderAll(id) {
 
-        navigate('/summary', { state: { orders: user.basket } });
+        navigate('/summary', { state: { user: user, orders: user.basket } });
     }
 
-
+    console.log('User from summary', user);
     return (
         <>
             <div className="header-container">

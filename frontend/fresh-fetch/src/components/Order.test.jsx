@@ -71,7 +71,6 @@ describe('<Order />', () => {
 
 
         expect(screen.getByRole('spinbutton')).toBeInTheDocument();
-        expect(screen.getByAltText('A pencil')).toBeInTheDocument();
     });
     
 });

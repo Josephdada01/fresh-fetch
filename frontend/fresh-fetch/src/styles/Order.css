@@ -35,6 +35,10 @@
         border-radius: 20px; 
     }
 
+    .order:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
     .order img {
         border-top-left-radius: 20px;
         border-bottom-left-radius: 20px;
@@ -101,8 +105,7 @@
 
     .order .order-btns .remove-btn:hover {
         transition: .3s ease;
-        font-weight: var(--font-weight-bold);
-        border: 1px solid var(--primary-white);
+        background-color: var(--hover-red);
     }
 
 .quantity-input {

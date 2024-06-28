@@ -21,7 +21,13 @@ describe('<Summary />', () => {
     it('contains the common Header', () => {
         renderWithRouter(<Summary />, {
             route: '/summary',
-            state: { orders: [{
+            state: { user: {
+                userId: 1,
+                first_name: 'Benoni',
+                last_name: 'Esckinder',
+                basket: [],
+                image: null,
+            }, orders: [{
                 id: "1",
                 productId: "1",
                 name: "Heirloom tomato",
@@ -40,7 +46,13 @@ describe('<Summary />', () => {
     it('contains the summary header', () => {
         renderWithRouter(<Summary />, {
             route: '/summary',
-            state: { orders: [{
+            state: { user: {
+                userId: 1,
+                first_name: 'Benoni',
+                last_name: 'Esckinder',
+                basket: [],
+                image: null,
+            }, orders: [{
                 id: "1",
                 productId: "1",
                 name: "Heirloom tomato",
@@ -52,14 +64,19 @@ describe('<Summary />', () => {
                 pic: tomatoImg,
             }] },
         });
-
         expect(screen.getByRole('heading', { name: 'Order summary' })).toBeInTheDocument();
     });
 
     it('contaims the subtotal paragraph', () => {
         renderWithRouter(<Summary />, {
             route: '/summary',
-            state: { orders: [{
+            state: { user: {
+                userId: 1,
+                first_name: 'Benoni',
+                last_name: 'Esckinder',
+                basket: [],
+                image: null,
+            }, orders: [{
                 id: "1",
                 productId: "1",
                 name: "Heirloom tomato",
@@ -78,7 +95,13 @@ describe('<Summary />', () => {
     it('contaims the delivery paragraph', () => {
         renderWithRouter(<Summary />, {
             route: '/summary',
-            state: { orders: [{
+            state: { user: {
+                userId: 1,
+                first_name: 'Benoni',
+                last_name: 'Esckinder',
+                basket: [],
+                image: null,
+            }, orders: [{
                 id: "1",
                 productId: "1",
                 name: "Heirloom tomato",
@@ -97,7 +120,13 @@ describe('<Summary />', () => {
     it('contaims the tax paragraph', () => {
         renderWithRouter(<Summary />, {
             route: '/summary',
-            state: { orders: [{
+            state: { user: {
+                userId: 1,
+                first_name: 'Benoni',
+                last_name: 'Esckinder',
+                basket: [],
+                image: null,
+            }, orders: [{
                 id: "1",
                 productId: "1",
                 name: "Heirloom tomato",
@@ -116,7 +145,13 @@ describe('<Summary />', () => {
     it('contaims the Total paragraph', () => {
         renderWithRouter(<Summary />, {
             route: '/summary',
-            state: { orders: [{
+            state: { user: {
+                userId: 1,
+                first_name: 'Benoni',
+                last_name: 'Esckinder',
+                basket: [],
+                image: null,
+            }, orders: [{
                 id: "1",
                 productId: "1",
                 name: "Heirloom tomato",
@@ -127,14 +162,21 @@ describe('<Summary />', () => {
                 status: null,
                 pic: tomatoImg,
             }] },
-        })
+        });
+
         expect(screen.getByText('Total')).toBeInTheDocument();
     });
 
     it('Displayes all the prices correctly', () => {
         renderWithRouter(<Summary />, {
             route: '/summary',
-            state: { orders: [{
+            state: { user: {
+                userId: 1,
+                first_name: 'Benoni',
+                last_name: 'Esckinder',
+                basket: [],
+                image: null,
+            }, orders: [{
                 id: "1",
                 productId: "1",
                 name: "Heirloom tomato",
@@ -145,7 +187,7 @@ describe('<Summary />', () => {
                 status: null,
                 pic: tomatoImg,
             }] },
-        })
+        });
 
         expect(screen.getAllByText(/\$\d+\.\d{2}/).length).toBe(4);
     });
