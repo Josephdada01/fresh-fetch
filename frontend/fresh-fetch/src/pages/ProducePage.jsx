@@ -28,10 +28,10 @@ export default function ProducePage() {
     const state = location.state;
 
     const [ user, setUser ] = useState(state ? {
-        userId: state.user.id,
-        first_name: state.user.first_name,
-        last_name: state.user.last_name,
-        basket: state?.user?.basket || [],
+        userId: state.user?.id,
+        first_name: state.user?.first_name,
+        last_name: state.user?.last_name,
+        basket: state.user?.basket || [],
         image: profilePic,
     } : null);
 
@@ -177,7 +177,7 @@ export default function ProducePage() {
     return (
         <>
             <div className="header-container">
-                <Header />
+                <Header user={user} />
                 
             {conditionalComponent}
 
