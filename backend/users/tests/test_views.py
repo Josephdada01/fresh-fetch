@@ -28,6 +28,8 @@ class TestUsersView(TestCase):
                    "password2": '1234test',
                    "first_name": 'solomon',   
                    "last_name": 'uche',   
+                   "state": 'enugu',   
+                   "city": 'enugu',   
                    "phone_number": '1234',
                 }
         
