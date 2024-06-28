@@ -14,24 +14,36 @@ function CreateNewProduct({ createProduct }) {
     image: null,
     name: '',
     price: '',
-    stock: ''
+    // stock: 0,
   });
+
+  const [ errors, setErrors ] = useState({});
 
   // Handles all form change and updates the state
   const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
+    let { name, value, type, files } = e.target;
+    if (name === "image") {
+      value = null
+    }
     setFormData({
       ...formData,
-      [name]: type === 'file' ? files[0] : value
+      [name]: /*type === 'file' ? files[0]*/ value
     });
+
+    const newErrors = validatInput(name, value);
+    setErrors(newErrors);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // If all of these input fields are not empty
-    if (formData.image && formData.name && formData.price && formData.stock) {
+    const hasErrors = Object.keys(errors).length > 0;
+    if (hasErrors) {
+      return;
+    }
 
+    // If all of these input fields are not empty
+    if (/* formData.image */formData.name && formData.price /* && formData.stock */) {
       // Calls a function from the parent component that creates the product
       createProduct(formData);
       // closes the popup form
@@ -49,8 +61,30 @@ function CreateNewProduct({ createProduct }) {
     setIsOpen(!isOpen);
   };
 
+  const validatInput = (name, value) => {
+    const newErrors = {...errors}
+    switch(name) {
+      case 'name':
+        if (!value || value === "") {
+          newErrors.name = (<p className='error-message'>
+            Name cannot be empty
+          </p>)
+        } else if (value.length < 3) {
+          newErrors.name = (<p className='error-message'>
+            Name has to be longer than 3 letters
+          </p>)
+        } else {
+          delete newErrors.name;
+        }
+        break;
+        default:
+          break;
+    }
+    return newErrors;
+  }
+
   // Makes sure all form data is not empty
-  const isFormIncomplete = formData.name && formData.price && formData.stock;
+  const isFormIncomplete = formData.name && formData.price /* && formData.stock */;
 
   // If form not complete, display a cancel button. Else, a submit button
   const createOrCancel = isFormIncomplete ?
@@ -65,19 +99,26 @@ function CreateNewProduct({ createProduct }) {
             <label>
               Image:
               <input type="file" name="image" onChange={handleChange} required />
+                   
             </label>
             <label>
               Name:
-              <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+              <input type="text" name="name" value={formData.name} onChange={handleChange} required
+                    aria-describedby={`email-error ${errors.email ? 'error' : ''}`}
+                 />
+             {/* Display an error message if there is an issue with the input */}
+             <span id='name-error' className='name-error-message'>
+                 {errors.name}
+             </span>
             </label>
             <label>
               Price per pound:
               <input type="number" name="price" id="price" value={formData.price} onChange={handleChange} required />
             </label>
-            <label>
+            {/* <label>
               Available Stock(in kg):
               <input type="number" name="stock" id="stock" value={formData.stock} onChange={handleChange} required />
-            </label>
+            </label> */}
             {/* Disable the button if form is incomplete */}
             <button type="submit" disabled={!isFormIncomplete}>Create</button> 
           </form>
