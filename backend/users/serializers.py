@@ -68,6 +68,6 @@ class UserDetailsSerializer(WritableOnCreateReadOnlyOnUpdateMixin, serializers.M
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'is_vendor', 'image']
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'is_vendor', 'image', 'state', 'city']
         writable_on_create_read_only_on_update = ['is_vendor']
-        flexible_edit = ['first_name', 'last_name', 'email', 'phone_number', 'image']
+        flexible_edit = ['first_name', 'last_name', 'email', 'phone_number', 'image', 'state', 'city']
