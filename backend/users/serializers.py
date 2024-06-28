@@ -21,6 +21,14 @@ class RegisterSerializer(BaseSerializer):
     phone_number = serializers.CharField(max_length=16, required=True)
     is_vendor = serializers.BooleanField(default=False)
 
+    def validate_email(self, value):
+        """
+        Validate that the email is unique.
+        """
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("email already exists.")
+        return value
+
     def get_cleaned_data(self):
         """
         Clean up the added field
