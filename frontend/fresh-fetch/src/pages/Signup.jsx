@@ -230,20 +230,17 @@ export default function Signup() {
                 if(response.status === 204) {
                     setMessage("User registered successfully");
                     goToLogin();
-                } if (response.status === 500) {
-                    setMessage(<p className="input-errors">
-                        Email already registered.
-                        Please try logging in if you have an account
-                    </p>)
-                    return;
-                }
+                } 
             } else {
-                if (response.status === 500) {
-                    setMessage(<p className="submit-error">
+                if (response.status === 400) {
+                    const responseJSON = await response.json();
+                    if (responseJSON.email[0] === "email already exists.") {
+                        setMessage(<p className="submit-error">
                         Email already registered.
                         Please try logging in if you have an account
                     </p>)
                     return;
+                    }
                 } else {
                     console.log("I am not okay");
                 }
