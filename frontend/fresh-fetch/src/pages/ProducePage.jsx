@@ -123,7 +123,7 @@ export default function ProducePage() {
     return (
         <>
             <div className="header-container">
-                <Header />
+                <Header user={user}/>
                 
             {conditionalComponent}
 
