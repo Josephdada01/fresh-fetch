@@ -16,6 +16,8 @@ class RegisterSerializer(BaseSerializer):
     username = None
     first_name = serializers.CharField(max_length=100, required=True)
     last_name = serializers.CharField(max_length=100, required=True)
+    state = serializers.CharField(max_length=100, required=True)
+    city = serializers.CharField(max_length=100, required=True)
     phone_number = serializers.CharField(max_length=16, required=True)
     is_vendor = serializers.BooleanField(default=False)
 
@@ -28,6 +30,8 @@ class RegisterSerializer(BaseSerializer):
         data.update({
             'first_name': self.validated_data.get('first_name', ''),
             'last_name': self.validated_data.get('last_name', ''),
+            'state': self.validated_data.get('state', ''),
+            'city': self.validated_data.get('city', ''),
             'phone_number': self.validated_data.get('phone_number', ''),
             'is_vendor': self.validated_data.get('is_vendor', False),
         })
@@ -41,6 +45,8 @@ class RegisterSerializer(BaseSerializer):
         user = super().save(request)
         user.first_name = self.validated_data.get('first_name', '')
         user.last_name = self.validated_data.get('last_name', '')
+        user.state = self.validated_data.get('state', '')
+        user.city = self.validated_data.get('city', '')
         user.phone_number = self.validated_data.get('phone_number', '')
         user.is_vendor = self.validated_data.get('is_vendor', False)
         user.save()
@@ -62,6 +68,6 @@ class UserDetailsSerializer(WritableOnCreateReadOnlyOnUpdateMixin, serializers.M
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'is_vendor', 'image']
+        fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'is_vendor', 'image', 'state', 'city']
         writable_on_create_read_only_on_update = ['is_vendor']
-        flexible_edit = ['first_name', 'last_name', 'email', 'phone_number', 'image']
+        flexible_edit = ['first_name', 'last_name', 'email', 'phone_number', 'image', 'state', 'city']
