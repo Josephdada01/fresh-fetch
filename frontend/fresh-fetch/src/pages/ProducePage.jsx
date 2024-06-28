@@ -35,7 +35,7 @@ export default function ProducePage() {
         image: profilePic,
     } : null);
 
-    console.log("React user at produce:", user);
+    // console.log("React user at produce:", user);
 
     const products = getProducts();
     const [ displayProducts, setDisplayProducts ] = useState(products.length > 0 ? [
@@ -118,6 +118,7 @@ export default function ProducePage() {
         // console.log(products);
         return products;
     }
+
     const navigate = useNavigate();
 
     const goToBasket = () => {

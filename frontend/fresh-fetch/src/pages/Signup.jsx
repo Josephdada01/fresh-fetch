@@ -12,6 +12,8 @@ export default function Signup() {
         last_name: "",
         email: "",
         phone_number: "",
+        state: "",
+        city: "",
         password1: "",
         password2: "",
         is_vendor: null,
@@ -134,6 +136,24 @@ export default function Signup() {
                         delete newErrors.password1
                     }
                     break;
+                case 'state':
+                    if(!value) {
+                        newErrors.state = (<p  className='input-error'>
+                            State cannot be empty
+                        </p>)
+                    } else {
+                        delete newErrors.state;
+                    }
+                    break;
+                case 'city':
+                    if(!value) {
+                        newErrors.city = (<p  className='input-error'>
+                            City cannot be empty
+                        </p>)
+                    } else {
+                        delete newErrors.city;
+                    }
+                    break;
                 case 'password2':
                     const passwd = formData.password1;
                     if(value !== passwd) {
@@ -200,7 +220,7 @@ export default function Signup() {
             console.error('Failed to submit form:', error)
         }
     }
-    console.log("Am I a vendor?:", formData.is_vendor)
+    // console.log("Am I a vendor?:", formData.is_vendor)
 
     return (
         <>
@@ -256,6 +276,27 @@ export default function Signup() {
                         <span id='phone-error' className='error-message'>
                             {errors.phone}
                         </span>
+
+                        <label htmlFor="state">State</label>
+                        <input type="text" name="state" id="state"
+                               onChange={handleChange}
+                               aria-describedby={`state-error ${errors.state ? 'error' : ''}`}
+                               required={true}
+                            />
+                        <span id='state-error' className='error-message'>
+                            {errors.state}
+                        </span>
+
+                        <label htmlFor="city">City</label>
+                        <input type="text" name="city" id="city"
+                               onChange={handleChange}
+                               aria-describedby={`city-error ${errors.city ? 'error' : ''}`}
+                               required={true}
+                            />
+                        <span id='city-error' className='error-message'>
+                            {errors.city}
+                        </span>
+
 
                         <label htmlFor="password1">Password</label>
                         <input type="password" name="password1" id="password1"
