@@ -193,24 +193,22 @@ export default function Dashboard() {
             price: product.price,
             description: "this is a descritpiton",
             product_status: "available",
-            old_price: '1234',
+            old_price: 0,
             user: user?.id,
         }
         console.log("new product:", newProduct);
-
-        console.log(newProduct);
         try {
             // Sends a request to the api to create a new product
             const response = await fetch('http://127.0.0.1:8000/api/v1/products/create/', {
                 method: 'POST',
                 header: {
-                    'Authentication': user.userId,
+                    'Authentication': `Token ${user.userId}`,
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(product),
             })
 
-            if (response.ok) {
-                const product = await response.json();
+            if (response.ok) {                const product = await response.json();
                 console.log('Created new product:', product);
 
             } else {

@@ -13,8 +13,8 @@ function CreateNewProduct({ createProduct }) {
   const [formData, setFormData] = useState({
     image: null,
     name: '',
-    price: '',
-    // stock: 0,
+    price: 0,
+    stock_count: 0,
   });
 
   const [ errors, setErrors ] = useState({});
@@ -24,10 +24,14 @@ function CreateNewProduct({ createProduct }) {
     let { name, value, type, files } = e.target;
     if (name === "image") {
       value = null
+    // } else if (name === "price" || name === "stock_count"){
+    //   if(value) {
+    //     value = Number(value);
+    //   }
     }
     setFormData({
       ...formData,
-      [name]: /*type === 'file' ? files[0]*/ value
+      [name]: type === 'file' ? files[0]: value
     });
 
     const newErrors = validatInput(name, value);
@@ -43,7 +47,7 @@ function CreateNewProduct({ createProduct }) {
     }
 
     // If all of these input fields are not empty
-    if (/* formData.image */formData.name && formData.price /* && formData.stock */) {
+    if (/* formData.image &&*/ formData.name && formData.price && formData.stock_count ) {
       // Calls a function from the parent component that creates the product
       createProduct(formData);
       // closes the popup form
@@ -51,8 +55,8 @@ function CreateNewProduct({ createProduct }) {
       setFormData({
         image: null,
         name: '',
-        price: '',
-        stock: ''
+        price: 0,
+        stock_count: 0,
       });
     }
   };
@@ -84,7 +88,7 @@ function CreateNewProduct({ createProduct }) {
   }
 
   // Makes sure all form data is not empty
-  const isFormIncomplete = formData.name && formData.price /* && formData.stock */;
+  const isFormIncomplete = formData.name && formData.price  && formData.stock_count;
 
   // If form not complete, display a cancel button. Else, a submit button
   const createOrCancel = isFormIncomplete ?
@@ -115,10 +119,10 @@ function CreateNewProduct({ createProduct }) {
               Price per pound:
               <input type="number" name="price" id="price" value={formData.price} onChange={handleChange} required />
             </label>
-            {/* <label>
+            <label>
               Available Stock(in kg):
-              <input type="number" name="stock" id="stock" value={formData.stock} onChange={handleChange} required />
-            </label> */}
+              <input type="number" name="stock_count" id="stock" value={formData.stock_count} onChange={handleChange} required />
+            </label>
             {/* Disable the button if form is incomplete */}
             <button type="submit" disabled={!isFormIncomplete}>Create</button> 
           </form>
