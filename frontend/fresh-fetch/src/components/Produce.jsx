@@ -61,7 +61,7 @@ export default function Produce({ product, addToBasket, handleMakeOrder }) {
                 <div className="produce-details">
                     <h3 className="produce-name">{product.name}</h3>
                     <p className="price-per-pound">${product.price} / kg</p>
-                    <p className="vendor">Vendor: Change to vendor name</p>
+                    <p className="vendor">Vendor: {product.vendor}</p>
                 </div>
 
                 {/* When order now is clicked, a quantity input will replace order now and

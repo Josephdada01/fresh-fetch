@@ -112,8 +112,19 @@ export default function ProducePage() {
         let products;
         if (response.ok) {
             products = await response.json();
-            // console.log('GET products:', products);
-            setDisplayProducts(prevState => [ ...products, ]);
+            const responseVendor = await fetch('http://127.0.0.1:8000//api-auth/vendors/');
+
+            // Get a list of all the vendors
+            const vendors = await responseVendor.json();
+            const newProducts = products.map(product => {
+
+                // Find the creator of the product
+                const vendor =  vendors.filter(vendor => vendor.id === product.user)[0]
+
+                return {...product, vendor: vendor.first_name + ' ' + vendor.last_name}
+            })
+            console.log('products with vendors:', newProducts);
+            setDisplayProducts(prevState => [ ...newProducts, ]);
         } else {
             console.log("I am not okay");
         }
