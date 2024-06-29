@@ -239,7 +239,7 @@ export default function ProducePage() {
                 {/* A few of the available produces */}
                 <div className="produces">
                     {(searchResult.length !== 0 ? searchResult : displayProducts).map((product) => (
-                        <Produce key={product.product_id} product={product}
+                        <Produce key={product.id} product={product}
                                  handleMakeOrder={handleMakeOrder}
                                  addToBasket={user ? addToBasket : goToLogin} />
                     ))}

@@ -34,7 +34,7 @@ export default function VendorProduct({ product, changeQuantity, removeProduct }
         ) : (
             <button className="enter-quantity-btn"
                         onClick={() => {
-                            changeQuantity(Number(quantity), product.product_id);
+                            changeQuantity(Number(quantity), product.id);
                             toggleQuantityModal();
                         }}>
                     Continue
@@ -78,7 +78,7 @@ export default function VendorProduct({ product, changeQuantity, removeProduct }
                                     Change quantity
                         </button>
                         <button className="remove-product"
-                            onClick={() => removeProduct(product.product_id)}>
+                            onClick={() => removeProduct(product.id)}>
                                 Remove
                     </button>
                     </div>

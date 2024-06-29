@@ -149,10 +149,9 @@ export default function Dashboard() {
     //             pic: onionImg,
     //         }
     //     ] 
-    });
+    );
 
 
-    // console.log('This user"s products:', user.products);
     const [ popupFormIsActive, setPopupFormIsActive ] = useState(false);
     function togglePopupForm() {
         setPopupFormIsActive(prevModal => !prevModal);
@@ -167,17 +166,7 @@ export default function Dashboard() {
             user: user?.id,
         };
 
-        // const fakeProduct = {
-        //     "product_id": "1000",
-        //     "user": user.id,
-        //     "name": "Heirloom tomato",
-        //     "image": null,
-        //     "description": "This is a description",
-        //     "price": 5.00,
-        //     "old_price": 3.00,
-        //     "product_status": "available",
-        // }
-        console.log("new product:", JSON.stringify(newProduct));
+        // console.log("new product:", JSON.stringify(newProduct));
         try {
             // Sends a request to the api to create a new product
             const response = await fetch('http://127.0.0.1:8000/api/v1/products/create/', {
@@ -191,19 +180,20 @@ export default function Dashboard() {
 
             if (response.ok) {
                 const product = await response.json();
-                console.log('Created new product:', product);
+                // console.log('Created new product:', product);
                 setUser(prevUser => ({
                     ...prevUser,
                     products: [...prevUser.products, product]
                 }))
             } else {
-                console.log(response, response.status);
-                console.log(await response.json())
+                // console.log(response, response.status);
+                // console.log(await response.json())
                 console.log("I am not okay");
             }
         } catch(error) {
             console.log("Failed to submit form", error);
         } 
+        togglePopupForm();
     }
 
     async function getProducts(id) {
@@ -232,7 +222,7 @@ export default function Dashboard() {
 
     async function handleRemoveProduct(id) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}/delete`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Token ${state.token.key}`,
@@ -276,7 +266,7 @@ export default function Dashboard() {
         getProducts(user.id)
     }, [user.basket])
 
-    console.log("User's products:", user.products);
+    // console.log("User's products:", user.products);
 
     async function handleRemoveProduct(id) {
         try {
@@ -401,7 +391,7 @@ export default function Dashboard() {
                     {user.products.length === 0 ? (
                         <p className="no-products">You have no products. Create one!</p>
                     ) : user.products.map((product) => (
-                        <VendorProducts key={product.product_id} product={product}
+                        <VendorProducts key={product.id} product={product}
                                         changeQuantity={changeQuantity}
                                         removeProduct={handleRemoveProduct} />
                     ))}
