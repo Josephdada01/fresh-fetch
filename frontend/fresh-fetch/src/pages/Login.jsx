@@ -37,13 +37,13 @@ export default function Login() {
     };
 
     // If the user is a buyer, this is the "home page"
-    function goHome (user) {
-        navigate('/', { state: { user: user }});
+    function goHome (user, token) {
+        navigate('/', { state: { user: user, token: token }});
     }
 
     // If the user is a vendor, this is a "home page"
-    function goToDashboard (user) {
-        navigate('/dashboard', { state: { user: user }});
+    function goToDashboard (user, token) {
+        navigate('/dashboard', { state: { user: user, token: token }});
     }
 
     // Takes care of all input validation
@@ -157,7 +157,7 @@ export default function Login() {
                     console.log("Form submitted successfully")
                 }
             } else {
-                if (responseToken.status >= 400) {
+                if (responseToken.status === 400) {
                     setMessage(<p className="submit-error">
                         Incorrect email or password
                     </p>)
@@ -184,7 +184,7 @@ export default function Login() {
                 const returnedUser = await responseUser.json();
 
                 // Pass the returned user to the pages
-                returnedUser.is_vendor ? goToDashboard(returnedUser) : goHome(returnedUser); 
+                returnedUser.is_vendor ? goToDashboard(returnedUser, returnedToken) : goHome(returnedUser, returnedToken); 
 
             } else {
                 console.log(responseUser)

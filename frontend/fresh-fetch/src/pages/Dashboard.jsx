@@ -25,6 +25,7 @@ export default function Dashboard() {
     const state = location.state;
     const navigate = useNavigate();
     // console.log("User vendor:", state.user)
+    // console.log("Token:", state.token)
 
     function goToLogin() {
         navigate('/login');
@@ -190,25 +191,25 @@ export default function Dashboard() {
         const newProduct = {
             ...product,
             product_id: "1",
-            price: product.price,
             description: "this is a descritpiton",
             product_status: "available",
             old_price: 0,
             user: user?.id,
-        }
-        console.log("new product:", newProduct);
+        };
+        console.log("new product:", JSON.stringify(newProduct));
         try {
             // Sends a request to the api to create a new product
             const response = await fetch('http://127.0.0.1:8000/api/v1/products/create/', {
                 method: 'POST',
-                header: {
-                    'Authentication': `Token ${user.userId}`,
+                headers: {
+                    'Authorization': `Token ${state.token.key}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(product),
-            })
+                body: newProduct,
+            });
 
-            if (response.ok) {                const product = await response.json();
+            if (response.ok) {
+                const product = await response.json();
                 console.log('Created new product:', product);
 
             } else {
