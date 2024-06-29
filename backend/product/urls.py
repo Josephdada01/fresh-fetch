@@ -5,10 +5,10 @@ from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     path('products/', ProductList.as_view(), name='product-list'),
-    path('products/<int:pk>/', ProductDetail.as_view(), name='product-detail'),
+    path('products/<uuid:pk>/', ProductDetail.as_view(), name='product-detail'),
     path('products/create/', ProductCreateView.as_view(), name='product-create'),
-    path('products/<int:pk>/update/', ProductUpdateView.as_view(), name='product-update'),
-    path('products/<int:pk>/delete/', ProductDeleteView.as_view(), name='product-delete')
+    path('products/<uuid:pk>/update/', ProductUpdateView.as_view(), name='product-update'),
+    path('products/<uuid:pk>/delete/', ProductDeleteView.as_view(), name='product-delete')
     #path('products/<str:product_id>/delete/', ProductDeleteView.as_view(), name='product-delete')
 ]
 

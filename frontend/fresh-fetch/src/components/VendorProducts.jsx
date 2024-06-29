@@ -34,7 +34,7 @@ export default function VendorProduct({ product, changeQuantity, removeProduct }
         ) : (
             <button className="enter-quantity-btn"
                         onClick={() => {
-                            changeQuantity(Number(quantity), product.id);
+                            changeQuantity(Number(quantity), product.product_id);
                             toggleQuantityModal();
                         }}>
                     Continue
@@ -58,7 +58,9 @@ export default function VendorProduct({ product, changeQuantity, removeProduct }
         <div className="product" aria-label='Product item'>
             {/* This image will eventually be replaced by an image coming from an API */}
             <div className="product-image">
+
                 <img src={ tomatoImg } alt="product" />
+
             </div>
 
             {/* This data will also be replaced by data from the API. */}

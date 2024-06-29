@@ -73,8 +73,9 @@ export default function Dashboard() {
             }
         ],
 
-        // Also to be removed. Will be replaced by data from teh API
+
         products: [],
+    }
     // } : {
     //     // Fake user(To be reomoved)
     //     userId: "",
@@ -151,6 +152,7 @@ export default function Dashboard() {
     });
 
 
+    // console.log('This user"s products:', user.products);
     const [ popupFormIsActive, setPopupFormIsActive ] = useState(false);
     function togglePopupForm() {
         setPopupFormIsActive(prevModal => !prevModal);
@@ -159,12 +161,22 @@ export default function Dashboard() {
     async function handleNewProduct(product) {
         const newProduct = {
             ...product,
-            product_id: "4",
             description: "this is a descritpiton",
             product_status: "available",
             old_price: 0,
             user: user?.id,
         };
+
+        // const fakeProduct = {
+        //     "product_id": "1000",
+        //     "user": user.id,
+        //     "name": "Heirloom tomato",
+        //     "image": null,
+        //     "description": "This is a description",
+        //     "price": 5.00,
+        //     "old_price": 3.00,
+        //     "product_status": "available",
+        // }
         console.log("new product:", JSON.stringify(newProduct));
         try {
             // Sends a request to the api to create a new product
@@ -184,7 +196,6 @@ export default function Dashboard() {
                     ...prevUser,
                     products: [...prevUser.products, product]
                 }))
-
             } else {
                 console.log(response, response.status);
                 console.log(await response.json())
@@ -193,8 +204,52 @@ export default function Dashboard() {
         } catch(error) {
             console.log("Failed to submit form", error);
         } 
-        
-        togglePopupForm();
+    }
+
+    async function getProducts(id) {
+        // Gets all products form the back-end
+        const response = await fetch('http://127.0.0.1:8000/api/v1/products', {
+            method: 'get',
+        });
+
+        let products;
+        if (response.ok) {
+            const allProducts = await response.json();
+            products = allProducts.filter(product => product.user === id);
+            setUser(prevUser => ({
+                ...prevUser,
+                products: products,
+            }))
+        } else {
+            console.log("I am not okay");
+        }
+        return [];
+    }
+
+    useEffect(() => {
+        getProducts(user.id);
+    }, []);
+
+    async function handleRemoveProduct(id) {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Token ${state.token.key}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                console.log('Product deleted successfully');
+            } else {
+                const errorData = await response.json();
+                console.error('Errod delteing product:', errorData);
+                return;
+            }
+        } catch(error) {
+            console.error('Network error:', error);
+        }
     }
 
     async function getProducts(id) {
