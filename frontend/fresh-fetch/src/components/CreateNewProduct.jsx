@@ -22,16 +22,16 @@ function CreateNewProduct({ createProduct }) {
   // Handles all form change and updates the state
   const handleChange = (e) => {
     let { name, value, type, files } = e.target;
-    if (name === "image") {
-      value = null
-    } else if (name === "price" || name === "stock_count"){
+    if (name === "price" || name === "stock_count") {
       if(value) {
         value = Number(value);
       }
+    } else if(name === "image") {
+      value = null;
     }
     setFormData({
       ...formData,
-      [name]: /* type === 'file' ? files[0] :*/ value
+      [name]:/* type === 'file' ? files[0] :*/ value
     });
 
     const newErrors = validatInput(name, value);
