@@ -1,5 +1,5 @@
 // React related imports
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 
 // Components
@@ -35,76 +35,71 @@ export default function ProducePage() {
         basket: state.user?.basket || [],
         image: profilePic,
     } : null);
-
-
-    // Get products from the API
-    const products = getProducts();
     
 
-    const [ displayProducts, setDisplayProducts ] = useState(products.length > 0 ? [
-        {
-            id: products[0]?.id,
-            name: products[0]?.title,
-            pricePerPound: Number(products[0]?.price),
-            vendor: products[0]?.description,
-            quantity: 1,
-            price: 0,
-            status: null,
-            pic: tomatoImg,
-        },
-        {
-            id: "2",
-            name: "Organic Ginger",
-            pricePerPound: 12.99,
-            vendor: "Kmart",
-            quantity: 1,
-            price: 0,
-            status: null,
-            pic: gingerImg,
-        },
-        {
-            id: "3",
-            name: "Sweet Onion",
-            pricePerPound: 2.99,
-            vendor: "target",
-            quantity: 1,
-            price: 0,
-            status: null,
-            pic: onionImg,
-        }
-    ]: [
-        // Fake products for dev. To be removed
-        {
-            id: "1",
-            name: "Heirloom tomato",
-            pricePerPound: 5.99,
-            vendor: "Wall-mart",
-            quantity: 1,
-            price: 0,
-            status: null,
-            pic: tomatoImg,
-        },
-        {
-            id: "2",
-            name: "Organic Ginger",
-            pricePerPound: 12.99,
-            vendor: "Kmart",
-            quantity: 1,
-            price: 0,
-            status: null,
-            pic: gingerImg,
-        },
-        {
-            id: "3",
-            name: "Sweet Onion",
-            pricePerPound: 2.99,
-            vendor: "target",
-            quantity: 1,
-            price: 0,
-            status: null,
-            pic: onionImg,
-        }
-    ]);
+    const [ displayProducts, setDisplayProducts ] = useState([])
+    //         id: products[0]?.id,
+    //         name: products[0]?.title,
+    //         pricePerPound: Number(products[0]?.price),
+    //         vendor: products[0]?.description,
+    //         quantity: 1,
+    //         price: 0,
+    //         status: null,
+    //         pic: tomatoImg,
+    //     },
+    //     {
+    //         id: "2",
+    //         name: "Organic Ginger",
+    //         pricePerPound: 12.99,
+    //         vendor: "Kmart",
+    //         quantity: 1,
+    //         price: 0,
+    //         status: null,
+    //         pic: gingerImg,
+    //     },
+    //     {
+    //         id: "3",
+    //         name: "Sweet Onion",
+    //         pricePerPound: 2.99,
+    //         vendor: "target",
+    //         quantity: 1,
+    //         price: 0,
+    //         status: null,
+    //         pic: onionImg,
+    //     }
+    // ]: [
+    //     // Fake products for dev. To be removed
+    //     {
+    //         id: "1",
+    //         name: "Heirloom tomato",
+    //         pricePerPound: 5.99,
+    //         vendor: "Wall-mart",
+    //         quantity: 1,
+    //         price: 0,
+    //         status: null,
+    //         pic: tomatoImg,
+    //     },
+    //     {
+    //         id: "2",
+    //         name: "Organic Ginger",
+    //         pricePerPound: 12.99,
+    //         vendor: "Kmart",
+    //         quantity: 1,
+    //         price: 0,
+    //         status: null,
+    //         pic: gingerImg,
+    //     },
+    //     {
+    //         id: "3",
+    //         name: "Sweet Onion",
+    //         pricePerPound: 2.99,
+    //         vendor: "target",
+    //         quantity: 1,
+    //         price: 0,
+    //         status: null,
+    //         pic: onionImg,
+    //     }
+    // ]);
 
     const [searchResult, setSearchResult ] = useState([])
 
@@ -118,11 +113,36 @@ export default function ProducePage() {
         if (response.ok) {
             products = await response.json();
             console.log('GET products:', products);
+            setDisplayProducts(prevState => [ ...products ]);
         } else {
             console.log("I am not okay");
         }
         return products;
     }
+
+    useEffect(() => {
+        getProducts();
+        // getBasket();
+    }, [])
+
+
+    // async function getBasket() {
+    //     try {
+    //         const response = await fetch(`http://127.0.0.1/api/v1/orders/${user.userId}`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //         })
+
+    //         if (response.ok) {
+    //             const ordersJSON = await response.json();
+    //             console.log("Pending ordres:", ordersJSON);
+    //         }
+    //     } catch(error) {
+    //         console.error("Error getting basket:", error)
+    //     }
+    // }
 
     const navigate = useNavigate();
 
@@ -162,12 +182,12 @@ export default function ProducePage() {
                 produce,
             ]
         }))
-    }
+    };
 
     function handleLogout() {
         // Sets user to null
         setUser(null);
-    }
+    };
 
     /* Depending on weather the user is logged in or not, this area will either
        display a login/signup button Or a basket button*/
@@ -219,7 +239,7 @@ export default function ProducePage() {
                 {/* A few of the available produces */}
                 <div className="produces">
                     {(searchResult.length !== 0 ? searchResult : displayProducts).map((product) => (
-                        <Produce key={product.id} product={product}
+                        <Produce key={product.product_id} product={product}
                                  handleMakeOrder={handleMakeOrder}
                                  addToBasket={user ? addToBasket : goToLogin} />
                     ))}

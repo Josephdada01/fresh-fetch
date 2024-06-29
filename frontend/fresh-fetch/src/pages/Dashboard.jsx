@@ -1,5 +1,5 @@
 // Imports from React
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router";
 
 // Custom component imports
@@ -72,6 +72,8 @@ export default function Dashboard() {
                 pic: onionImg,
             }
         ],
+
+
         products: [],
     }
     // } : {
@@ -147,8 +149,7 @@ export default function Dashboard() {
     //             pic: onionImg,
     //         }
     //     ] 
-    // }
-    );
+    });
 
 
     // console.log('This user"s products:', user.products);
@@ -190,12 +191,14 @@ export default function Dashboard() {
 
             if (response.ok) {
                 const product = await response.json();
-                // console.log('Created new product:', product);
-                setUser(prevUser => ({...prevUser, products: [...user.products, product]}))
-                togglePopupForm();
-
+                console.log('Created new product:', product);
+                setUser(prevUser => ({
+                    ...prevUser,
+                    products: [...prevUser.products, product]
+                }))
             } else {
                 console.log(response, response.status);
+                console.log(await response.json())
                 console.log("I am not okay");
             }
         } catch(error) {
@@ -248,6 +251,57 @@ export default function Dashboard() {
             console.error('Network error:', error);
         }
     }
+
+    async function getProducts(id) {
+        // Gets all products form the back-end
+        const response = await fetch('http://127.0.0.1:8000/api/v1/products', {
+            method: 'get',
+        });
+
+        if (response.ok) {
+            const allProducts = await response.json();
+            const products = allProducts.filter(product => product.user === id);
+            // console.log('GET products:', products);
+            setUser(prevUser => ({
+                ...prevUser,
+                products: [...products],
+            }))
+        } else {
+            console.log("I am not okay");
+        }
+        return [];
+    }
+
+    useEffect(() => {
+        getProducts(user.id)
+    }, [user.basket])
+
+    console.log("User's products:", user.products);
+
+    async function handleRemoveProduct(id) {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Token ${state.token.key}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                console.log('Product deleted successfully');
+                getProducts(user.id);
+            } else {
+                const errorData = await response.json();
+                console.error('Errod delteing product:', errorData);
+                return;
+            }
+        } catch(error) {
+            console.error('Network error:', error);
+        }
+        // removeOrder()
+    }
+
 
     // Change status from pending to en-route when fulfill is clicked
     function handleFulfill(id) {
@@ -349,7 +403,7 @@ export default function Dashboard() {
                     ) : user.products.map((product) => (
                         <VendorProducts key={product.product_id} product={product}
                                         changeQuantity={changeQuantity}
-                                        removeProduct={removeOrder} />
+                                        removeProduct={handleRemoveProduct} />
                     ))}
                 </div>
             </div>

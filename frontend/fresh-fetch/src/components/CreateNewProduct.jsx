@@ -90,11 +90,6 @@ function CreateNewProduct({ createProduct }) {
   // Makes sure all form data is not empty
   const isFormIncomplete = formData.name && formData.price  && formData.stock_count;
 
-  // If form not complete, display a cancel button. Else, a submit button
-  const createOrCancel = isFormIncomplete ?
-                                <button type="submit" disabled={!isFormIncomplete}>Create</button> 
-                            :
-                            <button onClick={toggleForm} className="cancel-btn">Cancel</button> 
   return (
     <div className="new-product-form">
       {isOpen && (
