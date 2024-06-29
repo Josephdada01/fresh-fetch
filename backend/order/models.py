@@ -3,6 +3,7 @@ from users.models import User
 from product.models import Product
 from decimal import Decimal
 from django.utils.html import mark_safe
+import uuid
 from django.utils import timezone
 from shortuuid.django_fields import ShortUUIDField
 
@@ -17,7 +18,8 @@ STATUS_CHOICE = (
 class Order(models.Model):
     """This is the class that handles the all the Order in a whole"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
-    order_id = ShortUUIDField(null=True, blank=True, length=8, alphabet="1234567890", unique=True)
+    # order_id = ShortUUIDField(null=True, blank=True, length=8, alphabet="1234567890", unique=True)
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4, help_text="Unique ID for order")
     price = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
     #order_date = models.DateTimeField(auto_now_add=True)
     order_date = models.DateTimeField(default=timezone.now) 
