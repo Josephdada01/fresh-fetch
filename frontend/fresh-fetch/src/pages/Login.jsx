@@ -178,7 +178,7 @@ export default function Login() {
 
             if (responseUser.ok) {
                 console.log("Getting user...");
-                if (responseToken.status == 400) {
+                if (responseToken.status === 400) {
                     return;
                 }
                 const returnedUser = await responseUser.json();

@@ -1,5 +1,5 @@
 // Imports from React
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router";
 
 // Custom component imports
@@ -32,7 +32,7 @@ export default function Dashboard() {
     }
 
     // Get user from login and save it in a user state
-    const [ user, setUser ] = useState(state ? {
+    const [ user, setUser ] = useState(state && {
         id: state.user?.id,
         first_name: state.user?.first_name,
         last_name: state.user?.last_name,
@@ -74,111 +74,80 @@ export default function Dashboard() {
         ],
 
         // Also to be removed. Will be replaced by data from teh API
-        products: [
-            {
-                id: "1",
-                name: "Heirloom Tomato",
-                pricePerPound: 5.99,
-                vendor: "Wall-Mart",
-                quantity: 1,
-                price: 0,
-                // status: null,
-                pic: tomatoImg,
-            },
-            {
-                id: "2",
-                name: "Organic Ginger",
-                pricePerPound: 12.99,
-                vendor: "Kmart",
-                quantity: 1,
-                price: 0,
-                // status: null,
-                pic: gingerImg,
-            },
-            {
-                id: "3",
-                name: "Sweet Onion",
-                pricePerPound: 2.99,
-                vendor: "target",
-                quantity: 1,
-                price: 0,
-                // status: null,
-                pic: onionImg,
-            }
-        ]
-    } : {
-        // Fake user(To be reomoved)
-        userId: "",
-        firstName: "",
-        lastName: "",
-        orders: [
-            {
-                id: "1",
-                productId: "1",
-                name: "Heirloom tomato",
-                pricePerPound: "$5.99 / kg",
-                vendor: "Wall-Mart",
-                quantity: 5,
-                price: "$5.99",
-                status: "En-route",
-                pic: tomatoImg,
-            },
-            {
-                id: "2",
-                productId: "2",
-                name: "Organic ginger",
-                pricePerPound: "$12.99 / lb",
-                vendor: "Wall-Mart",
-                quantity: 1,
-                price: "$6.50",
-                status: "Completed",
-                pic: gingerImg,
-            },
-            {
-                id: "3",
-                productId: "3",
-                name: "Sweet onion",
-                pricePerPound: "$14.95 / lb",
-                vendor: "Fresh Corner",
-                quantity: .5,
-                price: "$14.95",
-                status: "Pending",
-                pic: onionImg,
-            }
-        ],
-        // Fake (To be replaced by API data)
-        products: [
-            {
-                id: "1",
-                name: "Heirloom Tomato",
-                pricePerPound: 5.99,
-                vendor: "Wall-Mart",
-                quantity: 1,
-                price: 0,
-                // status: null,
-                pic: tomatoImg,
-            },
-            {
-                id: "2",
-                name: "Organic Ginger",
-                pricePerPound: 12.99,
-                vendor: "Kmart",
-                quantity: 1,
-                price: 0,
-                // status: null,
-                pic: gingerImg,
-            },
-            {
-                id: "3",
-                name: "Sweet Onion",
-                pricePerPound: 2.99,
-                vendor: "target",
-                quantity: 1,
-                price: 0,
-                // status: null,
-                pic: onionImg,
-            }
-        ] 
+        products: [],
+    // } : {
+    //     // Fake user(To be reomoved)
+    //     userId: "",
+    //     firstName: "",
+    //     lastName: "",
+    //     orders: [
+    //         {
+    //             id: "1",
+    //             productId: "1",
+    //             name: "Heirloom tomato",
+    //             pricePerPound: "$5.99 / kg",
+    //             vendor: "Wall-Mart",
+    //             quantity: 5,
+    //             price: "$5.99",
+    //             status: "En-route",
+    //             pic: tomatoImg,
+    //         },
+    //         {
+    //             id: "2",
+    //             productId: "2",
+    //             name: "Organic ginger",
+    //             pricePerPound: "$12.99 / lb",
+    //             vendor: "Wall-Mart",
+    //             quantity: 1,
+    //             price: "$6.50",
+    //             status: "Completed",
+    //             pic: gingerImg,
+    //         },
+    //         {
+    //             id: "3",
+    //             productId: "3",
+    //             name: "Sweet onion",
+    //             pricePerPound: "$14.95 / lb",
+    //             vendor: "Fresh Corner",
+    //             quantity: .5,
+    //             price: "$14.95",
+    //             status: "Pending",
+    //             pic: onionImg,
+    //         }
+    //     ],
+    //     // Fake (To be replaced by API data)
+    //     products: [
+    //         {
+    //             id: "1",
+    //             name: "Heirloom Tomato",
+    //             pricePerPound: 5.99,
+    //             vendor: "Wall-Mart",
+    //             quantity: 1,
+    //             price: 0,
+    //             // status: null,
+    //             pic: tomatoImg,
+    //         },
+    //         {
+    //             id: "2",
+    //             name: "Organic Ginger",
+    //             pricePerPound: 12.99,
+    //             vendor: "Kmart",
+    //             quantity: 1,
+    //             price: 0,
+    //             // status: null,
+    //             pic: gingerImg,
+    //         },
+    //         {
+    //             id: "3",
+    //             name: "Sweet Onion",
+    //             pricePerPound: 2.99,
+    //             vendor: "target",
+    //             quantity: 1,
+    //             price: 0,
+    //             // status: null,
+    //             pic: onionImg,
+    //         }
+    //     ] 
     });
 
 
@@ -190,7 +159,7 @@ export default function Dashboard() {
     async function handleNewProduct(product) {
         const newProduct = {
             ...product,
-            product_id: "1",
+            product_id: "3",
             description: "this is a descritpiton",
             product_status: "available",
             old_price: 0,
@@ -205,15 +174,20 @@ export default function Dashboard() {
                     'Authorization': `Token ${state.token.key}`,
                     'Content-Type': 'application/json',
                 },
-                body: newProduct,
+                body: JSON.stringify(newProduct),
             });
 
             if (response.ok) {
                 const product = await response.json();
                 console.log('Created new product:', product);
+                setUser(prevUser => ({
+                    ...prevUser,
+                    products: [...prevUser.products, product]
+                }))
 
             } else {
                 console.log(response, response.status);
+                console.log(await response.json())
                 console.log("I am not okay");
             }
         } catch(error) {
@@ -222,6 +196,56 @@ export default function Dashboard() {
         
         togglePopupForm();
     }
+
+    async function getProducts(id) {
+        // Gets all products form the back-end
+        const response = await fetch('http://127.0.0.1:8000/api/v1/products', {
+            method: 'get',
+        });
+
+        if (response.ok) {
+            const allProducts = await response.json();
+            const products = allProducts.filter(product => product.user === id);
+            // console.log('GET products:', products);
+            setUser(prevUser => ({
+                ...prevUser,
+                products: [...products],
+            }))
+        } else {
+            console.log("I am not okay");
+        }
+        return [];
+    }
+
+    useEffect(() => {
+        getProducts(user.id)
+    })
+
+    console.log("User's products:", user.products);
+
+    async function handleRemoveProduct(id) {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Token ${state.token.key}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                console.log('Product deleted successfully');
+            } else {
+                const errorData = await response.json();
+                console.error('Errod delteing product:', errorData);
+                return;
+            }
+        } catch(error) {
+            console.error('Network error:', error);
+        }
+        removeOrder()
+    }
+
 
     // Change status from pending to en-route when fulfill is clicked
     function handleFulfill(id) {
@@ -321,9 +345,9 @@ export default function Dashboard() {
                     {user.products.length === 0 ? (
                         <p className="no-products">You have no products. Create one!</p>
                     ) : user.products.map((product) => (
-                        <VendorProducts key={product.id} product={product}
+                        <VendorProducts key={product.product_id} product={product}
                                         changeQuantity={changeQuantity}
-                                        removeProduct={removeOrder} />
+                                        removeProduct={handleRemoveProduct} />
                     ))}
                 </div>
             </div>

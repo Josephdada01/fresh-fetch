@@ -1,6 +1,5 @@
 import Header from "../components/Header";
 import "../styles/Summary.css";
-import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import arrowImg from "../images/arrow.png";

@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import '../styles/VendorProducts.css';
+
+import tomatoImg from '../images/tomato.jpg';
 
 export default function VendorProduct({ product, changeQuantity, removeProduct }) {
     // This component is for the individual product items that will be displayed
@@ -57,15 +58,15 @@ export default function VendorProduct({ product, changeQuantity, removeProduct }
         <div className="product" aria-label='Product item'>
             {/* This image will eventually be replaced by an image coming from an API */}
             <div className="product-image">
-                <img src={ product.pic } alt="Image of product" />
+                <img src={ tomatoImg } alt="product" />
             </div>
 
             {/* This data will also be replaced by data from the API. */}
             <div className="product-info">
                 <div className="product-details">
                     <h3 className="prodice-name">{product.name}</h3>
-                    <p className="price-per-pound">${product.pricePerPound} / kg</p>
-                    <p className="available-quantity">Available quantity: {product.quantity}kgs</p>
+                    <p className="price-per-pound">${product.price} / kg</p>
+                    <p className="available-quantity">Available quantity: 10kgs</p>
                 </div>
 
                 {quantityModal ? quantityInput : (
@@ -75,7 +76,7 @@ export default function VendorProduct({ product, changeQuantity, removeProduct }
                                     Change quantity
                         </button>
                         <button className="remove-product"
-                            onClick={() => removeProduct(product.id)}>
+                            onClick={() => removeProduct(product.product_id)}>
                                 Remove
                     </button>
                     </div>
