@@ -228,17 +228,30 @@ export default function Signup() {
 
             if (response.ok) {
                 if(response.status === 204) {
-                    console.log("User registered successfully");
+                    setMessage("User registered successfully");
                     goToLogin();
+                } 
+            } else {
+                if (response.status === 400) {
+                    const responseJSON = await response.json();
+                    if (responseJSON.email[0] === "email already exists.") {
+                        setMessage(<p className="submit-error">
+                        Email already registered.
+                        Please try logging in if you have an account
+                    </p>)
+                    return;
+                    }
                 } else {
-                    console.log("Couldn't register user")
+                    console.log("I am not okay");
                 }
             }
         } catch(error) {
             console.error('Failed to submit form:', error)
+            setMessage(<p className="submit-error">
+                There was an issue submitting the form. Please try again
+            </p>)
         }
     }
-    // console.log("Am I a vendor?:", formData.is_vendor)
 
     return (
         <>

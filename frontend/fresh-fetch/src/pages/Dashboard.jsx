@@ -24,6 +24,8 @@ export default function Dashboard() {
     const location = useLocation();
     const state = location.state;
     const navigate = useNavigate();
+    // console.log("User vendor:", state.user)
+    // console.log("Token:", state.token)
 
     function goToLogin() {
         navigate('/login');
@@ -31,7 +33,7 @@ export default function Dashboard() {
 
     // Get user from login and save it in a user state
     const [ user, setUser ] = useState(state ? {
-        userId: state.user?.id,
+        id: state.user?.id,
         first_name: state.user?.first_name,
         last_name: state.user?.last_name,
         // To be removed. This will be retireved from the api or from the user
@@ -186,23 +188,39 @@ export default function Dashboard() {
     }
 
     async function handleNewProduct(product) {
+        const newProduct = {
+            ...product,
+            product_id: "1",
+            description: "this is a descritpiton",
+            product_status: "available",
+            old_price: 0,
+            user: user?.id,
+        };
+        console.log("new product:", JSON.stringify(newProduct));
         try {
             // Sends a request to the api to create a new product
-            const response = await fetch('http://127.0.0.1:8000/api/v1/products/', {
+            const response = await fetch('http://127.0.0.1:8000/api/v1/products/create/', {
                 method: 'POST',
-                body: JSON.stringify(product)
-            })
+                headers: {
+                    'Authorization': `Token ${state.token.key}`,
+                    'Content-Type': 'application/json',
+                },
+                body: newProduct,
+            });
 
             if (response.ok) {
                 const product = await response.json();
                 console.log('Created new product:', product);
 
             } else {
+                console.log(response, response.status);
                 console.log("I am not okay");
             }
         } catch(error) {
             console.log("Failed to submit form", error);
-        }  
+        } 
+        
+        togglePopupForm();
     }
 
     // Change status from pending to en-route when fulfill is clicked
