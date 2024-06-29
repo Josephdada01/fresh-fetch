@@ -39,6 +39,7 @@ export default function ProducePage() {
 
     // Get products from the API
     const products = getProducts();
+    
 
     const [ displayProducts, setDisplayProducts ] = useState(products.length > 0 ? [
         {
@@ -116,6 +117,7 @@ export default function ProducePage() {
         let products;
         if (response.ok) {
             products = await response.json();
+            console.log('GET products:', products);
         } else {
             console.log("I am not okay");
         }
