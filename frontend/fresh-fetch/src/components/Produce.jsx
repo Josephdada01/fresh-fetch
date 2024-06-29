@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 import '../styles/Produce.css';
 
+import gingerImg from '../images/ginger.jpg';
+
 export default function Produce({ product, addToBasket, handleMakeOrder }) {
     // This component is for the individual produce items that will be displayed
     // on the produce page
@@ -52,14 +54,14 @@ export default function Produce({ product, addToBasket, handleMakeOrder }) {
     return (
         <div className="produce" aria-label='Produce item'>
             <div className="produce-image">
-                <img src={ product.pic } alt="Image of produce" />
+                <img src={ gingerImg } alt="Image of produce" />
             </div>
 
             <div className="produce-info">
                 <div className="produce-details">
                     <h3 className="produce-name">{product.name}</h3>
-                    <p className="price-per-pound">${product.pricePerPound} / kg</p>
-                    <p className="vendor">Vendor: {product.vendor}</p>
+                    <p className="price-per-pound">${product.price} / kg</p>
+                    <p className="vendor">Vendor: Change to vendor name</p>
                 </div>
 
                 {/* When order now is clicked, a quantity input will replace order now and

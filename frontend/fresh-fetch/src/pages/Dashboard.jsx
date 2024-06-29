@@ -159,7 +159,7 @@ export default function Dashboard() {
     async function handleNewProduct(product) {
         const newProduct = {
             ...product,
-            product_id: "3",
+            product_id: "4",
             description: "this is a descritpiton",
             product_status: "available",
             old_price: 0,
@@ -219,13 +219,13 @@ export default function Dashboard() {
 
     useEffect(() => {
         getProducts(user.id)
-    })
+    }, [user.basket])
 
     console.log("User's products:", user.products);
 
     async function handleRemoveProduct(id) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}/delete`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Token ${state.token.key}`,
@@ -235,6 +235,7 @@ export default function Dashboard() {
 
             if (response.ok) {
                 console.log('Product deleted successfully');
+                getProducts(user.id);
             } else {
                 const errorData = await response.json();
                 console.error('Errod delteing product:', errorData);
@@ -243,7 +244,7 @@ export default function Dashboard() {
         } catch(error) {
             console.error('Network error:', error);
         }
-        removeOrder()
+        // removeOrder()
     }
 
 
