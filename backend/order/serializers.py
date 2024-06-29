@@ -5,7 +5,8 @@ from product.serializers import ProductSerializer, Product
 class OrderItemSerializer(serializers.ModelSerializer):
     """serializers for the orderItems class"""
     #product = ProductSerializer()
-    product_id = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all(), source='product.id')
+    #product_id
+    id = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all(), source='product.id')
    
     class Meta:
         model = OrderItems
