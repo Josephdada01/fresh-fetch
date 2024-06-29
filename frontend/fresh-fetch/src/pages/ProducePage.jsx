@@ -37,7 +37,7 @@ export default function ProducePage() {
     } : null);
     
 
-    const [ displayProducts, setDisplayProducts ] = useState([])
+    const [ displayProducts, setDisplayProducts ] = useState([]);
     //         id: products[0]?.id,
     //         name: products[0]?.title,
     //         pricePerPound: Number(products[0]?.price),
@@ -112,8 +112,8 @@ export default function ProducePage() {
         let products;
         if (response.ok) {
             products = await response.json();
-            console.log('GET products:', products);
-            setDisplayProducts(prevState => [ ...products ]);
+            // console.log('GET products:', products);
+            setDisplayProducts(prevState => [ ...products, ]);
         } else {
             console.log("I am not okay");
         }
@@ -125,10 +125,10 @@ export default function ProducePage() {
         // getBasket();
     }, [])
 
-
+    // console.log(user.userId)
     // async function getBasket() {
     //     try {
-    //         const response = await fetch(`http://127.0.0.1/api/v1/orders/${user.userId}`, {
+    //         const response = await fetch(`http://127.0.0.1/api-auth/users/user/`, {
     //             method: 'GET',
     //             headers: {
     //                 'Content-Type': 'application/json',
@@ -165,10 +165,17 @@ export default function ProducePage() {
     }
 
     // Handles making order directly from the produce page instead of from the basket
-    const handleMakeOrder = (id) => {
+    const handleMakeOrder = (id, quantity) => {
         const product = displayProducts.filter(product => product.id === id)
+        const order = {
+            ...product[0],
+            paid_status: false,
+            quantity: quantity,
+        }
+
+        console.log("Order from homepage:", order);
         // If the user is logged in, go to the summary page
-        user ? navigate('/summary', { state: { user: user, orders: product} })
+        user ? navigate('/summary', { state: { user: user, orders: [order]} })
             // if not go to the login page
              : goToLogin();
     }

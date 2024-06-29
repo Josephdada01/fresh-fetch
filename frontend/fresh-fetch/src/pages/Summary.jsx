@@ -11,13 +11,14 @@ export default function Summary() {
     const location = useLocation();
     const state = location.state;
     const orders = state.orders;
+    console.log(orders);
 
     // Gets user from Produce/Basket page
     const user = state.user;
 
     // Calculate the sum of everything in the orders array
     const subTotal = orders.reduce((acc, current) => {
-        return acc + current.pricePerPound * current.quantity;
+        return acc + Number(current.price) * current.quantity;
     }, 0);
 
     const delivery = 3.99;

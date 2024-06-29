@@ -28,7 +28,7 @@ export default function Produce({ product, addToBasket, handleMakeOrder }) {
             </button>
         ) : (
             <button className="enter-quantity-btn"
-                        onClick={() => {handleMakeOrder(product.id)}}>
+                        onClick={() => {handleMakeOrder(product.id, quantity)}}>
                     Continue
             </button>
         )

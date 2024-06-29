@@ -30,8 +30,8 @@ export default function Basket() {
 
     // Every time the basket changes, reset made and unmade orders
     useEffect(() => {
-        const unmade = user.basket.filter(order => !order.status);
-        const made = user.basket.filter(order => order.status);
+        const unmade = user.basket.filter(order => !order.pais_status);
+        const made = user.basket.filter(order => order.paid_status);
   
         setUnmadeOrders(unmade);
         setMadeOrders(made);
