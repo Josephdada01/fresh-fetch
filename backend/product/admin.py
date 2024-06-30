@@ -5,7 +5,7 @@ from product.models import Product
 
 class ProductAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
-    list_display = ('name', 'user', 'price', 'product_status', 'date_added')
+    list_display = ('name', 'user', 'price', 'product_status', 'stock_count', 'date_added')
     search_fields = ('name', 'user__email')
 
 admin.site.register(Product, ProductAdmin)

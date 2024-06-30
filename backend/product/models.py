@@ -34,7 +34,7 @@ class Product(models.Model):
                                     blank=False, null=True, default=Decimal('2.99'), help_text="input the old price")
     product_status = models.CharField(
         choices=STATUS, max_length=15, default="available", help_text="select the availability of the product")
-    stock_count = models.IntegerField(default="10", null=True, blank=True, help_text="how many of the product do you have in store?")
+    stock_count = models.IntegerField(default=10, null=False, blank=False, help_text="how many of the product do you have in store?")
     quantity = models.FloatField(blank=False, null=False, default=1.0, help_text="Input the number of quantity you have in store")
     date_added = models.DateTimeField(auto_now_add=True)
 
@@ -52,13 +52,20 @@ class Product(models.Model):
         """Custom validation for the image field"""
         if not self.image:
             raise ValidationError('Image field cannot be empty')
+        if self.stock_count < 0:
+            raise ValidationError('Stock count cannot be less than zero.')
+    
+    def save(self, *args, **kwargs):
+        self.full_clean()  # This will call clean() before saving
+        super().save(*args, **kwargs)
+    
 
     def get_percentage(self):
         """caluculating the percentage off, or something like 30 percent off"""
         if self.old_price > 0:
             return (self.price / self.old_price) * 100
         return 0
-    
+
 
 
 # if we think there is a need to have more than one image for a products then
