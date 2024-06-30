@@ -23,16 +23,20 @@ export default function Dashboard() {
 
     const location = useLocation();
     const state = location.state;
+    const token = localStorage.getItem('token')
     const navigate = useNavigate();
     // console.log("User vendor:", state.user)
-    // console.log("Token:", state.token)
 
     function goToLogin() {
         navigate('/login');
     }
 
+    useEffect(() => {
+        (!state.user || !token) && goToLogin();
+    })
+
     // Get user from login and save it in a user state
-    const [ user, setUser ] = useState(state && {
+    const [ user, setUser ] = useState(state && token && {
         id: state.user?.id,
         first_name: state.user?.first_name,
         last_name: state.user?.last_name,
@@ -72,8 +76,6 @@ export default function Dashboard() {
                 pic: onionImg,
             }
         ],
-
-
         products: [],
     }
     // } : {
@@ -158,13 +160,15 @@ export default function Dashboard() {
     }
 
     async function handleNewProduct(product) {
-        const newProduct = {
-            ...product,
-            description: "this is a descritpiton",
-            product_status: "available",
-            old_price: 0,
-            user: user?.id,
-        };
+        const newProduct = new FormData();
+        newProduct.append('image', product.image);
+        newProduct.append('name', product.name);
+        newProduct.append('price', Number(product.price));
+        newProduct.append('description', "this is a descritpiton")
+        newProduct.append('product_status', "available");
+        newProduct.append('old_price', Number(product.price));
+        newProduct.append('user', user?.id);
+        newProduct.append('stock_count', product.stock_count);
 
         // console.log("new product:", JSON.stringify(newProduct));
         try {
@@ -172,12 +176,10 @@ export default function Dashboard() {
             const response = await fetch('http://127.0.0.1:8000/api/v1/products/create/', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${state.token.key}`,
-                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${token}`,
                 },
-                body: JSON.stringify(newProduct),
+                body: newProduct,
             });
-
             if (response.ok) {
                 const product = await response.json();
                 // console.log('Created new product:', product);
@@ -187,7 +189,7 @@ export default function Dashboard() {
                 }))
             } else {
                 // console.log(response, response.status);
-                // console.log(await response.json())
+                console.log(await response.json())
                 console.log("I am not okay");
             }
         } catch(error) {
@@ -217,21 +219,22 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
-        getProducts(user.id);
-    }, []);
+        getProducts(user?.id);
+    }, [user?.id]);
 
     async function handleRemoveProduct(id) {
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Token ${state.token.key}`,
+                    'Authorization': `Token ${token}`,
                     'Content-Type': 'application/json',
                 }
             });
 
             if (response.ok) {
                 console.log('Product deleted successfully');
+                getProducts();
             } else {
                 const errorData = await response.json();
                 console.error('Error delteing product:', errorData);
@@ -242,56 +245,7 @@ export default function Dashboard() {
         }
     }
 
-    async function getProducts(id) {
-        // Gets all products form the back-end
-        const response = await fetch('http://127.0.0.1:8000/api/v1/products', {
-            method: 'get',
-        });
-
-        if (response.ok) {
-            const allProducts = await response.json();
-            const products = allProducts.filter(product => product.user === id);
-            // console.log('GET products:', products);
-            setUser(prevUser => ({
-                ...prevUser,
-                products: [...products],
-            }))
-        } else {
-            console.log("I am not okay");
-        }
-        return [];
-    }
-
-    useEffect(() => {
-        getProducts(user.id)
-    }, [user.basket])
-
     // console.log("User's products:", user.products);
-
-    async function handleRemoveProduct(id) {
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}/delete`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Token ${state.token.key}`,
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (response.ok) {
-                console.log('Product deleted successfully');
-                getProducts(user.id);
-            } else {
-                const errorData = await response.json();
-                console.error('Errod delteing product:', errorData);
-                return;
-            }
-        } catch(error) {
-            console.error('Network error:', error);
-        }
-        // removeOrder()
-    }
-
 
     // Change status from pending to en-route when fulfill is clicked
     function handleFulfill(id) {
@@ -304,7 +258,7 @@ export default function Dashboard() {
                 // Otherwise just return the order
                 return order;
             }
-        })
+        });
 
         // Set user with the updated orders array
         setUser(prevUser => ({ ...prevUser, orders: newOrders }));
@@ -332,9 +286,23 @@ export default function Dashboard() {
     }
 
     // Set the user to null and go back to the login page
-    function handleLogout() {
-        setUser(null);
-        goToLogin()
+    async function handleLogout() {
+        // Logs user out
+        const response = await fetch('http://127.0.0.1:8000/api-auth/users/logout/', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${token}`,
+            }
+        });
+
+        if (response.ok) {
+            location.state = null;
+            localStorage.removeItem('token');
+            setUser(null);
+            goToLogin();
+        } else {
+            console.log("I am not okay", await response.json())
+        }
     }
 
     return (
@@ -344,7 +312,7 @@ export default function Dashboard() {
             </div>
 
             {/* Display the profile only when user is received. */}
-            {state !== null && (
+            {state && token && (
                 <div className="profile-container" aria-label="User Profile">
                 <Profile profilePic={profilePic} />
                 <div className="user-info">
@@ -360,10 +328,10 @@ export default function Dashboard() {
             {/* This div contains all the orders the vendor needs to handle,
                 or has already handled */}
             <div className="all-orders">
-                {user.orders.length === 0 ? (
+                {user && token && user.orders.length === 0 ? (
                     <p className="basket-p">You have no active orders.</p>
                 ) :
-                    user.orders.map((order) => (
+                    token && user.orders.map((order) => (
                         <VendorOrder key={order.id}
                                      order={order}
                                      handleFulfill={handleFulfill} />
@@ -388,9 +356,9 @@ export default function Dashboard() {
                 {/* Displays all the products supplied by the user */}
                 <div className="vendor-products">
                     {/* If the user has no products display an informative paragraph */}
-                    {user.products.length === 0 ? (
+                    {token && user.products.length === 0 ? (
                         <p className="no-products">You have no products. Create one!</p>
-                    ) : user.products.map((product) => (
+                    ) : token && user.products.map((product) => (
                         <VendorProducts key={product.id} product={product}
                                         changeQuantity={changeQuantity}
                                         removeProduct={handleRemoveProduct} />

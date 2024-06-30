@@ -15,18 +15,18 @@ import "../styles/ProducePage.css";
 // images
 import basketImg from "../images/basket.jpg";
 import profilePic from "../images/pic-person-01.jpg";
-import tomatoImg from "../images/tomato.jpg";
-import onionImg from "../images/onion.jpg";
-import gingerImg from "../images/ginger.jpg";
-
 
 export default function ProducePage() {
     // This component displays all the available produces to the user
     
     const location = useLocation();
     const state = location.state;
+    const token = localStorage.getItem('token');
+    // console.log("state:", state)
+    // console.log('Token:', token);
 
-    // Recieves the user from teh Login page at first.
+
+    // Recieves the user from the Login page at first.
     // Also recieves the user from the basket and the summary pages
     const [ user, setUser ] = useState(state ? {
         userId: state.user?.id,
@@ -121,9 +121,13 @@ export default function ProducePage() {
                 // Find the creator of the product
                 const vendor =  vendors.filter(vendor => vendor.id === product.user)[0]
 
-                return {...product, vendor: vendor.first_name + ' ' + vendor.last_name}
+                return {
+                    ...product,
+                    vendor: vendor.first_name + ' ' + vendor.last_name,
+                    quantity: 1,
+                    paid_status: false
+                }
             })
-            console.log('products with vendors:', newProducts);
             setDisplayProducts(prevState => [ ...newProducts, ]);
         } else {
             console.log("I am not okay");
@@ -135,6 +139,7 @@ export default function ProducePage() {
         getProducts();
         // getBasket();
     }, [])
+
 
     // console.log(user.userId)
     // async function getBasket() {
@@ -180,13 +185,12 @@ export default function ProducePage() {
         const product = displayProducts.filter(product => product.id === id)
         const order = {
             ...product[0],
-            paid_status: false,
             quantity: quantity,
         }
 
         console.log("Order from homepage:", order);
         // If the user is logged in, go to the summary page
-        user ? navigate('/summary', { state: { user: user, orders: [order]} })
+        user && token ? navigate('/summary', { state: { user: user, orders: [order]} })
             // if not go to the login page
              : goToLogin();
     }
@@ -202,14 +206,27 @@ export default function ProducePage() {
         }))
     };
 
-    function handleLogout() {
-        // Sets user to null
-        setUser(null);
+    async function handleLogout() {
+        // Logs user out
+        const response = await fetch('http://127.0.0.1:8000/api-auth/users/logout/', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${token}`,
+            }
+        });
+
+        if (response.ok) {
+            location.state = null;
+            localStorage.removeItem('token');
+            setUser(null);
+        } else {
+            console.log("I am not okay", await response.json())
+        }
     };
 
     /* Depending on weather the user is logged in or not, this area will either
        display a login/signup button Or a basket button*/
-    const conditionalComponent = user ? (
+    const conditionalComponent = user && token ? (
         <div className="basket-container">
             <button className="basket-btn" onClick={goToBasket}>
                 <p>Basket({user.basket.length})</p>
@@ -234,7 +251,7 @@ export default function ProducePage() {
             </div>
 
             {/* Don't displaya user profile if user is not logged in */}
-            {user !== null && (
+            {user && token && (
                 <div className="profile-container" aria-label="User Profile">
                 <Profile profilePic={user.image} />
                 <div className="user-info">
@@ -259,7 +276,7 @@ export default function ProducePage() {
                     {(searchResult.length !== 0 ? searchResult : displayProducts).map((product) => (
                         <Produce key={product.id} product={product}
                                  handleMakeOrder={handleMakeOrder}
-                                 addToBasket={user ? addToBasket : goToLogin} />
+                                 addToBasket={user && token ? addToBasket : goToLogin} />
                     ))}
                 </div>
             </main>

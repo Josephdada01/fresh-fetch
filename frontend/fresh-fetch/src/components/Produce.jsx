@@ -54,7 +54,7 @@ export default function Produce({ product, addToBasket, handleMakeOrder }) {
     return (
         <div className="produce" aria-label='Produce item'>
             <div className="produce-image">
-                <img src={ gingerImg } alt="Image of produce" />
+                <img src={ product.image } alt="Image of produce" />
             </div>
 
             <div className="produce-info">
