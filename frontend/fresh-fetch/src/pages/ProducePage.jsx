@@ -109,9 +109,8 @@ export default function ProducePage() {
             method: 'get',
         });
 
-        let products;
         if (response.ok) {
-            products = await response.json();
+            const products = await response.json();
             const responseVendor = await fetch('http://127.0.0.1:8000//api-auth/vendors/');
 
             // Get a list of all the vendors
@@ -128,11 +127,10 @@ export default function ProducePage() {
                     paid_status: false
                 }
             })
-            setDisplayProducts(prevState => [ ...newProducts, ]);
+            setDisplayProducts(newProducts);
         } else {
             console.log("I am not okay");
         }
-        return products;
     }
 
     useEffect(() => {
@@ -187,7 +185,7 @@ export default function ProducePage() {
     const handleMakeOrder = async (id, quantity) => {
          // if not go to the login page
         (!user || !token) && goToLogin();
-        const product = displayProducts.filter(product => product.id === id)
+        // const product = displayProducts.filter(product => product.id === id)
         // console.log("The price of the product I want to order:", product.price)
         try {
             const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
@@ -207,7 +205,7 @@ export default function ProducePage() {
                 // console.log("price of my order", product.price);
 
                 // If the user is logged in, go to the summary page
-                navigate('/summary', { state: { user: user, orders: [{ ...order, price: product[0].price }]} })
+                navigate('/summary', { state: { user: user, orders: [order]} })
             } else {
                 console.log("I am not ok", await response.json());
             }

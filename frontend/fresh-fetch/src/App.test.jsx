@@ -9,10 +9,10 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import App from './App';
 
-beforeEach(() => {
-  // Reset the URL to the root before each test
-  window.history.pushState({}, 'Home', '/');
-});
+// beforeEach(() => {
+//   // Reset the URL to the root before each test
+//   window.history.pushState({}, 'Home', '/');
+// });
 
 describe('<App /> when user is not logged in', () => {
   const history = createMemoryHistory();

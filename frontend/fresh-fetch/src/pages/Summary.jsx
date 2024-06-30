@@ -12,14 +12,14 @@ export default function Summary() {
     const state = location.state;
     const orders = state.orders;
     const token = localStorage.getItem('token');
-    // console.log("Order at summary:", orders);
+    console.log("Orders at summary:", orders);
 
     // Gets user from Produce/Basket page
     const user = state.user;
 
     // Calculate the sum of everything in the orders array
     const subTotal = orders.reduce((acc, current) => {
-        return acc + Number(current.price) * Number(current.quantity);
+        return acc + Number(current.product_price) * Number(current.quantity);
     }, 0);
 
     const delivery = 3.99;
@@ -38,6 +38,7 @@ export default function Summary() {
     const navigate = useNavigate();
     async function goBackToBasket() {
         orders.forEach(async (order) => {
+            const price = Number(order.product_price) * Number(order.quantity);
             try {
                 const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${order.id}/`, {
                     method: 'PUT',
@@ -47,7 +48,9 @@ export default function Summary() {
                     },
                     body : JSON.stringify({
                         product_id: order.product_id,
+                        price: price,
                         paid_status: true,
+                        quantity: order.quantity
                      }),
                 })
     
@@ -61,13 +64,13 @@ export default function Summary() {
             }
         })
 
-        const responseOrder = await fetch(`http://127.0.0.1:8000/api/v1/orders/${orders[0].id}/`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Token ${token}`,
-            }
-        });
-        console.log('Paid for:', await responseOrder.json());
+        // const responseOrder = await fetch(`http://127.0.0.1:8000/api/v1/orders/${orders[0].id}/`, {
+        //     method: 'GET',
+        //     headers: {
+        //         'Authorization': `Token ${token}`,
+        //     }
+        // });
+        // console.log('Paid for:', await responseOrder.json());
         navigate('/basket', { state: { user: user }});
         // update the basket
         // const newUser = {

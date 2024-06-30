@@ -1,4 +1,5 @@
-import "../styles/PendingOrder.css"
+import "../styles/PendingOrder.css";
+import tomatoImg from "../images/tomato.jpg";
 
 export default function PendingOrder({ order, cancelOrder, confirmOrder }) {
     /* This component is for the individual order items that will be displayed
@@ -10,19 +11,19 @@ export default function PendingOrder({ order, cancelOrder, confirmOrder }) {
         <div className="pending-order" aria-label="Pending/Cancelled order">
             {/* This image will be repalced by an image we fetch 
                 from the api eventually */}
-            <img src={order.pic} alt="produce" />
+            <img src={ tomatoImg } alt="produce" />
 
             {/* This static data will also be replaced by data coming
                 from the api */}
             <div className="order-details">
-                <h3 className="order-name">{order.name}</h3>
-                <p className="price">Price: ${order.price}</p>
+                <h3 className="order-name">{order.product_name}</h3>
+                <p className="price">Price: ${order.product_price}</p>
                 <p className="quantity">Quantity: {order.quantity} kgs</p>
-                <p className="vendor">Vendor: {order.vendor}</p>
+                <p className="vendor">Vendor: {order.vendor_name}</p>
                 
-                {order.status === "Pending" && <div className="order-btns">
+                {order.order_status === "pending" && <div className="order-btns">
                     <button className="confirm-btn"
-                            onClick={() => {confirmOrder(order.id)}}>Confirm</button>
+                            onClick={() => {confirmOrder(order)}}>Confirm</button>
                     <button className="cancel-btn"
                             onClick={() => {cancelOrder(order.id)}}>Cancel</button>
                 </div>}
@@ -30,7 +31,7 @@ export default function PendingOrder({ order, cancelOrder, confirmOrder }) {
 
             {/* This status will be either pending, confirmed or cancelled */}
             <div className="status">
-                <small className={order.status}>{order.status}</small>
+                <small className={order.order_status}>{order.order_status}</small>
             </div>
         </div>
     )

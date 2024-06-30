@@ -79,11 +79,11 @@
         font-size: var(--font-size-extra-small);
     }
 
-    .pending-order .pending {
+    /* .pending-order .pending {
         color: var(--light-gray);
         font-family: var(--font-family-base);
         font-size: var(--font-size-extra-small)
-    }
+    } */
 
     .pending-order .order-btns {
         display: flex;
@@ -134,19 +134,19 @@
         margin-right: 15px;
     }
 
-    .pending-order .status .Completed {
+    .pending-order .status .completed {
         color: var(--primary-green);
     }
     
-    .pending-order .status .En-route {
+    .pending-order .status .en-route {
         color: var(--primary-blue);
     }
     
-    .pending-order .status .Pending {
+    .pending-order .status .pending {
         color: var(--primary-orange)
     }
     
-    .pending-order .status .Cancelled {
+    .pending-order .status .cancelled {
         color: var(--primary-red);
     }
   /*================================================*/
