@@ -222,7 +222,7 @@ export default function Dashboard() {
 
     async function handleRemoveProduct(id) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}/delete`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Token ${state.token.key}`,
@@ -234,7 +234,7 @@ export default function Dashboard() {
                 console.log('Product deleted successfully');
             } else {
                 const errorData = await response.json();
-                console.error('Errod delteing product:', errorData);
+                console.error('Error delteing product:', errorData);
                 return;
             }
         } catch(error) {
