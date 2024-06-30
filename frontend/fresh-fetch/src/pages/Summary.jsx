@@ -11,14 +11,15 @@ export default function Summary() {
     const location = useLocation();
     const state = location.state;
     const orders = state.orders;
-    console.log(orders);
+    const token = localStorage.getItem('token');
+    // console.log("Order at summary:", orders);
 
     // Gets user from Produce/Basket page
     const user = state.user;
 
     // Calculate the sum of everything in the orders array
     const subTotal = orders.reduce((acc, current) => {
-        return acc + Number(current.price) * current.quantity;
+        return acc + Number(current.price) * Number(current.quantity);
     }, 0);
 
     const delivery = 3.99;
@@ -35,24 +36,55 @@ export default function Summary() {
     }
 
     const navigate = useNavigate();
-    function goBackToBasket() {
-        // update the basket
-        const newUser = {
-            ...user,
-            basket: user.basket.map(order => {
-                // if order in basket is also in the orders array sent separately,
-                // change the status to "Pending" and update the price and the paidStatus
-                if (orders.includes(order)) {
-                    const price = order.pricePerPound * order.quantity;
-                    return { ...order, status: "Pending", paidStatus: true, price: price }
-                // If not just return the order
+    async function goBackToBasket() {
+        orders.forEach(async (order) => {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${order.id}/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Token ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body : JSON.stringify({
+                        product_id: order.product_id,
+                        paid_status: true,
+                     }),
+                })
+    
+                if (response.ok) {
+                    console.log("Order updated successfullly");
                 } else {
-                    return order
+                    console.log("I am not okay", await response.json())
                 }
-            })
-        }
+            } catch(error) {
+                console.log("Error updating order", error)
+            }
+        })
+
+        const responseOrder = await fetch(`http://127.0.0.1:8000/api/v1/orders/${orders[0].id}/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${token}`,
+            }
+        });
+        console.log('Paid for:', await responseOrder.json());
+        navigate('/basket', { state: { user: user }});
+        // update the basket
+        // const newUser = {
+        //     ...user,
+        //     basket: user.basket.map(order => {
+        //         // if order in basket is also in the orders array sent separately,
+        //         // change the status to "Pending" and update the price and the paidStatus
+        //         if (orders.includes(order)) {
+        //             const price = order.price * order.quantity;
+        //             return { ...order, paidStatus: true, price: price }
+        //         // If not just return the order
+        //         } else {
+        //             return order
+        //         }
+        //     })
+        // }
         // Go back to Basket with the updated user
-        navigate('/basket', { state: { user: newUser }});
     }
 
     return (

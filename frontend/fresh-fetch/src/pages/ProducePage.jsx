@@ -137,28 +137,30 @@ export default function ProducePage() {
 
     useEffect(() => {
         getProducts();
-        // getBasket();
+        user && token && getBasket();
     }, [])
 
 
     // console.log(user.userId)
-    // async function getBasket() {
-    //     try {
-    //         const response = await fetch(`http://127.0.0.1/api-auth/users/user/`, {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         })
+    async function getBasket() {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            })
 
-    //         if (response.ok) {
-    //             const ordersJSON = await response.json();
-    //             console.log("Pending ordres:", ordersJSON);
-    //         }
-    //     } catch(error) {
-    //         console.error("Error getting basket:", error)
-    //     }
-    // }
+            if (response.ok) {
+                const orders = await response.json();
+                // console.log("Pending ordres:", orders);
+                setUser(prevUser => ({ ...prevUser, basket: orders}));
+            }
+        } catch(error) {
+            console.error("Error getting basket:", error)
+        }
+    }
 
     const navigate = useNavigate();
 
@@ -180,30 +182,69 @@ export default function ProducePage() {
         navigate('/signup');
     }
 
+    // console.log('Token:', token)
     // Handles making order directly from the produce page instead of from the basket
-    const handleMakeOrder = (id, quantity) => {
+    const handleMakeOrder = async (id, quantity) => {
+         // if not go to the login page
+        (!user || !token) && goToLogin();
         const product = displayProducts.filter(product => product.id === id)
-        const order = {
-            ...product[0],
-            quantity: quantity,
-        }
+        // console.log("The price of the product I want to order:", product.price)
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body : JSON.stringify({
+                    product_id: id,
+                    quantity: quantity,
+                 }),
+            })
+        
+            if(response.ok) {
+                const order = await response.json();
+                // console.log("price of my order", product.price);
 
-        console.log("Order from homepage:", order);
-        // If the user is logged in, go to the summary page
-        user && token ? navigate('/summary', { state: { user: user, orders: [order]} })
-            // if not go to the login page
-             : goToLogin();
+                // If the user is logged in, go to the summary page
+                navigate('/summary', { state: { user: user, orders: [{ ...order, price: product[0].price }]} })
+            } else {
+                console.log("I am not ok", await response.json());
+            }
+        } catch(error) {
+            console.error("Error submitting form:", error);
+        }
     }
 
-    const addToBasket = (produce) => {
-        // Set user with updated basket
-        setUser((prevState) => ({
-            ...prevState,
-            basket: [
-                ...prevState.basket,
-                produce,
+    const addToBasket = async (product) => {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body : JSON.stringify({
+                    product_id: product.id,
+                    quantity: 1,
+                 }),
+            })
+        
+            if(response.ok) {
+                const order = await response.json();
+                // console.log("Just made an order:", order);
+                 // Set user with updated basket
+                setUser((prevState) => ({
+                    ...prevState,
+                    basket: [
+                        ...prevState.basket,
+                        {...order, name: product.name, price: product.price, image: product.image}
             ]
         }))
+            }
+        } catch(error) {
+            console.error("Error submitting form:", error);
+        }
     };
 
     async function handleLogout() {

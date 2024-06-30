@@ -19,7 +19,7 @@ export default function Order({ order, removeOrder, handleChange, handleOrder })
 
                 <div className="order-btns">
                     <button className="order-now-btn"
-                            onClick={() => {handleOrder(order.id)}}>Order now</button>
+                            onClick={() => {handleOrder(order)}}>Order now</button>
                     <button className="remove-btn"
                             onClick={() => {removeOrder(order.id)}}>Remove</button>
                 </div>
