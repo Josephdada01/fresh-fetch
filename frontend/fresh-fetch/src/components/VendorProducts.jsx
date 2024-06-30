@@ -59,7 +59,7 @@ export default function VendorProduct({ product, changeQuantity, removeProduct }
             {/* This image will eventually be replaced by an image coming from an API */}
             <div className="product-image">
 
-                <img src={ tomatoImg } alt="product" />
+                <img src={ product.image } alt="product" />
 
             </div>
 
@@ -68,7 +68,7 @@ export default function VendorProduct({ product, changeQuantity, removeProduct }
                 <div className="product-details">
                     <h3 className="prodice-name">{product.name}</h3>
                     <p className="price-per-pound">${product.price} / kg</p>
-                    <p className="available-quantity">Available quantity: 10kgs</p>
+                    <p className="available-quantity">Available quantity: ${product.stock_count}kgs</p>
                 </div>
 
                 {quantityModal ? quantityInput : (

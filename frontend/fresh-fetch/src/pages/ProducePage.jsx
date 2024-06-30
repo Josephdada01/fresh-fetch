@@ -124,7 +124,7 @@ export default function ProducePage() {
                 return {
                     ...product,
                     vendor: vendor.first_name + ' ' + vendor.last_name,
-                    quantity: 0,
+                    quantity: 1,
                     paid_status: false
                 }
             })
@@ -139,6 +139,7 @@ export default function ProducePage() {
         getProducts();
         // getBasket();
     }, [])
+
 
     // console.log(user.userId)
     // async function getBasket() {

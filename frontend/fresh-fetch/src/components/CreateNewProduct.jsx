@@ -26,12 +26,10 @@ function CreateNewProduct({ createProduct }) {
       if(value) {
         value = Number(value);
       }
-    } else if(name === "image") {
-      value = null;
     }
     setFormData({
       ...formData,
-      [name]:/* type === 'file' ? files[0] :*/ value
+      [name]: type === 'file' ? files[0]: value
     });
 
     const newErrors = validatInput(name, value);

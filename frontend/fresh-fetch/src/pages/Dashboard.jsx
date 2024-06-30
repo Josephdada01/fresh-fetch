@@ -160,13 +160,15 @@ export default function Dashboard() {
     }
 
     async function handleNewProduct(product) {
-        const newProduct = {
-            ...product,
-            description: "this is a descritpiton",
-            product_status: "available",
-            old_price: 0,
-            user: user?.id,
-        };
+        const newProduct = new FormData();
+        newProduct.append('image', product.image);
+        newProduct.append('name', product.name);
+        newProduct.append('price', Number(product.price));
+        newProduct.append('description', "this is a descritpiton")
+        newProduct.append('product_status', "available");
+        newProduct.append('old_price', Number(product.price));
+        newProduct.append('user', user?.id);
+        newProduct.append('stock_count', product.stock_count);
 
         // console.log("new product:", JSON.stringify(newProduct));
         try {
@@ -175,11 +177,9 @@ export default function Dashboard() {
                 method: 'POST',
                 headers: {
                     'Authorization': `Token ${token}`,
-                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newProduct),
+                body: newProduct,
             });
-
             if (response.ok) {
                 const product = await response.json();
                 // console.log('Created new product:', product);
@@ -189,7 +189,7 @@ export default function Dashboard() {
                 }))
             } else {
                 // console.log(response, response.status);
-                // console.log(await response.json())
+                console.log(await response.json())
                 console.log("I am not okay");
             }
         } catch(error) {
@@ -234,6 +234,7 @@ export default function Dashboard() {
 
             if (response.ok) {
                 console.log('Product deleted successfully');
+                getProducts();
             } else {
                 const errorData = await response.json();
                 console.error('Errod delteing product:', errorData);
@@ -244,32 +245,7 @@ export default function Dashboard() {
         }
     }
 
-    // console.log("User's products:", user.products);
-
-    async function handleRemoveProduct(id) {
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}/delete`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Token ${token}`,
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (response.ok) {
-                console.log('Product deleted successfully');
-                getProducts(user.id);
-            } else {
-                const errorData = await response.json();
-                console.error('Errod delteing product:', errorData);
-                return;
-            }
-        } catch(error) {
-            console.error('Network error:', error);
-        }
-        // removeOrder()
-    }
-
+    console.log("User's products:", user.products);
 
     // Change status from pending to en-route when fulfill is clicked
     function handleFulfill(id) {

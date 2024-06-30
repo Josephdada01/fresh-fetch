@@ -7,14 +7,14 @@ export default function Order({ order, removeOrder, handleChange, handleOrder })
         <div className="order" aria-label='Unmade order'>
             {/* This image will be repalced by an image we fetch 
                 from the api eventually */}
-            <img src={ order.pic } alt="Produce" />
+            <img src={ order.image } alt="Produce" />
 
             {/* This static data will also be replaced by data coming
                 from the api */}
             
             <div className="order-details">
                 <h3 className="order-name">{order.name}</h3>
-                <p className="price-per-pound">${order.pricePerPound} / kg</p>
+                <p className="price-per-pound">${order.price} / kg</p>
                 <p className="vendor">Vendor: {order.vendor}</p>
 
                 <div className="order-btns">
