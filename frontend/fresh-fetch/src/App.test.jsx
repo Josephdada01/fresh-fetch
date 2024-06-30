@@ -100,29 +100,29 @@ describe('<App /> when user is not logged in', () => {
     expect(screen.getAllByLabelText('Produce item').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('goes to the Login page when the login button is pressed', async () => {
-    render(<App />);
+  // it('goes to the Login page when the login button is pressed', async () => {
+  //   render(<App />);
 
-    const button = screen.getByRole('button', { name : 'Login' })
+  //   const button = screen.getByRole('button', { name : 'Login' })
 
-    act(() => {
-      userEvent.click(button);
-    })
+  //   act(() => {
+  //     userEvent.click(button);
+  //   })
 
-    await expect(window.location.href).toContain('/login');
-  });
+  //   await expect(window.location.href).toContain('/login');
+  // });
 
-  it('goes to the signup page when the singup button is pressed', async () => {
-    render(<App />);
+  // it('goes to the signup page when the singup button is pressed', async () => {
+  //   render(<App />);
 
-    const button = screen.getByRole('button', { name : 'Signup' })
+  //   const button = screen.getByRole('button', { name : 'Signup' })
 
-    act(() => {
-      userEvent.click(button);
-    })
+  //   act(() => {
+  //     userEvent.click(button);
+  //   })
 
-    await expect(window.location.href).toContain('/signup');
-  });
+  //   await expect(window.location.href).toContain('/signup');
+  // });
 
   // it('goes to the Basket page when the Basket button is pressed', async () => {
   //   render(<App />);

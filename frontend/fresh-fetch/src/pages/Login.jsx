@@ -38,12 +38,14 @@ export default function Login() {
 
     // If the user is a buyer, this is the "home page"
     function goHome (user, token) {
-        navigate('/', { state: { user: user, token: token }});
+        localStorage.setItem('token', token.key);
+        navigate('/', { state: { user: user }});
     }
 
     // If the user is a vendor, this is a "home page"
     function goToDashboard (user, token) {
-        navigate('/dashboard', { state: { user: user, token: token }});
+        localStorage.setItem('token', token.key);
+        navigate('/dashboard', { state: { user: user }});
     }
 
     // Takes care of all input validation

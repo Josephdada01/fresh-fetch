@@ -1,5 +1,5 @@
 from django.contrib import admin
-from order.models import Order, OrderItems
+from order.models import Order
 # Register your models here.
 
 
@@ -11,10 +11,10 @@ class OrderAdmin(admin.ModelAdmin):
 
 admin.site.register(Order, OrderAdmin)
 
-
+"""
 class OrderItemsAdmin(admin.ModelAdmin):
     list_display = ('order', 'product', 'quantity', 'price')
     search_fields = ('order', 'product')
 
 admin.site.register(OrderItems, OrderItemsAdmin)
-
+"""

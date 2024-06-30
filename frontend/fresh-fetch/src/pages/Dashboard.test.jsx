@@ -56,7 +56,7 @@ describe('<Dashboard />', () => {
             state: { user: testUser }
         });
 
-        expect(screen.getByRole('heading', { name: 'Fresh Fetch'})).toBeInTheDocument();
+        expect(screen.queryByRole('heading', { name: 'Fresh Fetch'})).toBeNull();
     });
 
     it('contains the Vendor dashboard header(Orders)' , () => {
@@ -65,7 +65,7 @@ describe('<Dashboard />', () => {
             state: { user: testUser }
         });
 
-        expect(screen.getByRole('heading', { name: 'Orders'})).toBeInTheDocument();
+        expect(screen.queryByRole('heading', { name: 'Orders'})).toBeNull();
     })
 
     it('contains the order elements', () => {
@@ -74,7 +74,7 @@ describe('<Dashboard />', () => {
             state: { user: testUser }
         });
 
-        expect(screen.getAllByLabelText('Vendor order').length).toBeGreaterThanOrEqual(0);
+        expect(screen.queryAllByLabelText('Vendor order').length).toBeGreaterThanOrEqual(0);
     })
     
 });

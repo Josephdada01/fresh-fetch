@@ -15,18 +15,18 @@ import "../styles/ProducePage.css";
 // images
 import basketImg from "../images/basket.jpg";
 import profilePic from "../images/pic-person-01.jpg";
-import tomatoImg from "../images/tomato.jpg";
-import onionImg from "../images/onion.jpg";
-import gingerImg from "../images/ginger.jpg";
-
 
 export default function ProducePage() {
     // This component displays all the available produces to the user
     
     const location = useLocation();
     const state = location.state;
+    const token = localStorage.getItem('token');
+    // console.log("state:", state)
+    // console.log('Token:', token);
 
-    // Recieves the user from teh Login page at first.
+
+    // Recieves the user from the Login page at first.
     // Also recieves the user from the basket and the summary pages
     const [ user, setUser ] = useState(state ? {
         userId: state.user?.id,
@@ -121,9 +121,13 @@ export default function ProducePage() {
                 // Find the creator of the product
                 const vendor =  vendors.filter(vendor => vendor.id === product.user)[0]
 
-                return {...product, vendor: vendor.first_name + ' ' + vendor.last_name}
+                return {
+                    ...product,
+                    vendor: vendor.first_name + ' ' + vendor.last_name,
+                    quantity: 1,
+                    paid_status: false
+                }
             })
-            console.log('products with vendors:', newProducts);
             setDisplayProducts(prevState => [ ...newProducts, ]);
         } else {
             console.log("I am not okay");
@@ -133,27 +137,30 @@ export default function ProducePage() {
 
     useEffect(() => {
         getProducts();
-        // getBasket();
+        user && token && getBasket();
     }, [])
 
-    // console.log(user.userId)
-    // async function getBasket() {
-    //     try {
-    //         const response = await fetch(`http://127.0.0.1/api-auth/users/user/`, {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         })
 
-    //         if (response.ok) {
-    //             const ordersJSON = await response.json();
-    //             console.log("Pending ordres:", ordersJSON);
-    //         }
-    //     } catch(error) {
-    //         console.error("Error getting basket:", error)
-    //     }
-    // }
+    // console.log(user.userId)
+    async function getBasket() {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+
+            if (response.ok) {
+                const orders = await response.json();
+                // console.log("Pending ordres:", orders);
+                setUser(prevUser => ({ ...prevUser, basket: orders}));
+            }
+        } catch(error) {
+            console.error("Error getting basket:", error)
+        }
+    }
 
     const navigate = useNavigate();
 
@@ -175,41 +182,92 @@ export default function ProducePage() {
         navigate('/signup');
     }
 
+    // console.log('Token:', token)
     // Handles making order directly from the produce page instead of from the basket
-    const handleMakeOrder = (id, quantity) => {
+    const handleMakeOrder = async (id, quantity) => {
+         // if not go to the login page
+        (!user || !token) && goToLogin();
         const product = displayProducts.filter(product => product.id === id)
-        const order = {
-            ...product[0],
-            paid_status: false,
-            quantity: quantity,
-        }
+        // console.log("The price of the product I want to order:", product.price)
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body : JSON.stringify({
+                    product_id: id,
+                    quantity: quantity,
+                 }),
+            })
+        
+            if(response.ok) {
+                const order = await response.json();
+                // console.log("price of my order", product.price);
 
-        console.log("Order from homepage:", order);
-        // If the user is logged in, go to the summary page
-        user ? navigate('/summary', { state: { user: user, orders: [order]} })
-            // if not go to the login page
-             : goToLogin();
+                // If the user is logged in, go to the summary page
+                navigate('/summary', { state: { user: user, orders: [{ ...order, price: product[0].price }]} })
+            } else {
+                console.log("I am not ok", await response.json());
+            }
+        } catch(error) {
+            console.error("Error submitting form:", error);
+        }
     }
 
-    const addToBasket = (produce) => {
-        // Set user with updated basket
-        setUser((prevState) => ({
-            ...prevState,
-            basket: [
-                ...prevState.basket,
-                produce,
+    const addToBasket = async (product) => {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body : JSON.stringify({
+                    product_id: product.id,
+                    quantity: 1,
+                 }),
+            })
+        
+            if(response.ok) {
+                const order = await response.json();
+                // console.log("Just made an order:", order);
+                 // Set user with updated basket
+                setUser((prevState) => ({
+                    ...prevState,
+                    basket: [
+                        ...prevState.basket,
+                        {...order, name: product.name, price: product.price, image: product.image}
             ]
         }))
+            }
+        } catch(error) {
+            console.error("Error submitting form:", error);
+        }
     };
 
-    function handleLogout() {
-        // Sets user to null
-        setUser(null);
+    async function handleLogout() {
+        // Logs user out
+        const response = await fetch('http://127.0.0.1:8000/api-auth/users/logout/', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${token}`,
+            }
+        });
+
+        if (response.ok) {
+            location.state = null;
+            localStorage.removeItem('token');
+            setUser(null);
+        } else {
+            console.log("I am not okay", await response.json())
+        }
     };
 
     /* Depending on weather the user is logged in or not, this area will either
        display a login/signup button Or a basket button*/
-    const conditionalComponent = user ? (
+    const conditionalComponent = user && token ? (
         <div className="basket-container">
             <button className="basket-btn" onClick={goToBasket}>
                 <p>Basket({user.basket.length})</p>
@@ -234,7 +292,7 @@ export default function ProducePage() {
             </div>
 
             {/* Don't displaya user profile if user is not logged in */}
-            {user !== null && (
+            {user && token && (
                 <div className="profile-container" aria-label="User Profile">
                 <Profile profilePic={user.image} />
                 <div className="user-info">
@@ -259,7 +317,7 @@ export default function ProducePage() {
                     {(searchResult.length !== 0 ? searchResult : displayProducts).map((product) => (
                         <Produce key={product.id} product={product}
                                  handleMakeOrder={handleMakeOrder}
-                                 addToBasket={user ? addToBasket : goToLogin} />
+                                 addToBasket={user && token ? addToBasket : goToLogin} />
                     ))}
                 </div>
             </main>

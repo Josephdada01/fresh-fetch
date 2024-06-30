@@ -18,6 +18,7 @@ export default function Basket() {
 
     const location = useLocation();
     const state = location.state;
+    const token = localStorage.getItem('token');
 
     // Receive the user from the Produce/Summary page
     const [ user, setUser ] = useState(state.user);
@@ -37,7 +38,32 @@ export default function Basket() {
         setMadeOrders(made);
     }, [user.basket]);
 
-    function handleChangeQuantity(e, id) {
+    useEffect(() => {
+        getBasket()
+    }, []);
+
+    async function getBasket() {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+
+            if (response.ok) {
+                const orders = await response.json();
+                // console.log("Pending ordres:", orders);
+                setUser(prevUser => ({ ...prevUser, basket: orders}));
+            }
+        } catch(error) {
+            console.error("Error getting basket:", error)
+        }
+    }
+
+    async function handleChangeQuantity(e, id) {
+        // Set the user with the new basket
         const value = e.target.value;
         const newBasket = user.basket.map((item) => {
             // If this is the item whose quantity is being changed...
@@ -50,18 +76,37 @@ export default function Basket() {
             }
         })
 
-        // Set the user with the new basket
-        setUser((prevState) => ({
-            ...prevState,
-            basket: newBasket,
-        }));
+        setUser(prevUser => ({ ...prevUser, basket: newBasket }))
     }
 
 
-    function removeOrder(id) {
+    async function removeOrder(id) {
         // Remove the order from the basket completely
-        const newBasket = user.basket.filter(order => order.id !== id);
-        setUser((prevState) => ({...prevState, basket: newBasket}));
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${id}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Token ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                })
+
+                if (response.ok) {
+                    console.log(response);
+                    if (response.status === 204) {
+                        console.log("Order update successfullly");
+                        getBasket();
+                    }
+                } else {
+                    if (response.status === 400) {
+                        console.log("Error deliting order");
+                    } else {
+                        console.log("I am not okay", await response.json());
+                    }
+                }
+        } catch(error) {
+            console.log("Error updating order", error)
+        }
     }
 
     // Removes all of the orders that are pending
@@ -84,17 +129,42 @@ export default function Basket() {
     const navigate = useNavigate();
 
     // Handles an individual order being made
-    function handleOrderNow(id) {
+    async function handleOrderNow(order) {
         // Identify the order that is being made
-        const order = user.basket.filter(order => order.id === id);
+        console.log(order.quantity);
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${order.id}/`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body : JSON.stringify({
+                    product_id: order.product_id,
+                    quantity: order.quantity,
+                 }),
+            })
+
+            if (response.ok) {
+                console.log("Order updated successfullly");
+            } else {
+                console.log("I am not okay", await response.json())
+            }
+        } catch(error) {
+            console.log("Error updating order", error)
+        }
+        const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${order.product_id}`);
+        const product = await response.json();
 
         // Go to the summary page with the user and the order
-        navigate('/summary', { state: { user: user, orders: order}});
+        order.price = product.price;
+        console.log(order);
+        navigate('/summary', { state: { user: user, orders: [order]}})
     }
 
     // Handles ordering everything in basket that is not already ordered
-    function handleOrderAll(id) {
-        navigate('/summary', { state: { user: user, orders: unmadeOrders } });
+    function handleOrderAll() {
+        unmadeOrders.forEach(order => handleOrderNow(order));
     }
 
     return (
