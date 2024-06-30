@@ -1,17 +1,14 @@
 import { render, screen, act, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import fetchMock from 'jest-fetch-mock';
 import userEvent from '@testing-library/user-event';
 import { createMemoryHistory } from 'history';
-import { useNavigate } from 'react-router';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
-
 
 import App from './App';
 
+global.fetch = jest.fn();
+
 beforeEach(() => {
-  // Reset the URL to the root before each test
-  window.history.pushState({}, 'Home', '/');
+  fetch.mockClear();
 });
 
 describe('<App /> when user is not logged in', () => {
@@ -95,22 +92,50 @@ describe('<App /> when user is not logged in', () => {
       }
     ];
 
+    const mockVendors = [
+      {
+        first_name: "Test",
+        last_name: "Vendor",
+        id: "48a3a34a-6e65-4d3c-9e07-266e078007cd",
+      }
+    ]
+
+    fetch.mockImplementationOnce(() => {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockProducts),
+      })
+    }).mockImplementationOnce(() => {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockVendors),
+      })
+    });
+
+    // fetch.get.mockImplementationOnce(() =>
+    //   Promise.resolve({ data: { products: mockProducts}}))
+
     await waitFor(() => screen.getAllByLabelText('Produce item'));
 
     expect(screen.getAllByLabelText('Produce item').length).toBeGreaterThanOrEqual(1);
   });
 
-  // it('goes to the Login page when the login button is pressed', async () => {
-  //   render(<App />);
+  it('goes to the Login page when the login button is pressed', async () => {
+    render(<App />);
 
-  //   const button = screen.getByRole('button', { name : 'Login' })
+    const button = screen.getByRole('button', { name : 'Login' })
 
-  //   act(() => {
-  //     userEvent.click(button);
-  //   })
+    act(() => {
+      userEvent.click(button);
+    })
 
-  //   await expect(window.location.href).toContain('/login');
-  // });
+    await expect(window.location.href).toContain('/login');
+  });
+
+  it('gets a search input field when the search button is clicked', () => {
+    render(<App />)
+  });
+  
 
   // it('goes to the signup page when the singup button is pressed', async () => {
   //   render(<App />);
@@ -134,6 +159,5 @@ describe('<App /> when user is not logged in', () => {
   //   });
   
   //   await expect(window.location.href).toContain('/basket');
-
   // })
 });

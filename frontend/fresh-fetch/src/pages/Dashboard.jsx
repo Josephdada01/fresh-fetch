@@ -41,41 +41,7 @@ export default function Dashboard() {
         first_name: state.user?.first_name,
         last_name: state.user?.last_name,
         // To be removed. This will be retireved from the api or from the user
-        orders: [
-            {
-                id: "1",
-                productId: "1",
-                name: "Heirloom tomato",
-                pricePerPound: "$5.99 / kg",
-                vendor: "Wall-Mart",
-                quantity: 5,
-                price: "$5.99",
-                status: "En-route",
-                pic: tomatoImg,
-            },
-            {
-                id: "2",
-                productId: "2",
-                name: "Organic ginger",
-                pricePerPound: "$12.99 / lb",
-                vendor: "Wall-Mart",
-                quantity: 1,
-                price: "$6.50",
-                status: "Completed",
-                pic: gingerImg,
-            },
-            {
-                id: "3",
-                productId: "3",
-                name: "Sweet onion",
-                pricePerPound: "$14.95 / lb",
-                vendor: "Fresh Corner",
-                quantity: .5,
-                price: "$14.95",
-                status: "Pending",
-                pic: onionImg,
-            }
-        ],
+        orders: [],
         products: [],
     }
     // } : {
@@ -152,7 +118,6 @@ export default function Dashboard() {
     //         }
     //     ] 
     );
-
 
     const [ popupFormIsActive, setPopupFormIsActive ] = useState(false);
     function togglePopupForm() {
