@@ -265,7 +265,7 @@ export default function Basket() {
                     </div>
                     <button className="cancel-all-btn"
                             onClick={cancelAllPending}
-                            disabled={unmadeOrders.length <= 0}>Cancel all</button>
+                            disabled={madeOrders.length <= 0}>Cancel all</button>
                 </div>
                 <hr />
 
