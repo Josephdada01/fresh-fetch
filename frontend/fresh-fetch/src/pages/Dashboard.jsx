@@ -245,7 +245,7 @@ export default function Dashboard() {
         }
     }
 
-    console.log("User's products:", user.products);
+    // console.log("User's products:", user.products);
 
     // Change status from pending to en-route when fulfill is clicked
     function handleFulfill(id) {
