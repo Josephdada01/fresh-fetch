@@ -25,10 +25,13 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['product_id', 'vendor_id', 'quantity', 'id',
-                  'order_date', 'order_status', 'paid_status']
+                  'order_date', 'order_status', 'paid_status',
+                  'vendor_name', 'product_name', 'product_price', 
+                  'product_image']
 
-        read_only_fields = ['vendor_id', 'id',
-                            'order_date', 'order_status', 'paid_status']
+        read_only_fields = ['vendor_id', 'id', 'product_image',
+                            'order_date', 'vendor_name',
+                            'product_name', 'product_price']
 
     def create(self, validated_data):
         """
@@ -43,5 +46,20 @@ class OrderSerializer(serializers.ModelSerializer):
         quantity = validated_data['quantity']
         product = Product.objects.get(id=product_id)
         vendor_id = product.user.id
+        first_name = product.user.first_name
+        last_name = product.user.last_name
+        vendor_name = f"{first_name} {last_name}"
+        product_name = product.name
+        product_price = product.price
+        product_image = product.image
 
-        return Order.objects.create(user=user, vendor_id=str(vendor_id), product=product, quantity=quantity)
+        return Order.objects.create(
+                user=user, 
+                vendor_id=str(vendor_id), 
+                product=product, 
+                product_name=product_name, 
+                product_price=product_price, 
+                product_image=product_image, 
+                vendor_name=vendor_name, 
+                quantity=quantity
+            )
