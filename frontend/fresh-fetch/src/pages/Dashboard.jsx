@@ -12,9 +12,7 @@ import Logout from "../components/Logout";
 
 // Image imports (To be removed)
 import profilePic from '../images/pic-person-01.jpg';
-import tomatoImg from "../images/tomato.jpg";
-import onionImg from "../images/onion.jpg";
-import gingerImg from "../images/ginger.jpg";
+
 
 // Style imports
 import "../styles/Dashboard.css";
