@@ -123,19 +123,19 @@
         margin-right: 9px;
     }
 
-    .vendor-order .status .Completed {
+    .vendor-order .status .completed {
         color: var(--primary-green);
     }
 
-    .vendor-order .status .En-route {
+    .vendor-order .status .enroute {
         color: var(--primary-blue);
     }
 
-    .vendor-order .status .Pending {
+    .vendor-order .status .cending {
         color: var(--primary-orange)
     }
 
-    .vendor-order .status .Cancelled {
+    .vendor-order .status .cancelled {
         color: var(--primary-red);
     }
 

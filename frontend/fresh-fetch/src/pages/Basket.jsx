@@ -60,6 +60,11 @@ export default function Basket() {
         } catch(error) {
             console.error("Error getting basket:", error)
         }
+
+        const intervalId = setInterval(getBasket, 180000);
+
+        // Cleanup the interval on component unmount
+        return () => clearInterval(intervalId);
     }
 
     async function handleChangeQuantity(e, id) {

@@ -6,7 +6,7 @@ export default function PendingOrder({ order, cancelOrder, confirmOrder }) {
     in the pending area of the basket. The orders are made and the user is
     waiting for them to be delivered.*/
 
-    const price = Number(order.product_price) * Number(order.quantity);
+    const price = (Number(order.product_price) * Number(order.quantity)).toFixed(2);
 
     return (
         <div className="pending-order" aria-label="Pending/Cancelled order">
@@ -22,12 +22,14 @@ export default function PendingOrder({ order, cancelOrder, confirmOrder }) {
                 <p className="quantity">Quantity: {order.quantity} kgs</p>
                 <p className="vendor">Vendor: {order.vendor_name}</p>
                 
-                {order.order_status === "pending" && <div className="order-btns">
-                    <button className="confirm-btn"
-                            onClick={() => {confirmOrder(order)}}>Confirm</button>
+                {(order.order_status === "pending" || order.order_status === "enroute")
+                     && <div className="order-btns">
+                    {order.order_status === "enroute" && (<button className="confirm-btn"
+                            onClick={() => {confirmOrder(order)}}>Confirm</button>)}
                     <button className="cancel-btn"
                             onClick={() => {cancelOrder(order.id)}}>Cancel</button>
-                </div>}
+                </div>
+                }
             </div>
 
             {/* This status will be either pending, confirmed or cancelled */}

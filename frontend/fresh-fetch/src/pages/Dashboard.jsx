@@ -126,18 +126,17 @@ export default function Dashboard() {
 
     async function getOrders() {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
+            const response = await fetch('http://127.0.0.1:8000/api-auth/vendors/orders/', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Token ${token}`,
-                    'Content-Type': 'application/json',
                 },
             })
 
             if (response.ok) {
                 const orders = await response.json();
                 // console.log("Pending ordres:", orders);
-                setUser(prevUser => ({ ...prevUser, basket: orders}));
+                setUser(prevUser => ({ ...prevUser, orders: orders}));
             }
         } catch(error) {
             console.error("Error getting basket:", error)
@@ -233,24 +232,48 @@ export default function Dashboard() {
         }
     }
 
-    console.log("User's products:", user.products);
+    // console.log("User's products:", user.products);
 
     // Change status from pending to en-route when fulfill is clicked
-    function handleFulfill(id) {
-        const newOrders = user.orders.map(order => {
-            // If this is the order being fulfilled ...
-            if (order.id === id) {
-                // Return the order with the status set to En-route
-                return {...order, status: "En-route"};
+    async function handleFulfill(order) {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api-auth/vendors/orders/${order.id}/`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    product_id: order.product_id,
+                    order_status: "enroute",
+                }),
+            })
+
+            if (response.ok) {
+                console.log('Product deleted successfully');
+                getOrders();
             } else {
-                // Otherwise just return the order
-                return order;
+                const errorData = await response.json();
+                console.error('Error fulfilling product:', errorData);
+                return;
             }
-        });
+        } catch(error) {
+        console.error('Network error:', error);
+        }
+    }
+        // const newOrders = user.orders.map(order => {
+        //     // If this is the order being fulfilled ...
+        //     if (order.id === id) {
+        //         // Return the order with the status set to En-route
+        //         return {...order, status: "En-route"};
+        //     } else {
+        //         // Otherwise just return the order
+        //         return order;
+        //     }
+        // });
 
         // Set user with the updated orders array
-        setUser(prevUser => ({ ...prevUser, orders: newOrders }));
-    }
+        // setUser(prevUser => ({ ...prevUser, orders: newOrders }));
 
     function changeQuantity(value, id) {
         const newProducts = user.products.map(product => {
