@@ -54,14 +54,14 @@ export default function Produce({ product, addToBasket, handleMakeOrder }) {
     return (
         <div className="produce" aria-label='Produce item'>
             <div className="produce-image">
-                <img src={ product.image } alt="Image of produce" />
+                <img src={ product?.image } alt="Image of produce" />
             </div>
 
             <div className="produce-info">
                 <div className="produce-details">
-                    <h3 className="produce-name">{product.name}</h3>
-                    <p className="price-per-pound">${product.price} / kg</p>
-                    <p className="vendor">Vendor: {product.vendor}</p>
+                    <h3 className="produce-name">{product?.name}</h3>
+                    <p className="price-per-pound">${product?.price} / kg</p>
+                    <p className="vendor">Vendor: {product?.vendor}</p>
                 </div>
 
                 {/* When order now is clicked, a quantity input will replace order now and

@@ -36,70 +36,7 @@ export default function ProducePage() {
         image: profilePic,
     } : null);
     
-
     const [ displayProducts, setDisplayProducts ] = useState([]);
-    //         id: products[0]?.id,
-    //         name: products[0]?.title,
-    //         pricePerPound: Number(products[0]?.price),
-    //         vendor: products[0]?.description,
-    //         quantity: 1,
-    //         price: 0,
-    //         status: null,
-    //         pic: tomatoImg,
-    //     },
-    //     {
-    //         id: "2",
-    //         name: "Organic Ginger",
-    //         pricePerPound: 12.99,
-    //         vendor: "Kmart",
-    //         quantity: 1,
-    //         price: 0,
-    //         status: null,
-    //         pic: gingerImg,
-    //     },
-    //     {
-    //         id: "3",
-    //         name: "Sweet Onion",
-    //         pricePerPound: 2.99,
-    //         vendor: "target",
-    //         quantity: 1,
-    //         price: 0,
-    //         status: null,
-    //         pic: onionImg,
-    //     }
-    // ]: [
-    //     // Fake products for dev. To be removed
-    //     {
-    //         id: "1",
-    //         name: "Heirloom tomato",
-    //         pricePerPound: 5.99,
-    //         vendor: "Wall-mart",
-    //         quantity: 1,
-    //         price: 0,
-    //         status: null,
-    //         pic: tomatoImg,
-    //     },
-    //     {
-    //         id: "2",
-    //         name: "Organic Ginger",
-    //         pricePerPound: 12.99,
-    //         vendor: "Kmart",
-    //         quantity: 1,
-    //         price: 0,
-    //         status: null,
-    //         pic: gingerImg,
-    //     },
-    //     {
-    //         id: "3",
-    //         name: "Sweet Onion",
-    //         pricePerPound: 2.99,
-    //         vendor: "target",
-    //         quantity: 1,
-    //         price: 0,
-    //         status: null,
-    //         pic: onionImg,
-    //     }
-    // ]);
 
     const [searchResult, setSearchResult ] = useState([])
 
