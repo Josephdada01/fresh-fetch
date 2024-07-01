@@ -44,13 +44,14 @@ export default function Search({ products, handleSearchReturn }) {
         {isSearchActive ? (
             <div className="active-search-container">
                 <input
+                    aria-label="Search for products"
                     type="text"
                     placeholder="Search..."
                     value={searchTerm}
                     onChange={handleSearch}
                     className="search-field"
                 />
-                <button onClick={toggleSearch}>
+                <button onClick={toggleSearch} aria-label="close-btn">
                     <AiOutlineClose className="close-icon"/>
                 </button>
             </div>
