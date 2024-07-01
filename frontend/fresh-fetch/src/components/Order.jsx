@@ -1,4 +1,5 @@
-import "../styles/Order.css"
+import "../styles/Order.css";
+import tomatoImg from "../images/tomato.jpg";
 
 export default function Order({ order, removeOrder, handleChange, handleOrder }) {
     // This component is for the individual order items that will be displayed
@@ -7,15 +8,15 @@ export default function Order({ order, removeOrder, handleChange, handleOrder })
         <div className="order" aria-label='Unmade order'>
             {/* This image will be repalced by an image we fetch 
                 from the api eventually */}
-            <img src={ order.image } alt="Produce" />
+            <img src={ tomatoImg } alt="Produce" />
 
             {/* This static data will also be replaced by data coming
                 from the api */}
             
             <div className="order-details">
-                <h3 className="order-name">{order.name}</h3>
-                <p className="price-per-pound">${order.price} / kg</p>
-                <p className="vendor">Vendor: {order.vendor}</p>
+                <h3 className="order-name">{order.product_name}</h3>
+                <p className="price-per-pound">${order.product_price} / kg</p>
+                <p className="vendor">Vendor: {order.vendor_name}</p>
 
                 <div className="order-btns">
                     <button className="order-now-btn"

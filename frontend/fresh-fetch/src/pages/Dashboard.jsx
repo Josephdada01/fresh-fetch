@@ -41,41 +41,7 @@ export default function Dashboard() {
         first_name: state.user?.first_name,
         last_name: state.user?.last_name,
         // To be removed. This will be retireved from the api or from the user
-        orders: [
-            {
-                id: "1",
-                productId: "1",
-                name: "Heirloom tomato",
-                pricePerPound: "$5.99 / kg",
-                vendor: "Wall-Mart",
-                quantity: 5,
-                price: "$5.99",
-                status: "En-route",
-                pic: tomatoImg,
-            },
-            {
-                id: "2",
-                productId: "2",
-                name: "Organic ginger",
-                pricePerPound: "$12.99 / lb",
-                vendor: "Wall-Mart",
-                quantity: 1,
-                price: "$6.50",
-                status: "Completed",
-                pic: gingerImg,
-            },
-            {
-                id: "3",
-                productId: "3",
-                name: "Sweet onion",
-                pricePerPound: "$14.95 / lb",
-                vendor: "Fresh Corner",
-                quantity: .5,
-                price: "$14.95",
-                status: "Pending",
-                pic: onionImg,
-            }
-        ],
+        orders: [],
         products: [],
     }
     // } : {
@@ -153,11 +119,34 @@ export default function Dashboard() {
     //     ] 
     );
 
-
     const [ popupFormIsActive, setPopupFormIsActive ] = useState(false);
     function togglePopupForm() {
         setPopupFormIsActive(prevModal => !prevModal);
     }
+
+    async function getOrders() {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+
+            if (response.ok) {
+                const orders = await response.json();
+                // console.log("Pending ordres:", orders);
+                setUser(prevUser => ({ ...prevUser, basket: orders}));
+            }
+        } catch(error) {
+            console.error("Error getting basket:", error)
+        }
+    }
+
+    useEffect(() => {
+        getOrders()
+    }, []);
 
     async function handleNewProduct(product) {
         const newProduct = new FormData();
@@ -204,10 +193,9 @@ export default function Dashboard() {
             method: 'get',
         });
 
-        let products;
         if (response.ok) {
             const allProducts = await response.json();
-            products = allProducts.filter(product => product.user === id);
+            const products = allProducts.filter(product => product.user === id);
             setUser(prevUser => ({
                 ...prevUser,
                 products: products,
@@ -220,11 +208,11 @@ export default function Dashboard() {
 
     useEffect(() => {
         getProducts(user?.id);
-    }, [user?.id]);
+    }, []);
 
     async function handleRemoveProduct(id) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}/delete`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -234,7 +222,7 @@ export default function Dashboard() {
 
             if (response.ok) {
                 console.log('Product deleted successfully');
-                getProducts();
+                getProducts(user.id);
             } else {
                 const errorData = await response.json();
                 console.error('Error delteing product:', errorData);
@@ -245,7 +233,7 @@ export default function Dashboard() {
         }
     }
 
-    // console.log("User's products:", user.products);
+    console.log("User's products:", user.products);
 
     // Change status from pending to en-route when fulfill is clicked
     function handleFulfill(id) {
@@ -262,12 +250,6 @@ export default function Dashboard() {
 
         // Set user with the updated orders array
         setUser(prevUser => ({ ...prevUser, orders: newOrders }));
-    }
-
-    function removeOrder(id) {
-        const newProducts = user.products.filter((product) => product.id !== id)
-        // Set user with new products array
-        setUser(prevUser => ({ ...prevUser, products: newProducts }));
     }
 
     function changeQuantity(value, id) {
@@ -322,7 +304,7 @@ export default function Dashboard() {
             </div>
             )}
 
-            <h2 className="vendor-header">Orders</h2>
+            <h2 className="orders-header">Orders</h2>
             <hr />
 
             {/* This div contains all the orders the vendor needs to handle,

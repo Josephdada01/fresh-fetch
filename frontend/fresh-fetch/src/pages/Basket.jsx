@@ -31,8 +31,8 @@ export default function Basket() {
 
     // Every time the basket changes, reset made and unmade orders
     useEffect(() => {
-        const unmade = user.basket.filter(order => !order.pais_status);
-        const made = user.basket.filter(order => order.paid_status);
+        const unmade = user.basket.filter(order => !order.paid_status);
+        const made = user.basket.filter(order => order.status !== "completed" && order.paid_status);
   
         setUnmadeOrders(unmade);
         setMadeOrders(made);
@@ -92,9 +92,8 @@ export default function Basket() {
                 })
 
                 if (response.ok) {
-                    console.log(response);
                     if (response.status === 204) {
-                        console.log("Order update successfullly");
+                        console.log("Order deleted successfullly");
                         getBasket();
                     }
                 } else {
@@ -105,25 +104,45 @@ export default function Basket() {
                     }
                 }
         } catch(error) {
-            console.log("Error updating order", error)
+            console.log("Network error", error)
         }
     }
 
     // Removes all of the orders that are pending
     function cancelAllPending() {
-        setUser(prevUser => ({...prevUser, basket: unmadeOrders }));
+        for (const order of madeOrders) {
+            removeOrder(order.id);
+        }
     }
 
     // Changes the status of the order from pending to completed
-    function confirmOrder(id) {
-        const newMadeOrders = madeOrders.map((order => {
-            if (order.id === id) {
-                return {...order, status: "Completed"};
+    async function confirmOrder(order) {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${order.id}/`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body : JSON.stringify({
+                    product_id: order.product_id,
+                    order_status: "completed",
+                 }),
+            })
+
+            if (response.ok) {
+                console.log("Order confirmed");
+                getBasket();
             } else {
-                return order;
+                console.log("I am not okay", await response.json())
             }
-        }))
-        setMadeOrders(newMadeOrders);
+        } catch(error) {
+            console.log("Error updating order", error)
+        }
+
+        setTimeout(() => {
+            removeOrder(order.id);
+        }, 10000)
     };
 
     const navigate = useNavigate();
@@ -131,7 +150,7 @@ export default function Basket() {
     // Handles an individual order being made
     async function handleOrderNow(order) {
         // Identify the order that is being made
-        console.log(order.quantity);
+        // console.log(order.quantity);
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${order.id}/`, {
                 method: 'PUT',
@@ -157,14 +176,37 @@ export default function Basket() {
         const product = await response.json();
 
         // Go to the summary page with the user and the order
-        order.price = product.price;
-        console.log(order);
         navigate('/summary', { state: { user: user, orders: [order]}})
     }
 
     // Handles ordering everything in basket that is not already ordered
-    function handleOrderAll() {
-        unmadeOrders.forEach(order => handleOrderNow(order));
+    async function handleOrderAll() {
+        unmadeOrders.forEach(async order => {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${order.id}/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Token ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body : JSON.stringify({
+                        product_id: order.product_id,
+                        quantity: order.quantity,
+                     }),
+                })
+    
+                if (response.ok) {
+                    console.log("Order updated successfullly");
+                } else {
+                    console.log("I am not okay", await response.json())
+                }
+            } catch(error) {
+                console.log("Error updating order", error)
+            }
+        });
+        // Go to the summary page with the user and the order
+        console.log(unmadeOrders);
+        navigate('/summary', { state: { user: user, orders: unmadeOrders}})
     }
 
     return (
@@ -200,7 +242,7 @@ export default function Basket() {
 
                 {/* This div is for orders that haven't been made yet */}
                 <div className="pre-orders">
-                    {user.basket.filter(order => !order.status).length === 0 ? (
+                    {unmadeOrders.length === 0 ? (
                         <p className="basket-p">Looks like there is nothing in your basket.</p>
                     ) :
                         unmadeOrders.map((order) => (
@@ -223,7 +265,7 @@ export default function Basket() {
                     </div>
                     <button className="cancel-all-btn"
                             onClick={cancelAllPending}
-                            >Cancel all</button>
+                            disabled={madeOrders.length <= 0}>Cancel all</button>
                 </div>
                 <hr />
 

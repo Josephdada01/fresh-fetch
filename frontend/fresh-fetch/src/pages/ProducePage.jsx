@@ -109,9 +109,8 @@ export default function ProducePage() {
             method: 'get',
         });
 
-        let products;
-        if (response.ok) {
-            products = await response.json();
+        if (response?.ok) {
+            const products = await response.json();
             const responseVendor = await fetch('http://127.0.0.1:8000//api-auth/vendors/');
 
             // Get a list of all the vendors
@@ -128,17 +127,16 @@ export default function ProducePage() {
                     paid_status: false
                 }
             })
-            setDisplayProducts(prevState => [ ...newProducts, ]);
+            setDisplayProducts(newProducts);
         } else {
             console.log("I am not okay");
         }
-        return products;
     }
 
     useEffect(() => {
         getProducts();
-        user && token && getBasket();
-    }, [])
+        token && getBasket();
+    }, [token])
 
 
     // console.log(user.userId)
@@ -152,7 +150,7 @@ export default function ProducePage() {
                 },
             })
 
-            if (response.ok) {
+            if (response?.ok) {
                 const orders = await response.json();
                 // console.log("Pending ordres:", orders);
                 setUser(prevUser => ({ ...prevUser, basket: orders}));
@@ -182,12 +180,11 @@ export default function ProducePage() {
         navigate('/signup');
     }
 
-    // console.log('Token:', token)
     // Handles making order directly from the produce page instead of from the basket
     const handleMakeOrder = async (id, quantity) => {
          // if not go to the login page
         (!user || !token) && goToLogin();
-        const product = displayProducts.filter(product => product.id === id)
+        // const product = displayProducts.filter(product => product.id === id)
         // console.log("The price of the product I want to order:", product.price)
         try {
             const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
@@ -202,12 +199,11 @@ export default function ProducePage() {
                  }),
             })
         
-            if(response.ok) {
+            if(response?.ok) {
                 const order = await response.json();
-                // console.log("price of my order", product.price);
 
                 // If the user is logged in, go to the summary page
-                navigate('/summary', { state: { user: user, orders: [{ ...order, price: product[0].price }]} })
+                navigate('/summary', { state: { user: user, orders: [order]} })
             } else {
                 console.log("I am not ok", await response.json());
             }
@@ -230,10 +226,9 @@ export default function ProducePage() {
                  }),
             })
         
-            if(response.ok) {
+            if(response?.ok) {
                 const order = await response.json();
-                // console.log("Just made an order:", order);
-                 // Set user with updated basket
+                // Set user with updated basket
                 setUser((prevState) => ({
                     ...prevState,
                     basket: [
@@ -256,7 +251,7 @@ export default function ProducePage() {
             }
         });
 
-        if (response.ok) {
+        if (response?.ok) {
             location.state = null;
             localStorage.removeItem('token');
             setUser(null);

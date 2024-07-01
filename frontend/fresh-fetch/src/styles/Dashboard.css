@@ -19,10 +19,14 @@
 }
 
 /*Basic styling for all the header*/
-.vendor-header, .products-header {
+.vendor-header, .products-header, .orders-header {
     margin-inline: 9vw;
     font-size: var(--font-size-large);
     font-weight: var(--font-weight-regular);
+}
+
+.orders-header {
+    margin-top: 100px;
 }
 
 .products-header-container {
