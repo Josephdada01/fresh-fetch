@@ -6,6 +6,7 @@ export default function PendingOrder({ order, cancelOrder, confirmOrder }) {
     in the pending area of the basket. The orders are made and the user is
     waiting for them to be delivered.*/
 
+    const price = Number(order.product_price) * Number(order.quantity);
 
     return (
         <div className="pending-order" aria-label="Pending/Cancelled order">
@@ -17,7 +18,7 @@ export default function PendingOrder({ order, cancelOrder, confirmOrder }) {
                 from the api */}
             <div className="order-details">
                 <h3 className="order-name">{order.product_name}</h3>
-                <p className="price">Price: ${order.product_price}</p>
+                <p className="price">Price: ${price}</p>
                 <p className="quantity">Quantity: {order.quantity} kgs</p>
                 <p className="vendor">Vendor: {order.vendor_name}</p>
                 
