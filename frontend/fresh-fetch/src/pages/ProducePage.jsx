@@ -109,7 +109,7 @@ export default function ProducePage() {
             method: 'get',
         });
 
-        if (response.ok) {
+        if (response?.ok) {
             const products = await response.json();
             const responseVendor = await fetch('http://127.0.0.1:8000//api-auth/vendors/');
 
@@ -135,8 +135,8 @@ export default function ProducePage() {
 
     useEffect(() => {
         getProducts();
-        user && token && getBasket();
-    }, [])
+        token && getBasket();
+    }, [token])
 
 
     // console.log(user.userId)
@@ -150,7 +150,7 @@ export default function ProducePage() {
                 },
             })
 
-            if (response.ok) {
+            if (response?.ok) {
                 const orders = await response.json();
                 // console.log("Pending ordres:", orders);
                 setUser(prevUser => ({ ...prevUser, basket: orders}));
@@ -180,7 +180,6 @@ export default function ProducePage() {
         navigate('/signup');
     }
 
-    // console.log('Token:', token)
     // Handles making order directly from the produce page instead of from the basket
     const handleMakeOrder = async (id, quantity) => {
          // if not go to the login page
@@ -200,9 +199,8 @@ export default function ProducePage() {
                  }),
             })
         
-            if(response.ok) {
+            if(response?.ok) {
                 const order = await response.json();
-                // console.log("price of my order", product.price);
 
                 // If the user is logged in, go to the summary page
                 navigate('/summary', { state: { user: user, orders: [order]} })
@@ -228,10 +226,9 @@ export default function ProducePage() {
                  }),
             })
         
-            if(response.ok) {
+            if(response?.ok) {
                 const order = await response.json();
-                // console.log("Just made an order:", order);
-                 // Set user with updated basket
+                // Set user with updated basket
                 setUser((prevState) => ({
                     ...prevState,
                     basket: [
@@ -254,7 +251,7 @@ export default function ProducePage() {
             }
         });
 
-        if (response.ok) {
+        if (response?.ok) {
             location.state = null;
             localStorage.removeItem('token');
             setUser(null);

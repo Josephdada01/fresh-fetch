@@ -5,18 +5,13 @@ import { createMemoryHistory } from 'history';
 
 import App from './App';
 
+global.fetch = jest.fn();
 
 beforeEach(() => {
   // Reset the URL to the root before each test
   window.history.pushState({}, 'Home', '/');
+  fetch.mockClear();
 });
-
-// global.fetch = jest.fn();
-
-// beforeEach(() => {
-//   fetch.mockClear();
-// });
-
 
 describe('<App /> when user is not logged in', () => {
   const history = createMemoryHistory();
@@ -76,51 +71,47 @@ describe('<App /> when user is not logged in', () => {
     expect(screen.getByRole('button', { name: /Search/})).toBeInTheDocument();
   });
 
+  const mockProducts = [
+    {
+      date_added: "2024-06-29T16:44:55.288252Z",
+      description: "this is a descritpiton",
+      id: "34237f81-da56-48ad-a798-2afa48fc2158",
+      image: null,
+      name: "Sweet onions",
+      old_price: "0.00",
+      paid_status: false,
+      price: "2.77",
+      product_status: "available",
+      quantity: 0,
+      user: "48a3a34a-6e65-4d3c-9e07-266e078007cd",
+      vendor: "Johnny Walker",
+    }
+  ];
+
+  const mockVendors = [
+    {
+      first_name: "Test",
+      last_name: "Vendor",
+      id: "48a3a34a-6e65-4d3c-9e07-266e078007cd",
+    }
+  ]
   it('Renders product element(s)', async () => {
+    fetch.mockImplementationOnce(() => {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockProducts),
+      })
+    }).mockImplementationOnce(() => {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockVendors),
+      })
+    });
+
     render(<App />, {
       route: '/',
       state: null,
     });
-
-    const mockProducts = [
-      {
-        date_added: "2024-06-29T16:44:55.288252Z",
-        description: "this is a descritpiton",
-        id: "34237f81-da56-48ad-a798-2afa48fc2158",
-        image: null,
-        name: "Sweet onions",
-        old_price: "0.00",
-        paid_status: false,
-        price: "2.77",
-        product_status: "available",
-        quantity: 0,
-        user: "48a3a34a-6e65-4d3c-9e07-266e078007cd",
-        vendor: "Johnny Walker",
-      }
-    ];
-
-    const mockVendors = [
-      {
-        first_name: "Test",
-        last_name: "Vendor",
-        id: "48a3a34a-6e65-4d3c-9e07-266e078007cd",
-      }
-    ]
-
-    // fetch.mockImplementationOnce(() => {
-    //   return Promise.resolve({
-    //     ok: true,
-    //     json: () => Promise.resolve(mockProducts),
-    //   })
-    // }).mockImplementationOnce(() => {
-    //   return Promise.resolve({
-    //     ok: true,
-    //     json: () => Promise.resolve(mockVendors),
-    //   })
-    // });
-
-    // fetch.get.mockImplementationOnce(() =>
-    //   Promise.resolve({ data: { products: mockProducts}}))
 
     await waitFor(() => screen.queryAllByLabelText('Produce item'));
 
@@ -144,27 +135,27 @@ describe('<App /> when user is not logged in', () => {
   });
   
 
-  // it('goes to the signup page when the singup button is pressed', async () => {
-  //   render(<App />);
+  it('goes to the signup page when the singup button is pressed', async () => {
+    render(<App />);
 
-  //   const button = screen.getByRole('button', { name : 'Signup' })
+    const button = screen.getByRole('button', { name : 'Signup' })
 
-  //   act(() => {
-  //     userEvent.click(button);
-  //   })
+    act(() => {
+      userEvent.click(button);
+    })
 
-  //   await expect(window.location.href).toContain('/signup');
-  // });
+    await expect(window.location.href).toContain('/signup');
+  });
 
-  // it('goes to the Basket page when the Basket button is pressed', async () => {
-  //   render(<App />);
+//   it('goes to the Basket page when the Basket button is pressed', async () => {
+//     render(<App />);
 
-  //   const button = screen.getByRole('button', { name: /Basket(.)/})
+//     const button = screen.getByRole('button', { name: /Basket(.)/})
 
-  //   act(() => {
-  //     userEvent.click(button);
-  //   });
+//     act(() => {
+//       userEvent.click(button);
+//     });
   
-  //   await expect(window.location.href).toContain('/basket');
-  // })
+//     await expect(window.location.href).toContain('/basket');
+//   })
 });
