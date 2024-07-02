@@ -54,7 +54,7 @@ export default function Basket() {
 
             if (response.ok) {
                 const orders = await response.json();
-                // console.log("Pending ordres:", orders);
+
                 setUser(prevUser => ({ ...prevUser, basket: orders}));
             }
         } catch(error) {
