@@ -46,11 +46,11 @@ Welcome to Fresh Fetch! Fresh Fetch allows users to browse and purchase a variet
    if requested for password in the above step input your mysql password
    cd into the backend directory containing settings.py and create a .env file, copy and paste the following code into it.
    
-   ```bash
    Copy this into the .env file created
 
    This is the environment variable
 
+   ```bash
    SECRET_KEY=django-insecure-e+pou$ltl%m!qe6v@9ib2j^14t_4(4mmm)=fm+rd@sgo#xao
 
    DATABASE_NAME=fresh_fetch
