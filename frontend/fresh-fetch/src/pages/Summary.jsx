@@ -65,22 +65,6 @@ export default function Summary() {
         })
 
         navigate('/basket', { state: { user: user }});
-        // update the basket
-        // const newUser = {
-        //     ...user,
-        //     basket: user.basket.map(order => {
-        //         // if order in basket is also in the orders array sent separately,
-        //         // change the status to "Pending" and update the price and the paidStatus
-        //         if (orders.includes(order)) {
-        //             const price = order.price * order.quantity;
-        //             return { ...order, paidStatus: true, price: price }
-        //         // If not just return the order
-        //         } else {
-        //             return order
-        //         }
-        //     })
-        // }
-        // Go back to Basket with the updated user
     }
 
     return (
