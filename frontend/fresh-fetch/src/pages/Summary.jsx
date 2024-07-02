@@ -12,7 +12,7 @@ export default function Summary() {
     const state = location.state;
     const orders = state.orders;
     const token = localStorage.getItem('token');
-    console.log("Orders at summary:", orders);
+    // console.log("Orders at summary:", orders);
 
     // Gets user from Produce/Basket page
     const user = state.user;
@@ -47,7 +47,6 @@ export default function Summary() {
                         'Content-Type': 'application/json',
                     },
                     body : JSON.stringify({
-                        product_id: order.product_id,
                         price: price,
                         paid_status: true,
                         quantity: order.quantity
@@ -63,30 +62,7 @@ export default function Summary() {
                 console.log("Error updating order", error)
             }
         })
-
-        // const responseOrder = await fetch(`http://127.0.0.1:8000/api/v1/orders/${orders[0].id}/`, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Authorization': `Token ${token}`,
-        //     }
-        // });
-        // console.log('Paid for:', await responseOrder.json());
         navigate('/basket', { state: { user: user }});
-        // update the basket
-        // const newUser = {
-        //     ...user,
-        //     basket: user.basket.map(order => {
-        //         // if order in basket is also in the orders array sent separately,
-        //         // change the status to "Pending" and update the price and the paidStatus
-        //         if (orders.includes(order)) {
-        //             const price = order.price * order.quantity;
-        //             return { ...order, paidStatus: true, price: price }
-        //         // If not just return the order
-        //         } else {
-        //             return order
-        //         }
-        //     })
-        // }
         // Go back to Basket with the updated user
     }
 

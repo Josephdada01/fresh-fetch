@@ -1,5 +1,5 @@
 // Imports from React
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router";
 
 // Custom component imports
@@ -11,10 +11,8 @@ import Profile from "../components/Profile";
 import Logout from "../components/Logout";
 
 // Image imports (To be removed)
-import profilePic from '../images/pic-person-01.jpg';
-import tomatoImg from "../images/tomato.jpg";
-import onionImg from "../images/onion.jpg";
-import gingerImg from "../images/ginger.jpg";
+import profilePic from '../images/pic-work-02.jpg';
+
 
 // Style imports
 import "../styles/Dashboard.css";
@@ -124,29 +122,29 @@ export default function Dashboard() {
         setPopupFormIsActive(prevModal => !prevModal);
     }
 
-    async function getOrders() {
+    const getOrders = useCallback(async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
+            const response = await fetch('http://127.0.0.1:8000/api-auth/vendors/orders/', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Token ${token}`,
-                    'Content-Type': 'application/json',
                 },
             })
 
             if (response.ok) {
                 const orders = await response.json();
                 // console.log("Pending ordres:", orders);
-                setUser(prevUser => ({ ...prevUser, basket: orders}));
+                setUser(prevUser => ({ ...prevUser, orders: orders}));
             }
         } catch(error) {
             console.error("Error getting basket:", error)
         }
-    }
+    }, [token])
 
     useEffect(() => {
-        getOrders()
-    }, []);
+        token && getProducts(user?.id);
+        user && token && getOrders()
+    }, [getOrders, token, user?.id]);
 
     async function handleNewProduct(product) {
         const newProduct = new FormData();
@@ -159,7 +157,7 @@ export default function Dashboard() {
         newProduct.append('user', user?.id);
         newProduct.append('stock_count', product.stock_count);
 
-        // console.log("new product:", JSON.stringify(newProduct));
+        // console.log("new product:", newProduct);
         try {
             // Sends a request to the api to create a new product
             const response = await fetch('http://127.0.0.1:8000/api/v1/products/create/', {
@@ -178,7 +176,7 @@ export default function Dashboard() {
                 }))
             } else {
                 // console.log(response, response.status);
-                console.log(await response.json())
+                // console.log(await response.json())
                 console.log("I am not okay");
             }
         } catch(error) {
@@ -195,6 +193,7 @@ export default function Dashboard() {
 
         if (response.ok) {
             const allProducts = await response.json();
+            // console.log("Products: ", allProducts);
             const products = allProducts.filter(product => product.user === id);
             setUser(prevUser => ({
                 ...prevUser,
@@ -205,10 +204,6 @@ export default function Dashboard() {
         }
         return [];
     }
-
-    useEffect(() => {
-        getProducts(user?.id);
-    }, []);
 
     async function handleRemoveProduct(id) {
         try {
@@ -233,24 +228,47 @@ export default function Dashboard() {
         }
     }
 
-    console.log("User's products:", user.products);
+    // console.log("User's products:", user.products);
 
     // Change status from pending to en-route when fulfill is clicked
-    function handleFulfill(id) {
-        const newOrders = user.orders.map(order => {
-            // If this is the order being fulfilled ...
-            if (order.id === id) {
-                // Return the order with the status set to En-route
-                return {...order, status: "En-route"};
+    async function handleFulfill(order) {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api-auth/vendors/orders/${order.id}/`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    order_status: "enroute",
+                }),
+            })
+
+            if (response.ok) {
+                console.log('Product deleted successfully');
+                getOrders();
             } else {
-                // Otherwise just return the order
-                return order;
+                const errorData = await response.json();
+                console.error('Error fulfilling product:', errorData);
+                return;
             }
-        });
+        } catch(error) {
+        console.error('Network error:', error);
+        }
+    }
+        // const newOrders = user.orders.map(order => {
+        //     // If this is the order being fulfilled ...
+        //     if (order.id === id) {
+        //         // Return the order with the status set to En-route
+        //         return {...order, status: "En-route"};
+        //     } else {
+        //         // Otherwise just return the order
+        //         return order;
+        //     }
+        // });
 
         // Set user with the updated orders array
-        setUser(prevUser => ({ ...prevUser, orders: newOrders }));
-    }
+        // setUser(prevUser => ({ ...prevUser, orders: newOrders }));
 
     function changeQuantity(value, id) {
         const newProducts = user.products.map(product => {

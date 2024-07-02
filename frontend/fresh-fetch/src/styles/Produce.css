@@ -96,7 +96,14 @@
     .quantity-input-container input {
         width: 40px;
         height: 20px;
-        margin-bottom: 15px;
+        margin-bottom: 0;
+    }
+
+    .quantity-input-container .error-message {
+        margin: 0;
+        margin-top: -10px;
+        margin-bottom: -25px;
+        font-size: 10px;
     }
 
     .quantity-input-container .cancel-quantity-btn {
@@ -111,6 +118,11 @@
 
     .quantity-input-container .cancel-quantity-btn:hover {
         height: 40px;
+    }
+
+    .quantity-input-container .enter-quantity-btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
     }
 
     .produce .produce-btns {

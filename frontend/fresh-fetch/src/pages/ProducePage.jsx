@@ -1,5 +1,5 @@
 // React related imports
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 
 // Components
@@ -21,7 +21,7 @@ export default function ProducePage() {
     
     const location = useLocation();
     const state = location.state;
-    const token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
     // console.log("state:", state)
     // console.log('Token:', token);
 
@@ -36,70 +36,7 @@ export default function ProducePage() {
         image: profilePic,
     } : null);
     
-
     const [ displayProducts, setDisplayProducts ] = useState([]);
-    //         id: products[0]?.id,
-    //         name: products[0]?.title,
-    //         pricePerPound: Number(products[0]?.price),
-    //         vendor: products[0]?.description,
-    //         quantity: 1,
-    //         price: 0,
-    //         status: null,
-    //         pic: tomatoImg,
-    //     },
-    //     {
-    //         id: "2",
-    //         name: "Organic Ginger",
-    //         pricePerPound: 12.99,
-    //         vendor: "Kmart",
-    //         quantity: 1,
-    //         price: 0,
-    //         status: null,
-    //         pic: gingerImg,
-    //     },
-    //     {
-    //         id: "3",
-    //         name: "Sweet Onion",
-    //         pricePerPound: 2.99,
-    //         vendor: "target",
-    //         quantity: 1,
-    //         price: 0,
-    //         status: null,
-    //         pic: onionImg,
-    //     }
-    // ]: [
-    //     // Fake products for dev. To be removed
-    //     {
-    //         id: "1",
-    //         name: "Heirloom tomato",
-    //         pricePerPound: 5.99,
-    //         vendor: "Wall-mart",
-    //         quantity: 1,
-    //         price: 0,
-    //         status: null,
-    //         pic: tomatoImg,
-    //     },
-    //     {
-    //         id: "2",
-    //         name: "Organic Ginger",
-    //         pricePerPound: 12.99,
-    //         vendor: "Kmart",
-    //         quantity: 1,
-    //         price: 0,
-    //         status: null,
-    //         pic: gingerImg,
-    //     },
-    //     {
-    //         id: "3",
-    //         name: "Sweet Onion",
-    //         pricePerPound: 2.99,
-    //         vendor: "target",
-    //         quantity: 1,
-    //         price: 0,
-    //         status: null,
-    //         pic: onionImg,
-    //     }
-    // ]);
 
     const [searchResult, setSearchResult ] = useState([])
 
@@ -109,7 +46,7 @@ export default function ProducePage() {
             method: 'get',
         });
 
-        if (response.ok) {
+        if (response?.ok) {
             const products = await response.json();
             const responseVendor = await fetch('http://127.0.0.1:8000//api-auth/vendors/');
 
@@ -133,14 +70,8 @@ export default function ProducePage() {
         }
     }
 
-    useEffect(() => {
-        getProducts();
-        user && token && getBasket();
-    }, [])
-
-
     // console.log(user.userId)
-    async function getBasket() {
+    const getBasket = useCallback(async() => {
         try {
             const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
                 method: 'GET',
@@ -150,7 +81,7 @@ export default function ProducePage() {
                 },
             })
 
-            if (response.ok) {
+            if (response?.ok) {
                 const orders = await response.json();
                 // console.log("Pending ordres:", orders);
                 setUser(prevUser => ({ ...prevUser, basket: orders}));
@@ -158,7 +89,14 @@ export default function ProducePage() {
         } catch(error) {
             console.error("Error getting basket:", error)
         }
-    }
+    }, [token]);
+
+    useEffect(() => {
+        getProducts();
+        if (user && token) {
+            getBasket();
+        }
+    }, [getBasket, user, token])
 
     const navigate = useNavigate();
 
@@ -180,11 +118,13 @@ export default function ProducePage() {
         navigate('/signup');
     }
 
-    // console.log('Token:', token)
     // Handles making order directly from the produce page instead of from the basket
     const handleMakeOrder = async (id, quantity) => {
          // if not go to the login page
-        (!user || !token) && goToLogin();
+         if (!user || !token) {
+            goToLogin();
+            return;
+         }
         // const product = displayProducts.filter(product => product.id === id)
         // console.log("The price of the product I want to order:", product.price)
         try {
@@ -200,9 +140,8 @@ export default function ProducePage() {
                  }),
             })
         
-            if(response.ok) {
+            if(response?.ok) {
                 const order = await response.json();
-                // console.log("price of my order", product.price);
 
                 // If the user is logged in, go to the summary page
                 navigate('/summary', { state: { user: user, orders: [order]} })
@@ -214,7 +153,13 @@ export default function ProducePage() {
         }
     }
 
+    // console.log(user?.basket)
+
     const addToBasket = async (product) => {
+        if (!user || !token) {
+            goToLogin();
+            return;
+         }
         try {
             const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
                 method: 'POST',
@@ -228,10 +173,9 @@ export default function ProducePage() {
                  }),
             })
         
-            if(response.ok) {
+            if(response?.ok) {
                 const order = await response.json();
-                // console.log("Just made an order:", order);
-                 // Set user with updated basket
+                // Set user with updated basket
                 setUser((prevState) => ({
                     ...prevState,
                     basket: [
@@ -254,7 +198,8 @@ export default function ProducePage() {
             }
         });
 
-        if (response.ok) {
+        if (response?.ok) {
+            token = null;
             location.state = null;
             localStorage.removeItem('token');
             setUser(null);
@@ -294,7 +239,7 @@ export default function ProducePage() {
                 <div className="profile-container" aria-label="User Profile">
                 <Profile profilePic={user.image} />
                 <div className="user-info">
-                    <h2 className="user-header">Welcome {user?.first_name}</h2>
+                    <h2 className="user-header">Welcome, {user?.first_name}</h2>
                     <Logout handleLogout={handleLogout}/>
                 </div>
             </div>
