@@ -58,7 +58,7 @@ Welcome to Fresh Fetch! Fresh Fetch allows users to browse and purchase a variet
    DATABASE_PASSWORD=your password
    DATABASE_HOST=localhost
    ```
-4. Once the django server is running go into the frontend directory and into the fresh-fetch director.
+4. Once the django server is running go into the frontend directory and into the fresh-fetch directory.
    
    ```bash
    npm install
