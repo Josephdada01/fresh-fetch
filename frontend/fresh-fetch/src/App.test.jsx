@@ -141,7 +141,7 @@ describe('<App /> when user is not logged in', () => {
       userEvent.click(button);
     })
 
-    await expect(window.location.href).toContain('/login');
+    expect(window.location.href).toContain('/login');
   });
 
   it('gets a search input field when the search button is clicked', () => {
@@ -186,10 +186,10 @@ describe('<App /> when user is not logged in', () => {
       userEvent.click(button);
     })
 
-    await expect(window.location.href).toContain('/signup');
+    expect(window.location.href).toContain('/signup');
   });
 
-    // it('goes to the login page when a user is not logged in and\
+  // it('goes to the login page when a user is not logged in and\
   //     they press order now/add to basket buttons',async  () => {
 
   //   fetch.mockImplementationOnce(() => {
@@ -252,7 +252,7 @@ const mockOrders = [
   }
 ]
 
-const AppWithUser = (ui, { route = '/', state = {} } = {}) => {
+const renderWithRouter = (ui, { route = '/', state = {} } = {}) => {
   window.history.pushState(state, 'Test page', route);
 
   return render(
@@ -262,25 +262,18 @@ const AppWithUser = (ui, { route = '/', state = {} } = {}) => {
           </Routes>
       </MemoryRouter>
   );
-};
+}
 
-// describe('<App /> when user is logged in', () => {
-//   it('goes to the Basket page when the Basket button is pressed', async () => {
-//     AppWithUser(<Produce />, {
-//       route: '/produce',
-//       state: { user: mockUser }
-//       }
-//   );
-//     screen.debug();
+describe('<Basket />', () => {
+  localStorage.setItem('token', 'fake token');
+  it('contains the common Header', () => {
+      renderWithRouter(<Produce />, {
+          route: '/',
+          state: {user: mockUser}
+          }
+      );
+    screen.debug()
 
-//     const button = screen.getByRole('button', { name: /Basket(.)/})
-
-//     // act(() => {
-//     //   userEvent.click(button);
-//     // });
-  
-//     // await expect(window.location.href).toContain('/basket');
-//   })
-//   screen.debug()
-// });
+  });
+});
 
