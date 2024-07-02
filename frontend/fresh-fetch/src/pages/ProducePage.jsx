@@ -22,12 +22,10 @@ export default function ProducePage() {
     const location = useLocation();
     const state = location.state;
     const token = localStorage.getItem('token');
-    // console.log("state:", state)
-    // console.log('Token:', token);
 
 
-    // Recieves the user from the Login page at first.
-    // Also recieves the user from the basket and the summary pages
+    // Receives the user from the Login page at first.
+    // Also receives the user from the basket and the summary pages
     const [ user, setUser ] = useState(state ? {
         userId: state.user?.id,
         first_name: state.user?.first_name,
