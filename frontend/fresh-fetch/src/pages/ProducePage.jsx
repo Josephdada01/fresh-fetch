@@ -74,7 +74,6 @@ export default function ProducePage() {
     }, [token])
 
 
-    // console.log(user.userId)
     async function getBasket() {
         try {
             const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
@@ -87,7 +86,6 @@ export default function ProducePage() {
 
             if (response?.ok) {
                 const orders = await response.json();
-                // console.log("Pending ordres:", orders);
                 setUser(prevUser => ({ ...prevUser, basket: orders}));
             }
         } catch(error) {
