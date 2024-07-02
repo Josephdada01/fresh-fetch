@@ -10,7 +10,7 @@ export default function PendingOrder({ order, cancelOrder, confirmOrder }) {
 
     return (
         <div className="pending-order" aria-label="Pending/Cancelled order">
-            {/* This image will be repalced by an image we fetch 
+            {/* This image will be replaced by an image we fetch 
                 from the api eventually */}
             <img src={ tomatoImg } alt="produce" />
 
