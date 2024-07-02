@@ -55,7 +55,7 @@ Welcome to Fresh Fetch! Fresh Fetch allows users to browse and purchase a variet
 
    DATABASE_NAME=fresh_fetch
    DATABASE_USER=root
-   DATABASE_PASSWORD=your pass
+   DATABASE_PASSWORD=your password
    DATABASE_HOST=localhost
    ```
 4. Once the django server is running go into the frontend directory and into the fresh-fetch director.
