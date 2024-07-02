@@ -15,13 +15,13 @@ export default function Order({ order, removeOrder, handleChange, handleOrder })
         }
 
         setError(newError);
-        handleChange(e, order.id);
+        handleChange(value, order.id);
     }
     return (
         <div className="order" aria-label='Unmade order'>
             {/* This image will be repalced by an image we fetch 
                 from the api eventually */}
-            <img src={ order.product_image } alt="Produce" />
+            <img src={ order.product_image_url } alt="Produce" />
 
             {/* This static data will also be replaced by data coming
                 from the api */}

@@ -47,7 +47,6 @@ export default function Summary() {
                         'Content-Type': 'application/json',
                     },
                     body : JSON.stringify({
-                        product_id: order.product_id,
                         price: price,
                         paid_status: true,
                         quantity: order.quantity

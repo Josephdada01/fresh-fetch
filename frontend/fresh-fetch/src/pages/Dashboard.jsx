@@ -240,7 +240,6 @@ export default function Dashboard() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    product_id: order.product_id,
                     order_status: "enroute",
                 }),
             })

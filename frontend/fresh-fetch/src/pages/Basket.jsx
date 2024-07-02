@@ -67,9 +67,8 @@ export default function Basket() {
         user && token && getBasket()
     }, [user, token, getBasket]);
 
-    async function handleChangeQuantity(e, id) {
+    async function handleChangeQuantity(value, id) {
         // Set the user with the new basket
-        const value = e.target.value;
         const newBasket = user.basket.map((item) => {
             // If this is the item whose quantity is being changed...
             if(item.id === id) {
@@ -83,7 +82,7 @@ export default function Basket() {
         setUser(prevUser => ({ ...prevUser, basket: newBasket }))
     }
 
-    
+    // console.log("Orders:", user.basket)
 
 
     async function removeOrder(id) {
@@ -131,7 +130,6 @@ export default function Basket() {
                     'Content-Type': 'application/json',
                 },
                 body : JSON.stringify({
-                    product_id: order.product_id,
                     order_status: "completed",
                  }),
             })
@@ -156,7 +154,7 @@ export default function Basket() {
     // Handles an individual order being made
     async function handleOrderNow(order) {
         // Identify the order that is being made
-        // console.log(order.quantity);
+        console.log('Quantity:', order.quantity);
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${order.id}/`, {
                 method: 'PUT',
@@ -165,7 +163,6 @@ export default function Basket() {
                     'Content-Type': 'application/json',
                 },
                 body : JSON.stringify({
-                    product_id: order.product_id,
                     quantity: order.quantity,
                  }),
             })
@@ -194,7 +191,6 @@ export default function Basket() {
                         'Content-Type': 'application/json',
                     },
                     body : JSON.stringify({
-                        product_id: order.product_id,
                         quantity: order.quantity,
                      }),
                 })

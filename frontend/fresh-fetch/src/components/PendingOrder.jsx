@@ -11,7 +11,7 @@ export default function PendingOrder({ order, cancelOrder, confirmOrder }) {
         <div className="pending-order" aria-label="Pending/Cancelled order">
             {/* This image will be repalced by an image we fetch 
                 from the api eventually */}
-            <img src={ order.product_image } alt="produce" />
+            <img src={ order.product_image_url } alt="produce" />
 
             {/* This static data will also be replaced by data coming
                 from the api */}

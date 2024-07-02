@@ -3,7 +3,7 @@ import '../styles/VendorOrder.css'
 export default function VendorOrder({ order, handleFulfill }) {
     return (
         <div className="vendor-order" aria-label="Vendor order">
-            <img src={order.product_image} alt="order" />
+            <img src={order.product_image_url} alt="order" />
             
             <div className="order-details">
                 <h3 className="order-name">{order.product_name}</h3>
