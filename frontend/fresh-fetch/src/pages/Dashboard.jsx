@@ -11,7 +11,7 @@ import Profile from "../components/Profile";
 import Logout from "../components/Logout";
 
 // Image imports (To be removed)
-import profilePic from '../images/pic-person-01.jpg';
+import profilePic from '../images/pic-work-02.jpg';
 
 
 // Style imports
@@ -143,7 +143,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         token && getProducts(user?.id);
-        token && getOrders()
+        user && token && getOrders()
     }, [getOrders, token, user?.id]);
 
     async function handleNewProduct(product) {

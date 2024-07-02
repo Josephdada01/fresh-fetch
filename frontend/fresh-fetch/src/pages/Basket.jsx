@@ -69,17 +69,30 @@ export default function Basket() {
 
     async function handleChangeQuantity(value, id) {
         // Set the user with the new basket
-        const newBasket = user.basket.map((item) => {
-            // If this is the item whose quantity is being changed...
-            if(item.id === id) {
-                // Return the item with the qunatity changed
-                return { ...item, quantity: value };
+        if (!value || value <= 0) {
+            return;
+        }
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${id}/`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body : JSON.stringify({
+                    quantity: value,
+                 }),
+            })
+
+            if (response.ok) {
+                console.log("Order updated successfullly");
             } else {
-                // Else just return te item
-            return item;
+                console.log("I am not okay", await response.json())
             }
-        })
-        setUser(prevUser => ({ ...prevUser, basket: newBasket }))
+        } catch(error) {
+            console.log("Error updating order", error)
+        }
+        token && getBasket();
     }
 
     // console.log("Orders:", user.basket)
@@ -155,26 +168,6 @@ export default function Basket() {
     async function handleOrderNow(order) {
         // Identify the order that is being made
         console.log('Quantity:', order.quantity);
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${order.id}/`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Token ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body : JSON.stringify({
-                    quantity: order.quantity,
-                 }),
-            })
-
-            if (response.ok) {
-                console.log("Order updated successfullly");
-            } else {
-                console.log("I am not okay", await response.json())
-            }
-        } catch(error) {
-            console.log("Error updating order", error)
-        }
 
         // Go to the summary page with the user and the order
         navigate('/summary', { state: { user: user, orders: [order]}})
