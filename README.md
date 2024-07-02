@@ -96,6 +96,7 @@ This project is licensed under the MIT License.
 
 ## Authors
 This project was created with passion by:
+
 Solomon Nweke
 - Email: [solomonuche@gmail.com
 - Github: [Solomonuche](https://github.com/Solomonuche)
