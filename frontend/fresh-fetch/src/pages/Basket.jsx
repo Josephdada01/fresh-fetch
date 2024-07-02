@@ -1,5 +1,5 @@
 // imports from React
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router";
 
 // Custom component imports
@@ -29,20 +29,7 @@ export default function Basket() {
     // Orders that are jsut sitting there(haven't been sent out yet)
     const [ unmadeOrders, setUnmadeOrders ] = useState(user.basket);
 
-    // Every time the basket changes, reset made and unmade orders
-    useEffect(() => {
-        const unmade = user.basket.filter(order => !order.paid_status);
-        const made = user.basket.filter(order => order.status !== "completed" && order.paid_status);
-  
-        setUnmadeOrders(unmade);
-        setMadeOrders(made);
-    }, [user.basket]);
-
-    useEffect(() => {
-        getBasket()
-    }, []);
-
-    async function getBasket() {
+    const getBasket = useCallback( async () => {
         try {
             const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
                 method: 'GET',
@@ -61,11 +48,24 @@ export default function Basket() {
             console.error("Error getting basket:", error)
         }
 
-        const intervalId = setInterval(getBasket, 180000);
+        // const intervalId = setInterval(getBasket, 10000);
 
-        // Cleanup the interval on component unmount
-        return () => clearInterval(intervalId);
-    }
+        // // Cleanup the interval on component unmount
+        // return () => clearInterval(intervalId);
+    }, [token])
+
+    // Every time the basket changes, reset made and unmade orders
+    useEffect(() => {
+        const unmade = user.basket.filter(order => !order.paid_status);
+        const made = user.basket.filter(order => order.status !== "completed" && order.paid_status);
+  
+        setUnmadeOrders(unmade);
+        setMadeOrders(made);
+    }, [user.basket]);
+
+    useEffect(() => {
+        user && token && getBasket()
+    }, [user, token, getBasket]);
 
     async function handleChangeQuantity(e, id) {
         // Set the user with the new basket
@@ -80,9 +80,10 @@ export default function Basket() {
             return item;
             }
         })
-
         setUser(prevUser => ({ ...prevUser, basket: newBasket }))
     }
+
+    
 
 
     async function removeOrder(id) {
@@ -147,7 +148,7 @@ export default function Basket() {
 
         setTimeout(() => {
             removeOrder(order.id);
-        }, 10000)
+        }, 5000)
     };
 
     const navigate = useNavigate();
@@ -177,8 +178,6 @@ export default function Basket() {
         } catch(error) {
             console.log("Error updating order", error)
         }
-        const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${order.product_id}`);
-        const product = await response.json();
 
         // Go to the summary page with the user and the order
         navigate('/summary', { state: { user: user, orders: [order]}})
@@ -235,7 +234,7 @@ export default function Basket() {
                         <img src={basketImg} alt="A basket" />
                         <div className="basket-logo-text">
                             <h2>Basket</h2>
-                            <small className="item-count" aria-label="Item count">{user.basket.filter(order => !order.status).length} item(s)</small>
+                            <small className="item-count" aria-label="Item count">{unmadeOrders.length} item(s)</small>
                         </div>
                     </div>
 

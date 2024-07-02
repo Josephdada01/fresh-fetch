@@ -1,5 +1,4 @@
 import "../styles/PendingOrder.css";
-import tomatoImg from "../images/tomato.jpg";
 
 export default function PendingOrder({ order, cancelOrder, confirmOrder }) {
     /* This component is for the individual order items that will be displayed
@@ -12,7 +11,7 @@ export default function PendingOrder({ order, cancelOrder, confirmOrder }) {
         <div className="pending-order" aria-label="Pending/Cancelled order">
             {/* This image will be repalced by an image we fetch 
                 from the api eventually */}
-            <img src={ tomatoImg } alt="produce" />
+            <img src={ order.product_image } alt="produce" />
 
             {/* This static data will also be replaced by data coming
                 from the api */}

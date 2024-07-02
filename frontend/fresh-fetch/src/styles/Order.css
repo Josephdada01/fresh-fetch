@@ -89,8 +89,6 @@
         margin-bottom: 20px;
     }
 
-
-
     .order .order-btns .order-now-btn {
         background-color: var(--primary-green);
         color: var(--primary-white);
@@ -99,6 +97,11 @@
     .order .order-btns .order-now-btn:hover {
         background-color: var(--hover-green);
         transition: .3s ease;
+    }
+
+    .order .order-btns .order-now-btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
     }
 
     .order .order-btns .remove-btn {
@@ -118,6 +121,7 @@
     margin-right: 5px;
     margin-top: 23px;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     border: 1px solid #ccc;
@@ -131,14 +135,20 @@
 .quantity-input input {
     border: none;
     outline: none;
-    padding: 10px 10px 10px 0;
+    padding: 5px 5px 5px 0;
     font-size: var(--font-size-extra-small);
-    width: 50px;
+    width: clamp(38px, 9vw, 80px);
     background-color: transparent;
 }
 
 .quantity-input:hover {
     border: 1px solid var(--primary-black)
+}
+
+.quantity-input .error-message {
+    margin: 0;
+    font-size: clamp(8px, 2vw, 12px);
+    margin-top: -12px;
 }
 
 .quantity-input #hiddenLabel {
