@@ -2,10 +2,8 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router";
 
-// COmponent imports
+// Component imports
 import Header from "../components/Header";
-
-// Styling imports
 import "../styles/Signup.css"
 
 export default function Signup() {
@@ -84,7 +82,7 @@ export default function Signup() {
                 }
                 break;
             case 'email':
-                // Regual expression for email validation
+                // Regular expression for email validation
                 const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                 const parts = value.split('@');
                 if (!value || value === "") {
