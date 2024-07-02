@@ -27,12 +27,30 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ['product_id', 'vendor_id', 'quantity', 'id',
                   'order_date', 'order_status', 'paid_status',
                   'vendor_name', 'product_name', 'product_price', 
-                  'product_image']
+                  'product_image_url']
 
         read_only_fields = ['vendor_id', 'id', 'product_image',
-                            'order_date', 'vendor_name',
+                            'order_date', 'vendor_name', 'product_image_url',
                             'product_name', 'product_price']
 
+    def __init__(self, *args, **kwargs):
+        """
+        Serializer init method to customize the serializer based on different contexts
+        """
+        super().__init__(*args, **kwargs)
+        request = self.context.get('request', None)
+        is_vendor = self.context.get('is_vendor', False)
+        
+        if request and request.method in ['PUT', 'PATCH']:
+            # make certain fields readonly during edit operation for diff user type
+            self.fields['product_id'].read_only = True
+            
+            # Additional field restrictions for vendors
+            if is_vendor:
+                self.fields['paid_status'].read_only = True  # Vendors can't update the paid status
+                self.fields['quantity'].read_only = True  # Vendors can't update the order quantity
+
+    
     def create(self, validated_data):
         """
         Create and return a new `Order` instance, given the validated data.
@@ -51,7 +69,7 @@ class OrderSerializer(serializers.ModelSerializer):
         vendor_name = f"{first_name} {last_name}"
         product_name = product.name
         product_price = product.price
-        product_image = product.image
+        product_image = request.build_absolute_uri(product.image.url)
 
         return Order.objects.create(
                 user=user, 
@@ -59,7 +77,7 @@ class OrderSerializer(serializers.ModelSerializer):
                 product=product, 
                 product_name=product_name, 
                 product_price=product_price, 
-                product_image=product_image, 
+                product_image_url=product_image, 
                 vendor_name=vendor_name, 
                 quantity=quantity
             )

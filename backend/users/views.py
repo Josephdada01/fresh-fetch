@@ -6,6 +6,7 @@ from .permissions import IsVendor
 from order.models import Order
 from order.serializers import OrderSerializer
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound, PermissionDenied
 
 
 class VendorListView(generics.ListAPIView):
@@ -30,7 +31,7 @@ class VendorOrderListView(generics.ListAPIView):
         Return a list of all the vendor's Orders.
         """
         vendor_id = self.request.user.id
-        return Order.objects.filter(vendor_id=vendor_id)
+        return Order.objects.filter(vendor_id=vendor_id, paid_status=True)
 
 
 class VendorOrderUpdateView(generics.UpdateAPIView):
@@ -50,8 +51,17 @@ class VendorOrderUpdateView(generics.UpdateAPIView):
         vendor_id = self.request.user.id
 
         # Retrieve the order by its primary key and vendor_id
-        obj = Order.objects.get(id=order_id, vendor_id=vendor_id)
-        return obj
+        try:
+            obj = Order.objects.get(id=order_id, vendor_id=vendor_id, paid_status=True)
+            return obj
+        except Order.DoesNotExist:
+            raise NotFound("Order not found or changing order status for unpaid orders is not allowed")
+
+    def get_serializer_context(self):
+        # pass vendor permission into the serializer context
+        context = super().get_serializer_context()
+        context['is_vendor'] = self.request.user.is_vendor
+        return context
 
     def update(self, request, *args, **kwargs):
         """
