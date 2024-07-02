@@ -6,7 +6,7 @@ export default function Order({ order, removeOrder, handleChange, handleOrder })
     // in the basket. These orders haven't been made yet
     return (
         <div className="order" aria-label='Unmade order'>
-            {/* This image will be repalced by an image we fetch 
+            {/* This image will be replaced by an image we fetch 
                 from the api eventually */}
             <img src={ tomatoImg } alt="Produce" />
 
