@@ -83,7 +83,8 @@ export default function Dashboard() {
         newProduct.append('user', user?.id);
         newProduct.append('stock_count', product.stock_count);
       
-      
+        JSON.stringify(newProduct));
+    
         try {
             // Sends a request to the api to create a new product
             const response = await fetch('http://127.0.0.1:8000/api/v1/products/create/', {
