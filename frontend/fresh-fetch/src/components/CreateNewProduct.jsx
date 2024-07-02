@@ -59,10 +59,6 @@ function CreateNewProduct({ createProduct }) {
     }
   };
 
-  const toggleForm = () => {
-    setIsOpen(!isOpen);
-  };
-
   const validatInput = (name, value) => {
     const newErrors = {...errors}
     switch(name) {

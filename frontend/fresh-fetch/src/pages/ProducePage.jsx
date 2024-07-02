@@ -1,5 +1,5 @@
 // React related imports
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 
 // Components
@@ -21,8 +21,10 @@ export default function ProducePage() {
     
     const location = useLocation();
     const state = location.state;
+
     const token = localStorage.getItem('token');
 
+    let token = localStorage.getItem('token');
 
     // Receives the user from the Login page at first.
     // Also receives the user from the basket and the summary pages
@@ -75,6 +77,7 @@ export default function ProducePage() {
 
 
     async function getBasket() {
+    const getBasket = useCallback(async() => {
         try {
             const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
                 method: 'GET',
@@ -91,7 +94,14 @@ export default function ProducePage() {
         } catch(error) {
             console.error("Error getting basket:", error)
         }
-    }
+    }, [token]);
+
+    useEffect(() => {
+        getProducts();
+        if (user && token) {
+            getBasket();
+        }
+    }, [getBasket, user, token])
 
     const navigate = useNavigate();
 
@@ -116,7 +126,10 @@ export default function ProducePage() {
     // Handles making order directly from the produce page instead of from the basket
     const handleMakeOrder = async (id, quantity) => {
          // if not go to the login page
-        (!user || !token) && goToLogin();
+         if (!user || !token) {
+            goToLogin();
+            return;
+         }
         // const product = displayProducts.filter(product => product.id === id)
         // console.log("The price of the product I want to order:", product.price)
         try {
@@ -145,7 +158,13 @@ export default function ProducePage() {
         }
     }
 
+    // console.log(user?.basket)
+
     const addToBasket = async (product) => {
+        if (!user || !token) {
+            goToLogin();
+            return;
+         }
         try {
             const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
                 method: 'POST',
@@ -185,6 +204,7 @@ export default function ProducePage() {
         });
 
         if (response?.ok) {
+            token = null;
             location.state = null;
             localStorage.removeItem('token');
             setUser(null);
@@ -224,7 +244,7 @@ export default function ProducePage() {
                 <div className="profile-container" aria-label="User Profile">
                 <Profile profilePic={user.image} />
                 <div className="user-info">
-                    <h2 className="user-header">Welcome {user?.first_name}</h2>
+                    <h2 className="user-header">Welcome, {user?.first_name}</h2>
                     <Logout handleLogout={handleLogout}/>
                 </div>
             </div>

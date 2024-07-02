@@ -1,5 +1,5 @@
 // imports from React
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router";
 
 // Custom component imports
@@ -29,20 +29,7 @@ export default function Basket() {
     // Orders that are jsut sitting there(haven't been sent out yet)
     const [ unmadeOrders, setUnmadeOrders ] = useState(user.basket);
 
-    // Every time the basket changes, reset made and unmade orders
-    useEffect(() => {
-        const unmade = user.basket.filter(order => !order.paid_status);
-        const made = user.basket.filter(order => order.status !== "completed" && order.paid_status);
-  
-        setUnmadeOrders(unmade);
-        setMadeOrders(made);
-    }, [user.basket]);
-
-    useEffect(() => {
-        getBasket()
-    }, []);
-
-    async function getBasket() {
+    const getBasket = useCallback( async () => {
         try {
             const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
                 method: 'GET',
@@ -60,24 +47,55 @@ export default function Basket() {
         } catch(error) {
             console.error("Error getting basket:", error)
         }
-    }
 
-    async function handleChangeQuantity(e, id) {
+        // const intervalId = setInterval(getBasket, 10000);
+
+        // // Cleanup the interval on component unmount
+        // return () => clearInterval(intervalId);
+    }, [token])
+
+    // Every time the basket changes, reset made and unmade orders
+    useEffect(() => {
+        const unmade = user.basket.filter(order => !order.paid_status);
+        const made = user.basket.filter(order => order.status !== "completed" && order.paid_status);
+  
+        setUnmadeOrders(unmade);
+        setMadeOrders(made);
+    }, [user.basket]);
+
+    useEffect(() => {
+        user && token && getBasket()
+    }, [user, token, getBasket]);
+
+    async function handleChangeQuantity(value, id) {
         // Set the user with the new basket
-        const value = e.target.value;
-        const newBasket = user.basket.map((item) => {
-            // If this is the item whose quantity is being changed...
-            if(item.id === id) {
-                // Return the item with the qunatity changed
-                return { ...item, quantity: value };
-            } else {
-                // Else just return te item
-            return item;
-            }
-        })
+        if (!value || value <= 0) {
+            return;
+        }
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${id}/`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body : JSON.stringify({
+                    quantity: value,
+                 }),
+            })
 
-        setUser(prevUser => ({ ...prevUser, basket: newBasket }))
+            if (response.ok) {
+                console.log("Order updated successfullly");
+            } else {
+                console.log("I am not okay", await response.json())
+            }
+        } catch(error) {
+            console.log("Error updating order", error)
+        }
+        token && getBasket();
     }
+
+    // console.log("Orders:", user.basket)
 
 
     async function removeOrder(id) {
@@ -125,7 +143,6 @@ export default function Basket() {
                     'Content-Type': 'application/json',
                 },
                 body : JSON.stringify({
-                    product_id: order.product_id,
                     order_status: "completed",
                  }),
             })
@@ -142,7 +159,7 @@ export default function Basket() {
 
         setTimeout(() => {
             removeOrder(order.id);
-        }, 10000)
+        }, 5000)
     };
 
     const navigate = useNavigate();
@@ -150,30 +167,7 @@ export default function Basket() {
     // Handles an individual order being made
     async function handleOrderNow(order) {
         // Identify the order that is being made
-        // console.log(order.quantity);
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${order.id}/`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Token ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body : JSON.stringify({
-                    product_id: order.product_id,
-                    quantity: order.quantity,
-                 }),
-            })
-
-            if (response.ok) {
-                console.log("Order updated successfullly");
-            } else {
-                console.log("I am not okay", await response.json())
-            }
-        } catch(error) {
-            console.log("Error updating order", error)
-        }
-        const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${order.product_id}`);
-        const product = await response.json();
+        console.log('Quantity:', order.quantity);
 
         // Go to the summary page with the user and the order
         navigate('/summary', { state: { user: user, orders: [order]}})
@@ -190,7 +184,6 @@ export default function Basket() {
                         'Content-Type': 'application/json',
                     },
                     body : JSON.stringify({
-                        product_id: order.product_id,
                         quantity: order.quantity,
                      }),
                 })
@@ -230,7 +223,7 @@ export default function Basket() {
                         <img src={basketImg} alt="A basket" />
                         <div className="basket-logo-text">
                             <h2>Basket</h2>
-                            <small className="item-count" aria-label="Item count">{user.basket.filter(order => !order.status).length} item(s)</small>
+                            <small className="item-count" aria-label="Item count">{unmadeOrders.length} item(s)</small>
                         </div>
                     </div>
 

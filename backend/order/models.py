@@ -31,7 +31,7 @@ class Order(models.Model):
     quantity = models.CharField(max_length=100, default='1')
     product_name = models.CharField(max_length=500)
     product_price = models.CharField(max_length=500)
-    product_image = models.CharField(max_length=500)
+    product_image_url = models.URLField(max_length=500)
     # state = models.CharField(max_length=100, default="Arizona")
     # country = models.CharField(max_length=100)
     # total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)

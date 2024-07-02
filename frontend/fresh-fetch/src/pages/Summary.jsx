@@ -12,7 +12,7 @@ export default function Summary() {
     const state = location.state;
     const orders = state.orders;
     const token = localStorage.getItem('token');
-    console.log("Orders at summary:", orders);
+    // console.log("Orders at summary:", orders);
 
     // Gets user from Produce/Basket page
     const user = state.user;
@@ -47,7 +47,6 @@ export default function Summary() {
                         'Content-Type': 'application/json',
                     },
                     body : JSON.stringify({
-                        product_id: order.product_id,
                         price: price,
                         paid_status: true,
                         quantity: order.quantity
@@ -64,7 +63,12 @@ export default function Summary() {
             }
         })
 
+
         navigate('/basket', { state: { user: user }});
+
+        navigate('/basket', { state: { user: user }});
+        // Go back to Basket with the updated user
+
     }
 
     return (
