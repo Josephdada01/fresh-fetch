@@ -64,13 +64,6 @@ export default function Summary() {
             }
         })
 
-        // const responseOrder = await fetch(`http://127.0.0.1:8000/api/v1/orders/${orders[0].id}/`, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Authorization': `Token ${token}`,
-        //     }
-        // });
-        // console.log('Paid for:', await responseOrder.json());
         navigate('/basket', { state: { user: user }});
         // update the basket
         // const newUser = {
