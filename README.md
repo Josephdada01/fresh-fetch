@@ -38,11 +38,13 @@ Welcome to Fresh Fetch! Fresh Fetch allows users to browse and purchase a variet
 2. In the base directory containing requirement.txt run - $ pip install -r requirement.txt
 
 3. Setup
-   ```bash
-   cd into the backend directory containing database_setup.sql run - $ mysql -u root -p < database_setup.sql
+   cd into the backend directory containing database_setup.sql run:
+   ```bash 
+   $ mysql -u root -p < database_setup.sql
+   ```
+
    if requested for password in the above step input your mysql password
    cd into the backend directory containing settings.py and create a .env file, copy and paste the following code into it.
-   ```
    
    ```bash
    Copy this into the .env file created
