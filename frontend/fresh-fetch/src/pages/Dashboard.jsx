@@ -95,13 +95,11 @@ export default function Dashboard() {
             });
             if (response.ok) {
                 const product = await response.json();
-                // console.log('Created new product:', product);
                 setUser(prevUser => ({
                     ...prevUser,
                     products: [...prevUser.products, product]
                 }))
             } else {
-                // console.log(response, response.status);
                 console.log(await response.json())
                 console.log("I am not okay");
             }
