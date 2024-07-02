@@ -33,6 +33,24 @@ class OrderSerializer(serializers.ModelSerializer):
                             'order_date', 'vendor_name', 'product_image_url',
                             'product_name', 'product_price']
 
+    def __init__(self, *args, **kwargs):
+        """
+        Serializer init method to customize the serializer based on different contexts
+        """
+        super().__init__(*args, **kwargs)
+        request = self.context.get('request', None)
+        is_vendor = self.context.get('is_vendor', False)
+        
+        if request and request.method in ['PUT', 'PATCH']:
+            # make certain fields readonly during edit operation for diff user type
+            self.fields['product_id'].read_only = True
+            
+            # Additional field restrictions for vendors
+            if is_vendor:
+                self.fields['paid_status'].read_only = True  # Vendors can't update the paid status
+                self.fields['quantity'].read_only = True  # Vendors can't update the order quantity
+
+    
     def create(self, validated_data):
         """
         Create and return a new `Order` instance, given the validated data.
