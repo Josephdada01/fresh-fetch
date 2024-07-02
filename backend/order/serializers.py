@@ -27,10 +27,10 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ['product_id', 'vendor_id', 'quantity', 'id',
                   'order_date', 'order_status', 'paid_status',
                   'vendor_name', 'product_name', 'product_price', 
-                  'product_image']
+                  'product_image_url']
 
         read_only_fields = ['vendor_id', 'id', 'product_image',
-                            'order_date', 'vendor_name',
+                            'order_date', 'vendor_name', 'product_image_url',
                             'product_name', 'product_price']
 
     def create(self, validated_data):
@@ -51,7 +51,7 @@ class OrderSerializer(serializers.ModelSerializer):
         vendor_name = f"{first_name} {last_name}"
         product_name = product.name
         product_price = product.price
-        product_image = product.image
+        product_image = request.build_absolute_uri(product.image.url)
 
         return Order.objects.create(
                 user=user, 
@@ -59,7 +59,7 @@ class OrderSerializer(serializers.ModelSerializer):
                 product=product, 
                 product_name=product_name, 
                 product_price=product_price, 
-                product_image=product_image, 
+                product_image_url=product_image, 
                 vendor_name=vendor_name, 
                 quantity=quantity
             )
