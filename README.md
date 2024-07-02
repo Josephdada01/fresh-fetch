@@ -1,7 +1,7 @@
 # Fresh-Fetch
 
 ## Description
-Welcome to Fresh Fetch Website! Fresh Fetch allows users to browse and purchase a variety of fresh vegetables.
+Welcome to Fresh Fetch! Fresh Fetch allows users to browse and purchase a variety of fresh vegetables.
 
 ## Table of Contents
 1. [Features](#features)
