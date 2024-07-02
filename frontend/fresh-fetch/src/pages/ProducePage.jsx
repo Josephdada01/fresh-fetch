@@ -21,13 +21,13 @@ export default function ProducePage() {
     
     const location = useLocation();
     const state = location.state;
+
+    const token = localStorage.getItem('token');
+
     let token = localStorage.getItem('token');
-    // console.log("state:", state)
-    // console.log('Token:', token);
 
-
-    // Recieves the user from the Login page at first.
-    // Also recieves the user from the basket and the summary pages
+    // Receives the user from the Login page at first.
+    // Also receives the user from the basket and the summary pages
     const [ user, setUser ] = useState(state ? {
         userId: state.user?.id,
         first_name: state.user?.first_name,
@@ -70,7 +70,13 @@ export default function ProducePage() {
         }
     }
 
-    // console.log(user.userId)
+    useEffect(() => {
+        getProducts();
+        token && getBasket();
+    }, [token])
+
+
+    async function getBasket() {
     const getBasket = useCallback(async() => {
         try {
             const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
@@ -83,7 +89,6 @@ export default function ProducePage() {
 
             if (response?.ok) {
                 const orders = await response.json();
-                // console.log("Pending ordres:", orders);
                 setUser(prevUser => ({ ...prevUser, basket: orders}));
             }
         } catch(error) {

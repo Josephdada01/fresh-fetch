@@ -62,8 +62,13 @@ export default function Summary() {
                 console.log("Error updating order", error)
             }
         })
+
+
+        navigate('/basket', { state: { user: user }});
+
         navigate('/basket', { state: { user: user }});
         // Go back to Basket with the updated user
+
     }
 
     return (

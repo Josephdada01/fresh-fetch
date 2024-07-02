@@ -53,7 +53,7 @@ export default function Login() {
         const newErrors = { ...errors }; // Copy existing errors
         switch(name) {
             case 'email':
-                // regualr expression for email
+                // regular expression for email
                 const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                 const parts = value.split('@');
                 if (!value || value === "") {

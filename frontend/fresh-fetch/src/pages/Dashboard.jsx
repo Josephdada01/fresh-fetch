@@ -41,81 +41,7 @@ export default function Dashboard() {
         // To be removed. This will be retireved from the api or from the user
         orders: [],
         products: [],
-    }
-    // } : {
-    //     // Fake user(To be reomoved)
-    //     userId: "",
-    //     firstName: "",
-    //     lastName: "",
-    //     orders: [
-    //         {
-    //             id: "1",
-    //             productId: "1",
-    //             name: "Heirloom tomato",
-    //             pricePerPound: "$5.99 / kg",
-    //             vendor: "Wall-Mart",
-    //             quantity: 5,
-    //             price: "$5.99",
-    //             status: "En-route",
-    //             pic: tomatoImg,
-    //         },
-    //         {
-    //             id: "2",
-    //             productId: "2",
-    //             name: "Organic ginger",
-    //             pricePerPound: "$12.99 / lb",
-    //             vendor: "Wall-Mart",
-    //             quantity: 1,
-    //             price: "$6.50",
-    //             status: "Completed",
-    //             pic: gingerImg,
-    //         },
-    //         {
-    //             id: "3",
-    //             productId: "3",
-    //             name: "Sweet onion",
-    //             pricePerPound: "$14.95 / lb",
-    //             vendor: "Fresh Corner",
-    //             quantity: .5,
-    //             price: "$14.95",
-    //             status: "Pending",
-    //             pic: onionImg,
-    //         }
-    //     ],
-    //     // Fake (To be replaced by API data)
-    //     products: [
-    //         {
-    //             id: "1",
-    //             name: "Heirloom Tomato",
-    //             pricePerPound: 5.99,
-    //             vendor: "Wall-Mart",
-    //             quantity: 1,
-    //             price: 0,
-    //             // status: null,
-    //             pic: tomatoImg,
-    //         },
-    //         {
-    //             id: "2",
-    //             name: "Organic Ginger",
-    //             pricePerPound: 12.99,
-    //             vendor: "Kmart",
-    //             quantity: 1,
-    //             price: 0,
-    //             // status: null,
-    //             pic: gingerImg,
-    //         },
-    //         {
-    //             id: "3",
-    //             name: "Sweet Onion",
-    //             pricePerPound: 2.99,
-    //             vendor: "target",
-    //             quantity: 1,
-    //             price: 0,
-    //             // status: null,
-    //             pic: onionImg,
-    //         }
-    //     ] 
-    );
+    });
 
     const [ popupFormIsActive, setPopupFormIsActive ] = useState(false);
     function togglePopupForm() {
@@ -156,8 +82,8 @@ export default function Dashboard() {
         newProduct.append('old_price', Number(product.price));
         newProduct.append('user', user?.id);
         newProduct.append('stock_count', product.stock_count);
-
-        // console.log("new product:", newProduct);
+      
+      
         try {
             // Sends a request to the api to create a new product
             const response = await fetch('http://127.0.0.1:8000/api/v1/products/create/', {
@@ -169,14 +95,14 @@ export default function Dashboard() {
             });
             if (response.ok) {
                 const product = await response.json();
-                // console.log('Created new product:', product);
                 setUser(prevUser => ({
                     ...prevUser,
                     products: [...prevUser.products, product]
                 }))
             } else {
-                // console.log(response, response.status);
-                // console.log(await response.json())
+
+                console.log(await response.json())
+
                 console.log("I am not okay");
             }
         } catch(error) {
