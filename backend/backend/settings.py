@@ -100,7 +100,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         # Replace this value with your local database's connection string.
-        default='postgresql://postgres:postgres@localhost:5432/fresh_fetch',
+        default='postgresql://postgres:postgres@localhost:5432/backend',
         conn_max_age=600
     )
 }
