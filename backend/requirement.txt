@@ -27,3 +27,6 @@ sqlparse==0.4.4
 typing_extensions==4.10.0
 urllib3==2.2.1
 whitenoise[brotli]==1.1.0
+Django>=4.0
+gunicorn>=20.1.0
+uvicorn>=0.15.0
