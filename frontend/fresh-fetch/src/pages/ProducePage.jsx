@@ -22,8 +22,6 @@ export default function ProducePage() {
     const location = useLocation();
     const state = location.state;
 
-    const token = localStorage.getItem('token');
-
     let token = localStorage.getItem('token');
 
     // Receives the user from the Login page at first.
@@ -70,13 +68,6 @@ export default function ProducePage() {
         }
     }
 
-    useEffect(() => {
-        getProducts();
-        token && getBasket();
-    }, [token])
-
-
-    async function getBasket() {
     const getBasket = useCallback(async() => {
         try {
             const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
@@ -95,6 +86,7 @@ export default function ProducePage() {
             console.error("Error getting basket:", error)
         }
     }, [token]);
+
 
     useEffect(() => {
         getProducts();

@@ -69,7 +69,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         token && getProducts(user?.id);
-        user && token && getOrders()
+        token && getOrders()
     }, [getOrders, token, user?.id]);
 
     async function handleNewProduct(product) {
@@ -83,7 +83,7 @@ export default function Dashboard() {
         newProduct.append('user', user?.id);
         newProduct.append('stock_count', product.stock_count);
       
-        JSON.stringify(newProduct));
+        JSON.stringify(newProduct);
     
         try {
             // Sends a request to the api to create a new product

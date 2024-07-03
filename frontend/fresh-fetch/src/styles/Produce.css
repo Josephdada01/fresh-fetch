@@ -45,6 +45,7 @@
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
         margin-bottom: 7px;
+        min-height: 200px;
     }
 
     .produce .produce-info {
