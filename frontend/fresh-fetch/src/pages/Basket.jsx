@@ -204,9 +204,6 @@ export default function Basket() {
         navigate('/summary', { state: { user: user, orders: unmadeOrders}})
     }
 
-    console.log(user);
-
-
     const goHome = () => {
         navigate('/', { state: { user: user }})
     }

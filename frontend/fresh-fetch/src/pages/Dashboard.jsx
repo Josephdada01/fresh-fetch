@@ -10,10 +10,6 @@ import CreateNewProduct from "../components/CreateNewProduct";
 import Profile from "../components/Profile";
 import Logout from "../components/Logout";
 
-// Image imports (To be removed)
-import profilePic from '../images/pic-work-02.jpg';
-
-
 // Style imports
 import "../styles/Dashboard.css";
 
@@ -24,8 +20,6 @@ export default function Dashboard() {
     const token = localStorage.getItem('token')
     const apiURL = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
-    const apiURL = process.env.REACT_APP_API_URL;
-    // console.log("User vendor:", state.user)
 
     function goToLogin() {
         navigate('/login');
@@ -67,7 +61,7 @@ export default function Dashboard() {
         } catch(error) {
             console.error("Error getting basket:", error)
         }
-    }, [token])
+    }, [apiURL, token])
 
     useEffect(() => {
         token && getProducts(user?.id);

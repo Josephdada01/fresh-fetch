@@ -14,7 +14,6 @@ import "../styles/ProducePage.css";
 
 // images
 import basketImg from "../images/basket.jpg";
-import profilePic from "../images/pic-person-01.jpg";
 
 export default function ProducePage() {
     // This component displays all the available produces to the user
@@ -86,7 +85,7 @@ export default function ProducePage() {
         } catch(error) {
             console.error("Error getting basket:", error)
         }
-    }, [token]);
+    }, [apiURL, token]);
 
 
     useEffect(() => {
