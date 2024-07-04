@@ -24,6 +24,7 @@ export default function Dashboard() {
     const token = localStorage.getItem('token')
     const apiURL = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
+    const apiURL = process.env.REACT_APP_API_URL;
     // console.log("User vendor:", state.user)
 
     function goToLogin() {
@@ -70,7 +71,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         token && getProducts(user?.id);
-        user && token && getOrders()
+        token && getOrders()
     }, [getOrders, token, user?.id]);
 
     async function handleNewProduct(product) {
@@ -83,8 +84,9 @@ export default function Dashboard() {
         newProduct.append('old_price', Number(product.price));
         newProduct.append('user', user?.id);
         newProduct.append('stock_count', product.stock_count);
-
-        // console.log("new product:", newProduct);
+      
+        JSON.stringify(newProduct);
+    
         try {
             // Sends a request to the api to create a new product
             const response = await fetch(`${apiURL}/api/v1/products/create/`, {
@@ -96,14 +98,14 @@ export default function Dashboard() {
             });
             if (response.ok) {
                 const product = await response.json();
-                // console.log('Created new product:', product);
                 setUser(prevUser => ({
                     ...prevUser,
                     products: [...prevUser.products, product]
                 }))
             } else {
-                // console.log(response, response.status);
-                // console.log(await response.json())
+
+                console.log(await response.json())
+
                 console.log("I am not okay");
             }
         } catch(error) {

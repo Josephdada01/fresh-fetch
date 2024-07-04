@@ -7,7 +7,7 @@ export default function VendorOrder({ order, handleFulfill }) {
             
             <div className="order-details">
                 <h3 className="order-name">{order.product_name}</h3>
-                <p className="price">{order.product_price}</p>
+                <p className="price">Total: ${order.product_price}</p>
                 <p className="quantity">Quantity: {order.quantity}kg</p>
             </div>
 

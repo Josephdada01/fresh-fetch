@@ -19,7 +19,7 @@ export default function Order({ order, removeOrder, handleChange, handleOrder })
     }
     return (
         <div className="order" aria-label='Unmade order'>
-            {/* This image will be repalced by an image we fetch 
+            {/* This image will be replaced by an image we fetch 
                 from the api eventually */}
             <img src={ order.product_image_url } alt="Produce" />
 

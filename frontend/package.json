@@ -2,5 +2,12 @@
   "dependencies": {
     "react-router": "^6.23.1",
     "react-router-dom": "^6.23.1"
+  },
+  "scripts": {
+    "start": "npm start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "test-watch": "react-scripts test --watch",
+    "eject": "react-scripts eject"
   }
 }

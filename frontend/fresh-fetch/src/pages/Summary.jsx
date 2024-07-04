@@ -1,7 +1,9 @@
-import Header from "../components/Header";
-import "../styles/Summary.css";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { MdHome } from "react-icons/md";
+import { MdHome } from 'react-icons/md';
+
+import Header from "../components/Header";
+
+import "../styles/Summary.css";
 
 import arrowImg from "../images/arrow.png";
 
@@ -64,15 +66,24 @@ export default function Summary() {
                 console.log("Error updating order", error)
             }
         })
+
+
+        navigate('/basket', { state: { user: user }});
+
         navigate('/basket', { state: { user: user }});
         // Go back to Basket with the updated user
+
+    }
+
+    const goHome = () => {
+        navigate('/', { state: { user: user }})
     }
 
     return (
         <>
             <div className="header-container">
                 <Header user={user}/>
-                <MdHome className='home-icon' onClick={() => {navigate('/', { state : { user: user } })}} />
+                <MdHome className='home-icon' onClick={goHome}/>
             </div>
 
             <main className="summary">

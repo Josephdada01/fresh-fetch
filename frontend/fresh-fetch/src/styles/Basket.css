@@ -36,7 +36,8 @@
 }
 
 .header-container .home-icon {
-    margin-top: 25px;
+    margin-top: 27px;
+    margin-right: qvw;
     color: var(--primary-green);
     width: var(--font-size-large);
     height: var(--font-size-large);

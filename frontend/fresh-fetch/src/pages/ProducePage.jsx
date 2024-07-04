@@ -21,11 +21,12 @@ export default function ProducePage() {
     
     const location = useLocation();
     const state = location.state;
+
     let token = localStorage.getItem('token');
     const apiURL = process.env.REACT_APP_API_URL;
 
-    // Recieves the user from the Login page at first.
-    // Also recieves the user from the basket and the summary pages
+    // Receives the user from the Login page at first.
+    // Also receives the user from the basket and the summary pages
     const [ user, setUser ] = useState(state ? {
         userId: state.user?.id,
         first_name: state.user?.first_name,
@@ -46,7 +47,7 @@ export default function ProducePage() {
 
         if (response?.ok) {
             const products = await response.json();
-            const responseVendor = await fetch(`${apiURL}//api-auth/vendors/`);
+            const responseVendor = await fetch(`${apiURL}/api-auth/vendors/`);
 
             // Get a list of all the vendors
             const vendors = await responseVendor.json();
@@ -68,7 +69,6 @@ export default function ProducePage() {
         }
     }
 
-    // console.log(user.userId)
     const getBasket = useCallback(async() => {
         try {
             const response = await fetch(`${apiURL}/api/v1/orders/`, {
@@ -81,7 +81,6 @@ export default function ProducePage() {
 
             if (response?.ok) {
                 const orders = await response.json();
-                // console.log("Pending ordres:", orders);
                 setUser(prevUser => ({ ...prevUser, basket: orders}));
             }
         } catch(error) {
@@ -89,11 +88,10 @@ export default function ProducePage() {
         }
     }, [token]);
 
+
     useEffect(() => {
         getProducts();
-        if (user && token) {
-            getBasket();
-        }
+        user && token && getBasket();
     }, [token])
 
     const navigate = useNavigate();

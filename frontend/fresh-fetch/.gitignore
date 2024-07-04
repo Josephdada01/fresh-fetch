@@ -8,8 +8,11 @@
 # testing
 /coverage
 
-# production
+# Build
 /build
+
+# .env file
+.env
 
 # misc
 .DS_Store

@@ -3,10 +3,8 @@ import { useState } from 'react';
 import { useNavigate } from "react-router";
 import { MdHome } from 'react-icons/md';
 
-// COmponent imports
+// Component imports
 import Header from "../components/Header";
-
-// Styling imports
 import "../styles/Signup.css"
 
 export default function Signup() {
@@ -22,6 +20,8 @@ export default function Signup() {
         password2: "",
         is_vendor: null,
     });
+    const apiURL = process.env.REACT_APP_API_URL;
+
     const apiURL = process.env.REACT_APP_API_URL;
 
     // Keep track of al lthe form errors
@@ -86,7 +86,7 @@ export default function Signup() {
                 }
                 break;
             case 'email':
-                // Regual expression for email validation
+                // Regular expression for email validation
                 const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                 const parts = value.split('@');
                 if (!value || value === "") {

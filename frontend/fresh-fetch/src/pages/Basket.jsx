@@ -43,7 +43,7 @@ export default function Basket() {
 
             if (response.ok) {
                 const orders = await response.json();
-                // console.log("Pending ordres:", orders);
+
                 setUser(prevUser => ({ ...prevUser, basket: orders}));
             }
         } catch(error) {
@@ -203,12 +203,19 @@ export default function Basket() {
         console.log(unmadeOrders);
         navigate('/summary', { state: { user: user, orders: unmadeOrders}})
     }
+
     console.log(user);
+
+
+    const goHome = () => {
+        navigate('/', { state: { user: user }})
+    }
+
     return (
         <>
             <div className="header-container">
                 <Header user={user}/>
-                <MdHome className='home-icon' onClick={() => {navigate('/', { state : { user: user } })}} />
+                <MdHome className='home-icon' onClick={goHome}/>
             </div>
 
             <div className="profile-container" aria-label="User Profile">
