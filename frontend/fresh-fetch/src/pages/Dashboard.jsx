@@ -22,6 +22,7 @@ export default function Dashboard() {
     const location = useLocation();
     const state = location.state;
     const token = localStorage.getItem('token')
+    const apiURL = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
     const apiURL = process.env.REACT_APP_API_URL;
     // console.log("User vendor:", state.user)
@@ -39,7 +40,7 @@ export default function Dashboard() {
         id: state.user?.id,
         first_name: state.user?.first_name,
         last_name: state.user?.last_name,
-        // To be removed. This will be retireved from the api or from the user
+        image: state.user.image,
         orders: [],
         products: [],
     });
@@ -184,19 +185,6 @@ export default function Dashboard() {
         console.error('Network error:', error);
         }
     }
-        // const newOrders = user.orders.map(order => {
-        //     // If this is the order being fulfilled ...
-        //     if (order.id === id) {
-        //         // Return the order with the status set to En-route
-        //         return {...order, status: "En-route"};
-        //     } else {
-        //         // Otherwise just return the order
-        //         return order;
-        //     }
-        // });
-
-        // Set user with the updated orders array
-        // setUser(prevUser => ({ ...prevUser, orders: newOrders }));
 
     function changeQuantity(value, id) {
         const newProducts = user.products.map(product => {
@@ -242,7 +230,7 @@ export default function Dashboard() {
             {/* Display the profile only when user is received. */}
             {state && token && (
                 <div className="profile-container" aria-label="User Profile">
-                <Profile profilePic={profilePic} />
+                <Profile profilePic={user.image} />
                 <div className="user-info">
                     <h2 className="user-header">{user.first_name}'s Dashboard</h2>
                     <Logout handleLogout={handleLogout}/>

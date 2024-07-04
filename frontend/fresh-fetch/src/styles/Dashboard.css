@@ -71,11 +71,11 @@
 /* Container for all products */
 
 .vendor-products {
-    margin-inline: 5vw;
+    margin-inline: 9vw;
     margin-bottom: 60px;
     max-width: 100%;
     display: grid;
     justify-content: center;
     gap: 5vw;
-    grid-template-columns: repeat(auto-fit, 320px);
+    grid-template-columns: repeat(auto-fit, 290px);
 }

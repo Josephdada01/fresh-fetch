@@ -20,6 +20,7 @@ export default function Signup() {
         password2: "",
         is_vendor: null,
     });
+    const apiURL = process.env.REACT_APP_API_URL;
 
     const apiURL = process.env.REACT_APP_API_URL;
 

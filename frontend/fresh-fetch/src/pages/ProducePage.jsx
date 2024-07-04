@@ -25,7 +25,6 @@ export default function ProducePage() {
     let token = localStorage.getItem('token');
     const apiURL = process.env.REACT_APP_API_URL;
 
-
     // Receives the user from the Login page at first.
     // Also receives the user from the basket and the summary pages
     const [ user, setUser ] = useState(state ? {
@@ -33,7 +32,7 @@ export default function ProducePage() {
         first_name: state.user?.first_name,
         last_name: state.user?.last_name,
         basket: state.user?.basket || [],
-        image: profilePic,
+        image: state.user.image,
     } : null);
     
     const [ displayProducts, setDisplayProducts ] = useState([]);
