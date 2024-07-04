@@ -50,11 +50,7 @@ export default function Basket() {
             console.error("Error getting basket:", error)
         }
 
-        // const intervalId = setInterval(getBasket, 10000);
-
-        // // Cleanup the interval on component unmount
-        // return () => clearInterval(intervalId);
-    }, [token])
+    }, [token, apiURL])
 
     // Every time the basket changes, reset made and unmade orders
     useEffect(() => {
