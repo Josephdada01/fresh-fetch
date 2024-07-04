@@ -1,6 +1,7 @@
 // imports from react
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import { MdHome } from "react-icons/md";
 
 // Custom component import
 import Header from "../components/Header";
@@ -9,6 +10,7 @@ import Header from "../components/Header";
 import "../styles/Login.css";
 
 export default function Login() {
+    const apiURL = process.env.REACT_APP_API_URL;
     const [ formData, setFormData ] = useState({
         email: "",
         password: "",
@@ -144,7 +146,7 @@ export default function Login() {
 
         try {
             // Send user to back-end for validation and retrieve session_id
-            const responseToken = await fetch('http://127.0.0.1:8000/api-auth/users/login/', {
+            const responseToken = await fetch(`${apiURL}/api-auth/users/login/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -171,7 +173,7 @@ export default function Login() {
             }
 
             // use the session ID to retrieve the user object
-            const responseUser = await fetch('http://127.0.0.1:8000/api-auth/users/user', {
+            const responseUser = await fetch(`${apiURL}/api-auth/users/user`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Token ${returnedToken.key}`,
@@ -200,6 +202,7 @@ export default function Login() {
         <>
             <div className="header-container">
                 <Header user={null}/>
+                <MdHome className='home-icon' onClick={() => {navigate('/')}} />
             </div>
 
             <main className="login">

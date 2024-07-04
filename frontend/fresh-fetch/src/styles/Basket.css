@@ -35,6 +35,17 @@
     --button-font-size: clamp(14px, 2vw + .5rem, 20px); /* The height of the order-all and cancel-all buttons */
 }
 
+.header-container .home-icon {
+    margin-top: 25px;
+    color: var(--primary-green);
+    width: var(--font-size-large);
+    height: var(--font-size-large);
+}
+
+.header-container .home-icon:hover {
+    color: var(--hover-green);
+}
+
 /* The header specific to the basket page
   ==================================== */
     .basket-header {

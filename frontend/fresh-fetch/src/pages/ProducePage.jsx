@@ -22,9 +22,7 @@ export default function ProducePage() {
     const location = useLocation();
     const state = location.state;
     let token = localStorage.getItem('token');
-    // console.log("state:", state)
-    // console.log('Token:', token);
-
+    const apiURL = process.env.REACT_APP_API_URL;
 
     // Recieves the user from the Login page at first.
     // Also recieves the user from the basket and the summary pages
@@ -33,7 +31,7 @@ export default function ProducePage() {
         first_name: state.user?.first_name,
         last_name: state.user?.last_name,
         basket: state.user?.basket || [],
-        image: profilePic,
+        image: state.user.image,
     } : null);
     
     const [ displayProducts, setDisplayProducts ] = useState([]);
@@ -42,13 +40,13 @@ export default function ProducePage() {
 
     async function getProducts() {
         // Gets all products form the back-end
-        const response = await fetch('http://127.0.0.1:8000/api/v1/products', {
+        const response = await fetch(`${apiURL}/api/v1/products`, {
             method: 'get',
         });
 
         if (response?.ok) {
             const products = await response.json();
-            const responseVendor = await fetch('http://127.0.0.1:8000//api-auth/vendors/');
+            const responseVendor = await fetch(`${apiURL}//api-auth/vendors/`);
 
             // Get a list of all the vendors
             const vendors = await responseVendor.json();
@@ -73,7 +71,7 @@ export default function ProducePage() {
     // console.log(user.userId)
     const getBasket = useCallback(async() => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
+            const response = await fetch(`${apiURL}/api/v1/orders/`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -96,7 +94,7 @@ export default function ProducePage() {
         if (user && token) {
             getBasket();
         }
-    }, [getBasket, user, token])
+    }, [token])
 
     const navigate = useNavigate();
 
@@ -128,7 +126,7 @@ export default function ProducePage() {
         // const product = displayProducts.filter(product => product.id === id)
         // console.log("The price of the product I want to order:", product.price)
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
+            const response = await fetch(`${apiURL}/api/v1/orders/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -161,7 +159,7 @@ export default function ProducePage() {
             return;
          }
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
+            const response = await fetch(`${apiURL}/api/v1/orders/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -191,7 +189,7 @@ export default function ProducePage() {
 
     async function handleLogout() {
         // Logs user out
-        const response = await fetch('http://127.0.0.1:8000/api-auth/users/logout/', {
+        const response = await fetch(`${apiURL}/api-auth/users/logout/`, {
             method: 'POST',
             headers: {
                 'Authorization': `Token ${token}`,

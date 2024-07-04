@@ -1,6 +1,7 @@
 // Imports from react
 import { useState } from 'react';
 import { useNavigate } from "react-router";
+import { MdHome } from 'react-icons/md';
 
 // COmponent imports
 import Header from "../components/Header";
@@ -21,6 +22,7 @@ export default function Signup() {
         password2: "",
         is_vendor: null,
     });
+    const apiURL = process.env.REACT_APP_API_URL;
 
     // Keep track of al lthe form errors
     const [errors, setErrors] = useState({});
@@ -218,7 +220,7 @@ export default function Signup() {
         // Send a request to register the user
         try {
             const jsonData = JSON.stringify(formData);
-            const response = await fetch('http://127.0.0.1:8000/api-auth/users/register/', {
+            const response = await fetch(`${apiURL}/api-auth/users/register/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -257,6 +259,7 @@ export default function Signup() {
         <>
             <div className="header-container">
                 <Header user={null}/>
+                <MdHome className='home-icon' onClick={() => {navigate('/')}} />
             </div>
 
             <main className="signup">

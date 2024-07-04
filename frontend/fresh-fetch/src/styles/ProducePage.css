@@ -156,6 +156,6 @@ img {
         display: grid;
         justify-content: center;
         gap: 5vw;
-        grid-template-columns: repeat(auto-fit,300px);
+        grid-template-columns: repeat(auto-fit, 280px);
     }
   /* =================================================== */

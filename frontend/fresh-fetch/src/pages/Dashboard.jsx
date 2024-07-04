@@ -22,6 +22,7 @@ export default function Dashboard() {
     const location = useLocation();
     const state = location.state;
     const token = localStorage.getItem('token')
+    const apiURL = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
     // console.log("User vendor:", state.user)
 
@@ -38,84 +39,10 @@ export default function Dashboard() {
         id: state.user?.id,
         first_name: state.user?.first_name,
         last_name: state.user?.last_name,
-        // To be removed. This will be retireved from the api or from the user
+        image: state.user.image,
         orders: [],
         products: [],
-    }
-    // } : {
-    //     // Fake user(To be reomoved)
-    //     userId: "",
-    //     firstName: "",
-    //     lastName: "",
-    //     orders: [
-    //         {
-    //             id: "1",
-    //             productId: "1",
-    //             name: "Heirloom tomato",
-    //             pricePerPound: "$5.99 / kg",
-    //             vendor: "Wall-Mart",
-    //             quantity: 5,
-    //             price: "$5.99",
-    //             status: "En-route",
-    //             pic: tomatoImg,
-    //         },
-    //         {
-    //             id: "2",
-    //             productId: "2",
-    //             name: "Organic ginger",
-    //             pricePerPound: "$12.99 / lb",
-    //             vendor: "Wall-Mart",
-    //             quantity: 1,
-    //             price: "$6.50",
-    //             status: "Completed",
-    //             pic: gingerImg,
-    //         },
-    //         {
-    //             id: "3",
-    //             productId: "3",
-    //             name: "Sweet onion",
-    //             pricePerPound: "$14.95 / lb",
-    //             vendor: "Fresh Corner",
-    //             quantity: .5,
-    //             price: "$14.95",
-    //             status: "Pending",
-    //             pic: onionImg,
-    //         }
-    //     ],
-    //     // Fake (To be replaced by API data)
-    //     products: [
-    //         {
-    //             id: "1",
-    //             name: "Heirloom Tomato",
-    //             pricePerPound: 5.99,
-    //             vendor: "Wall-Mart",
-    //             quantity: 1,
-    //             price: 0,
-    //             // status: null,
-    //             pic: tomatoImg,
-    //         },
-    //         {
-    //             id: "2",
-    //             name: "Organic Ginger",
-    //             pricePerPound: 12.99,
-    //             vendor: "Kmart",
-    //             quantity: 1,
-    //             price: 0,
-    //             // status: null,
-    //             pic: gingerImg,
-    //         },
-    //         {
-    //             id: "3",
-    //             name: "Sweet Onion",
-    //             pricePerPound: 2.99,
-    //             vendor: "target",
-    //             quantity: 1,
-    //             price: 0,
-    //             // status: null,
-    //             pic: onionImg,
-    //         }
-    //     ] 
-    );
+    });
 
     const [ popupFormIsActive, setPopupFormIsActive ] = useState(false);
     function togglePopupForm() {
@@ -124,7 +51,7 @@ export default function Dashboard() {
 
     const getOrders = useCallback(async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api-auth/vendors/orders/', {
+            const response = await fetch(`${apiURL}/api-auth/vendors/orders/`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -160,7 +87,7 @@ export default function Dashboard() {
         // console.log("new product:", newProduct);
         try {
             // Sends a request to the api to create a new product
-            const response = await fetch('http://127.0.0.1:8000/api/v1/products/create/', {
+            const response = await fetch(`${apiURL}/api/v1/products/create/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -187,7 +114,7 @@ export default function Dashboard() {
 
     async function getProducts(id) {
         // Gets all products form the back-end
-        const response = await fetch('http://127.0.0.1:8000/api/v1/products', {
+        const response = await fetch(`${apiURL}/api/v1/products`, {
             method: 'get',
         });
 
@@ -207,7 +134,7 @@ export default function Dashboard() {
 
     async function handleRemoveProduct(id) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}/delete`, {
+            const response = await fetch(`${apiURL}/api/v1/products/${id}/delete`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -233,7 +160,7 @@ export default function Dashboard() {
     // Change status from pending to en-route when fulfill is clicked
     async function handleFulfill(order) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api-auth/vendors/orders/${order.id}/`, {
+            const response = await fetch(`${apiURL}/api-auth/vendors/orders/${order.id}/`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -256,19 +183,6 @@ export default function Dashboard() {
         console.error('Network error:', error);
         }
     }
-        // const newOrders = user.orders.map(order => {
-        //     // If this is the order being fulfilled ...
-        //     if (order.id === id) {
-        //         // Return the order with the status set to En-route
-        //         return {...order, status: "En-route"};
-        //     } else {
-        //         // Otherwise just return the order
-        //         return order;
-        //     }
-        // });
-
-        // Set user with the updated orders array
-        // setUser(prevUser => ({ ...prevUser, orders: newOrders }));
 
     function changeQuantity(value, id) {
         const newProducts = user.products.map(product => {
@@ -288,7 +202,7 @@ export default function Dashboard() {
     // Set the user to null and go back to the login page
     async function handleLogout() {
         // Logs user out
-        const response = await fetch('http://127.0.0.1:8000/api-auth/users/logout/', {
+        const response = await fetch(`${apiURL}/api-auth/users/logout/`, {
             method: 'POST',
             headers: {
                 'Authorization': `Token ${token}`,
@@ -314,7 +228,7 @@ export default function Dashboard() {
             {/* Display the profile only when user is received. */}
             {state && token && (
                 <div className="profile-container" aria-label="User Profile">
-                <Profile profilePic={profilePic} />
+                <Profile profilePic={user.image} />
                 <div className="user-info">
                     <h2 className="user-header">{user.first_name}'s Dashboard</h2>
                     <Logout handleLogout={handleLogout}/>

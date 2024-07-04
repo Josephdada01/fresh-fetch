@@ -1,6 +1,7 @@
 // imports from React
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router";
+import { MdHome } from 'react-icons/md';
 
 // Custom component imports
 import Header from "../components/Header";
@@ -19,6 +20,7 @@ export default function Basket() {
     const location = useLocation();
     const state = location.state;
     const token = localStorage.getItem('token');
+    const apiURL = process.env.REACT_APP_API_URL;
 
     // Receive the user from the Produce/Summary page
     const [ user, setUser ] = useState(state.user);
@@ -31,7 +33,7 @@ export default function Basket() {
 
     const getBasket = useCallback( async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/v1/orders/', {
+            const response = await fetch(`${apiURL}/api/v1/orders/`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -65,7 +67,7 @@ export default function Basket() {
 
     useEffect(() => {
         user && token && getBasket()
-    }, [user, token, getBasket]);
+    }, [token]);
 
     async function handleChangeQuantity(value, id) {
         // Set the user with the new basket
@@ -73,7 +75,7 @@ export default function Basket() {
             return;
         }
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${id}/`, {
+            const response = await fetch(`${apiURL}/api/v1/orders/${id}/`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -101,7 +103,7 @@ export default function Basket() {
     async function removeOrder(id) {
         // Remove the order from the basket completely
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${id}/`, {
+            const response = await fetch(`${apiURL}/api/v1/orders/${id}/`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Token ${token}`,
@@ -136,7 +138,7 @@ export default function Basket() {
     // Changes the status of the order from pending to completed
     async function confirmOrder(order) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${order.id}/`, {
+            const response = await fetch(`${apiURL}/api/v1/orders/${order.id}/`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -177,7 +179,7 @@ export default function Basket() {
     async function handleOrderAll() {
         unmadeOrders.forEach(async order => {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/api/v1/orders/${order.id}/`, {
+                const response = await fetch(`${apiURL}/api/v1/orders/${order.id}/`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Token ${token}`,
@@ -201,11 +203,12 @@ export default function Basket() {
         console.log(unmadeOrders);
         navigate('/summary', { state: { user: user, orders: unmadeOrders}})
     }
-
+    console.log(user);
     return (
         <>
             <div className="header-container">
                 <Header user={user}/>
+                <MdHome className='home-icon' onClick={() => {navigate('/', { state : { user: user } })}} />
             </div>
 
             <div className="profile-container" aria-label="User Profile">
