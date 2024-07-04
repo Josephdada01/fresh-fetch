@@ -42,9 +42,12 @@
     }
 
     .product img {
+        height: 210px;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
         margin-bottom: 7px;
+        width: 100%;
+        min-height: 215px;
     }
 
     .product .product-info {
