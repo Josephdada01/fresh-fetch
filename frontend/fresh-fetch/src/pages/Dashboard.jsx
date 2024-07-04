@@ -23,6 +23,7 @@ export default function Dashboard() {
     const state = location.state;
     const token = localStorage.getItem('token')
     const navigate = useNavigate();
+    const apiURL = process.env.REACT_APP_API_URL;
     // console.log("User vendor:", state.user)
 
     function goToLogin() {
@@ -50,7 +51,7 @@ export default function Dashboard() {
 
     const getOrders = useCallback(async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api-auth/vendors/orders/', {
+            const response = await fetch(`${apiURL}/api-auth/vendors/orders/`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -87,7 +88,7 @@ export default function Dashboard() {
     
         try {
             // Sends a request to the api to create a new product
-            const response = await fetch('http://127.0.0.1:8000/api/v1/products/create/', {
+            const response = await fetch(`${apiURL}/api/v1/products/create/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -114,7 +115,7 @@ export default function Dashboard() {
 
     async function getProducts(id) {
         // Gets all products form the back-end
-        const response = await fetch('http://127.0.0.1:8000/api/v1/products', {
+        const response = await fetch(`${apiURL}/api/v1/products`, {
             method: 'get',
         });
 
@@ -134,7 +135,7 @@ export default function Dashboard() {
 
     async function handleRemoveProduct(id) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/v1/products/${id}/delete`, {
+            const response = await fetch(`${apiURL}/api/v1/products/${id}/delete`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -160,7 +161,7 @@ export default function Dashboard() {
     // Change status from pending to en-route when fulfill is clicked
     async function handleFulfill(order) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api-auth/vendors/orders/${order.id}/`, {
+            const response = await fetch(`${apiURL}/api-auth/vendors/orders/${order.id}/`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Token ${token}`,
@@ -215,7 +216,7 @@ export default function Dashboard() {
     // Set the user to null and go back to the login page
     async function handleLogout() {
         // Logs user out
-        const response = await fetch('http://127.0.0.1:8000/api-auth/users/logout/', {
+        const response = await fetch(`${apiURL}/api-auth/users/logout/`, {
             method: 'POST',
             headers: {
                 'Authorization': `Token ${token}`,
