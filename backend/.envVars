@@ -1,6 +1,0 @@
-SECRET_KEY=django-insecure-e+pou$ltl%m!qe6v@9ib2j^14t_4(4mmm)=fm+rd@sgo#xao
-
-DATABASE_NAME=fresh_fetch
-DATABASE_USER=root
-DATABASE_PASSWORD=olamilekan
-DATABASE_HOST=localhost
