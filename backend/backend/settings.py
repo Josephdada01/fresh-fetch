@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
-import dj_database_url
+# import dj_database_url
 
 import environ
 # Initialise environment variables
@@ -97,15 +97,15 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-DATABASES = {
-    'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        #default='postgresql://postgres:postgres@localhost:5432/backend',
-        default='postgresql://fresh_fetch_user:zHgP4KrYfwVwb4rbLlvtU639hsdDvWq1@dpg-cq2punks1f4s73f3kph0-a/fresh_fetch',
-        conn_max_age=600
-    )
-}
-"""
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         # Replace this value with your local database's connection string.
+#         #default='postgresql://postgres:postgres@localhost:5432/backend',
+#         default='postgresql://fresh_fetch_user:zHgP4KrYfwVwb4rbLlvtU639hsdDvWq1@dpg-cq2punks1f4s73f3kph0-a/fresh_fetch',
+#         conn_max_age=600
+#     )
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -115,7 +115,7 @@ DATABASES = {
         'PASSWORD': env('DATABASE_PASSWORD'),
     }
 }
-"""
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
