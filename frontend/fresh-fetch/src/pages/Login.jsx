@@ -173,7 +173,7 @@ export default function Login() {
             }
 
             // use the session ID to retrieve the user object
-            const responseUser = await fetch(`${apiURL}/api-auth/users/user`, {
+            const responseUser = await fetch(`${apiURL}/api-auth/users/user/`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Token ${returnedToken.key}`,

@@ -38,15 +38,17 @@ export default function ProducePage() {
 
     const [searchResult, setSearchResult ] = useState([])
 
+    console.log('API URL:', apiURL)
     async function getProducts() {
         // Gets all products form the back-end
-        const response = await fetch(`${apiURL}/api/v1/products`, {
+        const response = await fetch(`/api/v1/products/`, {
             method: 'get',
+            mode: 'no-cors',
         });
 
         if (response?.ok) {
             const products = await response.json();
-            const responseVendor = await fetch(`${apiURL}/api-auth/vendors/`);
+            const responseVendor = await fetch(`https://fresh-fetch-7o0h.onrender.com/api-auth/vendors/`);
 
             // Get a list of all the vendors
             const vendors = await responseVendor.json();
