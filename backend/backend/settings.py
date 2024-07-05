@@ -22,7 +22,9 @@ else:
 # Security
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG', default=False)
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1', 'https://fresh-fetch-qyuu.onrender.com/'])
+#ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1',])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -150,15 +152,24 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
-
 # CORS settings
+CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[])
+
+# CSRF settings
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
+
+"""
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://fresh-fetch-qyuu.onrender.com",
+    "https://fresh-fetch-7o0h.onrender.com",
 ]
+
 
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
-    "https://fresh-fetch-qyuu.onrender.com",
+    "https://fresh-fetch-frontend",
+    "https://fresh-fetch-backend.com",
 ]
+"""
