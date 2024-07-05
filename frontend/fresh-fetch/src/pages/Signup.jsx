@@ -22,8 +22,6 @@ export default function Signup() {
     });
     const apiURL = process.env.REACT_APP_API_URL;
 
-    const apiURL = process.env.REACT_APP_API_URL;
-
     // Keep track of al lthe form errors
     const [errors, setErrors] = useState({});
 

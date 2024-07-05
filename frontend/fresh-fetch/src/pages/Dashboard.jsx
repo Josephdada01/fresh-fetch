@@ -24,7 +24,6 @@ export default function Dashboard() {
     const token = localStorage.getItem('token')
     const apiURL = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
-    const apiURL = process.env.REACT_APP_API_URL;
     // console.log("User vendor:", state.user)
 
     function goToLogin() {
