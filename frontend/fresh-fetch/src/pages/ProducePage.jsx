@@ -41,7 +41,7 @@ export default function ProducePage() {
     console.log('API URL:', apiURL)
     async function getProducts() {
         // Gets all products form the back-end
-        const response = await fetch(`https://fresh-fetch-7o0h.onrender.com/api/v1/products/`, {
+        const response = await fetch(`${apiURL}/api/v1/products/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
