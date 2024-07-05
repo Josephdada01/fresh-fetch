@@ -42,8 +42,7 @@ export default function ProducePage() {
     async function getProducts() {
         // Gets all products form the back-end
         const response = await fetch(`https://fresh-fetch-7o0h.onrender.com/api/v1/products/`, {
-            method: 'get',
-            mode: 'no-cors',
+            method: 'GET',
         });
 
         if (response?.ok) {
