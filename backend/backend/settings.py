@@ -9,6 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     DEBUG=(bool, False)  # Default to False for production
 )
+environ.Env.read_env()
 
 # Determine the environment (development or production)
 DJANGO_ENV = os.environ.get('DJANGO_ENV', 'development')
