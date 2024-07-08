@@ -14,7 +14,7 @@ import "../styles/ProducePage.css";
 
 // images
 import basketImg from "../images/basket.jpg";
-import profilePic from "../images/pic-person-01.jpg";
+import SuccessPopup from "../components/SuccessPopup";
 
 export default function ProducePage() {
     // This component displays all the available produces to the user
@@ -39,10 +39,15 @@ export default function ProducePage() {
 
     const [searchResult, setSearchResult ] = useState([])
 
+    const [ showPopup, setShowPopup ] = useState(false);
+
     async function getProducts() {
         // Gets all products form the back-end
-        const response = await fetch(`${apiURL}/api/v1/products`, {
-            method: 'get',
+        const response = await fetch(`${apiURL}/api/v1/products/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
 
         if (response?.ok) {
@@ -86,7 +91,7 @@ export default function ProducePage() {
         } catch(error) {
             console.error("Error getting basket:", error)
         }
-    }, [token]);
+    }, [apiURL, token]);
 
 
     useEffect(() => {
@@ -116,13 +121,12 @@ export default function ProducePage() {
 
     // Handles making order directly from the produce page instead of from the basket
     const handleMakeOrder = async (id, quantity) => {
-         // if not go to the login page
-         if (!user || !token) {
+        // if not go to the login page
+        if (!user ||!token) {
             goToLogin();
             return;
-         }
+        }
         // const product = displayProducts.filter(product => product.id === id)
-        // console.log("The price of the product I want to order:", product.price)
         try {
             const response = await fetch(`${apiURL}/api/v1/orders/`, {
                 method: 'POST',
@@ -135,10 +139,9 @@ export default function ProducePage() {
                     quantity: quantity,
                  }),
             })
-        
+
             if(response?.ok) {
                 const order = await response.json();
-
                 // If the user is logged in, go to the summary page
                 navigate('/summary', { state: { user: user, orders: [order]} })
             } else {
@@ -148,8 +151,6 @@ export default function ProducePage() {
             console.error("Error submitting form:", error);
         }
     }
-
-    // console.log(user?.basket)
 
     const addToBasket = async (product) => {
         if (!user || !token) {
@@ -183,6 +184,11 @@ export default function ProducePage() {
         } catch(error) {
             console.error("Error submitting form:", error);
         }
+
+        setShowPopup(prevState => true);
+        setTimeout(() => {
+            setShowPopup(false)
+        }, 4000)
     };
 
     async function handleLogout() {
@@ -221,6 +227,10 @@ export default function ProducePage() {
         </div>
     );
 
+    function handleClosePopup() {
+        setShowPopup(false);
+    }
+
     return (
         <>
             <div className="header-container">
@@ -248,18 +258,17 @@ export default function ProducePage() {
                     <h2>Produce</h2>
                     <Search products={displayProducts} handleSearchReturn={handleSearchReturn}/>
                 </div>
-                <hr />
-                
-
+                <hr />                
                 {/* A few of the available produces */}
                 <div className="produces">
                     {(searchResult.length !== 0 ? searchResult : displayProducts).map((product) => (
-                        <Produce key={product.id} product={product}
-                                 handleMakeOrder={handleMakeOrder}
-                                 addToBasket={user && token ? addToBasket : goToLogin} />
-                    ))}
+                    <Produce key={product.id} product={product}
+                        handleMakeOrder={handleMakeOrder}
+                        addToBasket={user && token ? addToBasket : goToLogin} />
+                   ))}
                 </div>
+                {showPopup && <SuccessPopup status="success" message="Added to basket" handleClose={handleClosePopup}/>}
             </main>
         </>
-    )
+        )
 }

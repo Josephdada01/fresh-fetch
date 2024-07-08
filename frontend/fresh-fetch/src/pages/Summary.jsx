@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import "../styles/Summary.css";
 
 import arrowImg from "../images/arrow.png";
+import Popup from '../components/SuccessPopup';
 
 export default function Summary() {
     // This component will be handling the order summary.
@@ -16,9 +17,7 @@ export default function Summary() {
     const orders = state.orders;
     const token = localStorage.getItem('token');
     const apiURL = process.env.REACT_APP_API_URL;
-    // console.log("Orders at summary:", orders);
 
-    // Gets user from Produce/Basket page
     const user = state.user;
 
     // Calculate the sum of everything in the orders array
